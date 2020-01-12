@@ -26,6 +26,7 @@ namespace Bot_Dofus_Retro.Tema.Forms
             textBox_version.Text = GlobalConf.version_dofus;
             textBox_peso_core.Text = GlobalConf.peso_core.ToString();
             textBox_peso_loader.Text = GlobalConf.peso_loader.ToString();
+            textBox_encriptacion.Text = GlobalConf.password_encriptacion;
         }
 
         private void boton_opciones_guardar_Click(object sender, EventArgs e)
@@ -59,6 +60,7 @@ namespace Bot_Dofus_Retro.Tema.Forms
             GlobalConf.puerto_conexion = puerto;
             GlobalConf.peso_core = peso_core;
             GlobalConf.peso_loader = peso_loader;
+            GlobalConf.password_encriptacion = textBox_encriptacion.Text;
             GlobalConf.guardar();
             Close();
         }

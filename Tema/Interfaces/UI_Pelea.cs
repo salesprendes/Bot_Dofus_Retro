@@ -90,11 +90,15 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             MetodoLanzamiento metodo_lanzamiento = (MetodoLanzamiento)comboBox_modo_lanzamiento.SelectedIndex;
             byte lanzamientos_turnos = Convert.ToByte(numeric_lanzamientos_turno.Value);
             byte distancia = Convert.ToByte(numeric_distancia.Value);
-            bool es_AOE = checkBox_AOE.Checked;
             bool necesita_piedra = checkBox_piedra_equipada.Checked;
             byte vida_objetivo_necesaria = Convert.ToByte(numericUp_vida_minima.Value);
 
-            cuenta.pelea_extension.configuracion.hechizos.Add(new PeleaHechizos(hechizo.id, hechizo.nombre, focus, metodo_lanzamiento, lanzamientos_turnos, distancia, es_AOE, necesita_piedra, vida_objetivo_necesaria));
+            /** AOE **/
+            bool es_AOE = checkBox_AOE.Checked;
+            bool golpear_aliados = checkBox_aoe_aliados.Checked;
+            bool auto_golpearse = checkBox_aoe_autogolpearse.Checked;
+
+            cuenta.pelea_extension.configuracion.hechizos.Add(new PeleaHechizos(hechizo.id, hechizo.nombre, focus, metodo_lanzamiento, lanzamientos_turnos, distancia, es_AOE, golpear_aliados, auto_golpearse, necesita_piedra, vida_objetivo_necesaria));
             cuenta.pelea_extension.configuracion.guardar();
             refrescar_Lista_Hechizos();
             ordenar_ListView(listView_hechizos_pelea);

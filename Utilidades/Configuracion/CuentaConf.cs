@@ -26,19 +26,19 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
             nombre_personaje = _nombre_personaje;
         }
 
-        public void guardar_Cuenta(BinaryWriter bw)
+        public void guardar_Cuenta(BinaryWriter bw, string pass_encriptacion)
         {
             bw.Write(nombre_cuenta);
-            bw.Write(AESEncriptacion.Encriptar(password, "$AideMu$"));
+            bw.Write(AESEncriptacion.Encriptar(password, pass_encriptacion));
             bw.Write(servidor);
             bw.Write(nombre_personaje);
         }
 
-        public static CuentaConf cargar_Cuenta(BinaryReader br)
+        public static CuentaConf cargar_Cuenta(BinaryReader br, string pass_encriptacion)
         {
             try
             {
-                return new CuentaConf(br.ReadString(), AESEncriptacion.Desencriptar(br.ReadString(), "$AideMu$"), br.ReadString(), br.ReadString());
+                return new CuentaConf(br.ReadString(), AESEncriptacion.Desencriptar(br.ReadString(), pass_encriptacion), br.ReadString(), br.ReadString());
             }
             catch
             {

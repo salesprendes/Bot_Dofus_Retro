@@ -47,8 +47,6 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Interactivos
             switch (cuenta.juego.manejador.movimientos.get_Mover_A_Celda(celda, mapa.celdas_ocupadas(), true, 1))
             {
                 case ResultadoMovimientos.EXITO:
-                return true;
-
                 case ResultadoMovimientos.MISMA_CELDA:
                     get_Utilizar_Elemento();
                 return true;
@@ -64,8 +62,8 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Interactivos
             if (interactivo_utilizado == null)
                 return;
 
-            if (correcto)
-                get_Utilizar_Elemento();
+            if (!correcto)
+                get_Finalizar_Interactivo(false);
         }
 
         private void get_Utilizar_Elemento()
@@ -89,10 +87,10 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Interactivos
             cuenta.conexion.enviar_Paquete($"GA500{interactivo_utilizado.celda.id};{habilidad}");
         }
 
-        private void get_Finalizar_Interactivo(bool success)
+        private void get_Finalizar_Interactivo(bool correcto)
         {
             limpiar();
-            fin_interactivo?.Invoke(success);
+            fin_interactivo?.Invoke(correcto);
         }
 
         public void limpiar()

@@ -195,7 +195,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             NodoRango entrada;
 
             //Celda actual del jugador
-            entrada = get_Nodo_Rango(pelea.jugador_luchador.celda, null, hechizo_stats);
+            entrada = get_Nodo_Rango(pelea.jugador_luchador.celda, null, hechizo_pelea, hechizo_stats);
             if (entrada.enemigos_atacos_en_celda.Count > 0)
                 entradas.Add(entrada);
 
@@ -204,7 +204,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 if (!kvp.Value.alcanzable)
                     continue;
 
-                entrada = get_Nodo_Rango(mapa.get_Celda_Id(kvp.Key), kvp.Value, hechizo_stats);
+                entrada = get_Nodo_Rango(mapa.get_Celda_Id(kvp.Key), kvp.Value, hechizo_pelea, hechizo_stats);
                 if (entrada.enemigos_atacos_en_celda.Count > 0)
                     entradas.Add(entrada);
             }
@@ -212,7 +212,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             short celda_id = -1;
             short desde_celda_id = -1;
             KeyValuePair<short, MovimientoNodo>? node = null;
-            byte enemigos_atacos = 0;
+            byte enemigos_atacados = 0;
             int pm_utilizados = 99;
 
             foreach (NodoRango nodo in entradas)
@@ -225,11 +225,11 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                     if (pelea.get_Puede_Lanzar_hechizo(hechizo_pelea.id, nodo.celda, mapa.get_Celda_Id(kvp.Key), mapa) != FallosLanzandoHechizo.NINGUNO)
                         continue;
 
-                    if (kvp.Value >= enemigos_atacos)
+                    if (kvp.Value >= enemigos_atacados)
                     {
-                        if (kvp.Value > enemigos_atacos || (kvp.Value == enemigos_atacos && nodo.pm_utilizados <= pm_utilizados))
+                        if (kvp.Value > enemigos_atacados || (kvp.Value == enemigos_atacados && nodo.pm_utilizados <= pm_utilizados))
                         {
-                            enemigos_atacos = kvp.Value;
+                            enemigos_atacados = kvp.Value;
                             celda_id = kvp.Key;
                             desde_celda_id = nodo.celda.id;
                             pm_utilizados = nodo.pm_utilizados;
@@ -246,7 +246,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 if (node == null)
                 {
                     if (GlobalConf.mostrar_mensajes_debug)
-                        cuenta.logger.log_informacion("DEBUG", $"Se ha lanzado el hechizo {hechizo.nombre} tocando a {enemigos_atacos} enemigos en la celda {celda_id}");
+                        cuenta.logger.log_informacion("DEBUG", $"Se ha lanzado el hechizo {hechizo.nombre} atacando a {enemigos_atacados} enemigos en la celda {celda_id}");
                     
                     await pelea.get_Lanzar_Hechizo(hechizo_pelea.id, celda_id);
                     return ResultadoLanzandoHechizo.LANZADO;
@@ -255,7 +255,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 {
                     hechizo_para_lanzar = hechizo.id;
                     celda_objetivo = celda_id;
-                    enemigos_tocados = enemigos_atacos;
+                    enemigos_tocados = enemigos_atacados;
 
                     await cuenta.juego.manejador.movimientos.get_Mover_Celda_Pelea(node);
                     return ResultadoLanzandoHechizo.MOVIDO;
@@ -265,22 +265,22 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             return ResultadoLanzandoHechizo.NO_LANZADO;
         }
 
-        private NodoRango get_Nodo_Rango(Celda celda, MovimientoNodo node, HechizoStats hechizo_stats)
+        private NodoRango get_Nodo_Rango(Celda celda, MovimientoNodo node, PeleaHechizos hechizo_pelea, HechizoStats hechizo_stats)
         {
-            Dictionary<short, byte> touchedEnnemiesByCell = new Dictionary<short, byte>();
+            Dictionary<short, byte> enemigos_golpeados = new Dictionary<short, byte>();
             List<short> rango = pelea.get_Rango_Hechizo(celda, hechizo_stats, mapa);
 
             for (int i = 0; i < rango.Count; i++)
             {
-                byte tec = get_Total_Enemigos_Atacados(celda, mapa.get_Celda_Id(rango[i]), hechizo_stats);
+                byte tec = get_Total_Enemigos_Atacados(celda, mapa.get_Celda_Id(rango[i]), hechizo_pelea, hechizo_stats);
                 if (tec > 0)
-                    touchedEnnemiesByCell.Add(rango[i], tec);
+                    enemigos_golpeados.Add(rango[i], tec);
             }
 
-            return new NodoRango(celda, touchedEnnemiesByCell, node);
+            return new NodoRango(celda, enemigos_golpeados, node);
         }
 
-        private byte get_Total_Enemigos_Atacados(Celda celda_actual, Celda celda_objetivo, HechizoStats hechizo_stats)
+        private byte get_Total_Enemigos_Atacados(Celda celda_actual, Celda celda_objetivo, PeleaHechizos hechizo_pelea, HechizoStats hechizo_stats)
         {
             byte n = 0;
             List<Celda> zona = pelea.get_Zona_Hechizo(celda_actual, celda_objetivo, hechizo_stats, mapa);
@@ -289,20 +289,21 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             {
                 foreach (Celda celda in zona)
                 {
-                    //No tocarse a si mismo
-                    if (celda.id == celda_actual.id)
+                    if (hechizo_pelea.auto_golpearse && celda.id == celda_actual.id)
                         return 0;
 
-                    //No tocar a aliados
-                    foreach (Luchadores ally in pelea.get_Aliados)
+                    if(hechizo_pelea.golpear_aliados)
                     {
-                        if (ally.celda.id == celda.id)
-                            return 0;
+                        foreach (Luchadores aliado in pelea.get_Aliados)
+                        {
+                            if (aliado.celda.id == celda.id)
+                                return 0;
+                        }
                     }
 
-                    foreach (Luchadores ennemy in pelea.get_Enemigos)
+                    foreach (Luchadores enemigo in pelea.get_Enemigos)
                     {
-                        if (ennemy.celda.id == celda.id)
+                        if (enemigo.celda.id == celda.id)
                             n++;
                     }
                 }

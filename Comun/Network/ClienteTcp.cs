@@ -94,7 +94,6 @@ namespace Bot_Dofus_Retro.Comun.Network
 
                     esperando_paquete = false;
                 }
-                Console.WriteLine(paquete);
                 PaqueteRecibido.Recibir(this, paquete);
             }
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, recibir_CallBack, socket);
