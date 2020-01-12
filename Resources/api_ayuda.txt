@@ -1,0 +1,81 @@
+function delay(ms)
+	delayFuncion(ms)
+	coroutine.yield()
+end
+
+mapa =
+{
+	enCelda = api.mapa.enCelda,
+	enMapa = api.mapa.enMapa,
+	actualMapa = api.mapa.actualMapa,
+	actualPosicion = api.mapa.actualPosicion,
+
+	moverCelda = function(celda_id)
+		if api.mapa.moverCelda(celda_id) then
+			coroutine.yield()
+		end
+	end,
+	
+	utilizarInteractivo = function(celda_id, habilidad)
+		if api.mapa.utilizarInteractivo(celda_id, habilidad) then
+			coroutine.yield()
+		end
+	end,
+
+	cambiarMapa = function(posicion)
+		if api.mapa.cambiarMapa(posicion) then
+			coroutine.yield()
+		end
+	end
+}
+
+npc =
+{
+	npcBanco = function(npc_id)
+		if api.npc.npcBanco(npcId) then
+			coroutine.yield()
+		end
+	end,
+
+	hablarNpc = function(npc_id)
+		if api.npc.hablarNpc(npc_id) then
+			coroutine.yield()
+		end
+	end,
+
+	responder = function(respuesta_id)
+		api.npc.responder(respuesta_id)
+		coroutine.yield()
+	end
+}
+
+inventario =
+{
+	pods = api.inventario.pods,
+	podsMaximos = api.inventario.podsMaximos,
+	podsPorcentaje = api.inventario.podsPorcentaje,
+	tieneObjeto = api.inventario.tieneObjeto,
+
+	utilizar = function(modelo_id)
+		if api.inventario.utilizar(modelo_id) then
+			coroutine.yield()
+		end
+	end,
+
+	equipar = function(modelo_id)
+		if api.inventario.equipar(modelo_id) then
+			coroutine.yield()
+		end
+	end
+}
+
+pelea =
+{
+	puedePelear = api.pelea.puedePelear,
+	
+	pelear = function(monstruos_minimos, monstruos_maximos, nivel_minimo, nivel_maximo, monstruos_prohibidos, monstruos_obligatorios)
+		if api.pelea.pelear(monstruos_minimos, monstruos_maximos, nivel_minimo, nivel_maximo, monstruos_prohibidos, monstruos_obligatorios) then
+			coroutine.yield()
+		end
+	end
+}
