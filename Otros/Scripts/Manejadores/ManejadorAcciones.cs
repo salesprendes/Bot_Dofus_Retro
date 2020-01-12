@@ -27,8 +27,8 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Manejadores
         private bool mapa_cambiado;
         private bool disposed;
 
-        public event Action<bool> evento_accion_normal;
-        public event Action<bool> evento_accion_personalizada;
+        public event Action<Cuenta, bool> evento_accion_normal;
+        public event Action<Cuenta, bool> evento_accion_personalizada;
 
         public ManejadorAcciones(Cuenta _cuenta, LuaManejadorScript _manejador_script)
         {
@@ -285,10 +285,10 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Manejadores
             if (mapa_cambiado)
             {
                 mapa_cambiado = false;
-                evento_accion_normal?.Invoke(true);
+                evento_accion_normal?.Invoke(cuenta, true);
             }
             else
-                evento_accion_normal?.Invoke(false);
+                evento_accion_normal?.Invoke(cuenta, false);
         }
 
         private void acciones_Funciones_Finalizadas()
@@ -298,10 +298,10 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Manejadores
             if (mapa_cambiado)
             {
                 mapa_cambiado = false;
-                evento_accion_personalizada?.Invoke(true);
+                evento_accion_personalizada?.Invoke(cuenta, true);
             }
             else
-                evento_accion_personalizada?.Invoke(false);
+                evento_accion_personalizada?.Invoke(cuenta, false);
         }
 
         private void acciones_Salida(int delay) => Task.Factory.StartNew(async () =>

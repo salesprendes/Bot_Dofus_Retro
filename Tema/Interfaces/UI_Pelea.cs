@@ -135,6 +135,9 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
 
         private void comenzar_combate_aleatorio_Click(object sender, EventArgs e)
         {
+            if (!cuenta.juego.personaje.derechos.PUEDE_ATACAR)
+                return;
+
             List<Monstruos> monstruos = cuenta.juego.mapa.get_Monstruos();
 
             if (monstruos.Count > 0)

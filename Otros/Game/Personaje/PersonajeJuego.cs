@@ -42,10 +42,8 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
         public bool esta_conectado { get; set; }
         public bool en_grupo { get; set; }
         public bool esta_utilizando_dragopavo { get; set; } = false;
-        private bool disposed;
-       
-
         public int porcentaje_experiencia => (int)((caracteristicas.experiencia_actual - caracteristicas.experiencia_minima_nivel) / (caracteristicas.experiencia_siguiente_nivel - caracteristicas.experiencia_minima_nivel) * 100);
+        private bool disposed;
 
         /** Eventos **/
         public event Action servidor_seleccionado;
@@ -193,6 +191,8 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             hechizos_actualizados?.Invoke();
         }
 
+        public Hechizo get_Hechizo(short id) => hechizos[id];
+
         private void regeneracion_TimerCallback(object state)
         {
             try
@@ -224,8 +224,6 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
                 cuenta.logger.log_Error("TIMER-ANTIAFK", $"ERROR: {e}");
             }
         }
-
-        public Hechizo get_Hechizo(short id) => hechizos[id];
 
         #region Zona Dispose
         public void Dispose() => Dispose(true);

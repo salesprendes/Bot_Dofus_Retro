@@ -31,14 +31,6 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             await cliente.enviar_Paquete_Async("BD");
         });
 
-        [PaqueteAtributo("PIK")]
-        public Task get_Peticion_Grupo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
-        {
-            cliente.cuenta.logger.log_informacion("Grupo", $"Nueva invitación de grupo del personaje: {paquete.Substring(3).Split('|')[0]}");
-            await cliente.enviar_Paquete_Async("PR");
-            cliente.cuenta.logger.log_informacion("Grupo", "Petición rechazada");
-        });
-
         [PaqueteAtributo("SL")]
         public Task get_Lista_Hechizos(ClienteTcp cliente, string paquete) => Task.Run(() =>
         {
@@ -72,7 +64,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
                 case EstadoCuenta.DIALOGANDO:
                     cuenta.juego.npcs.get_Cerrar_Dialogo();
-                break;
+                    break;
             }
         });
 
@@ -109,18 +101,38 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         [PaqueteAtributo("ECK")]
         public Task get_Intercambio_Ventana_Abierta(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.Estado_Cuenta = EstadoCuenta.ALMACENAMIENTO);
 
+        [PaqueteAtributo("PIK")]
+        public Task get_Peticion_Grupo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
+        {
+            Cuenta cuenta = cliente.cuenta;
+            string nombre_invitador = paquete.Substring(3).Split('|')[0];
+
+            if (nombre_invitador.Equals(cuenta.juego.personaje.nombre))
+                return;
+
+            if (cuenta.tiene_grupo)
+            {
+                cuenta.grupo.get_Esta_En_Grupo(nombre_invitador);
+                await cliente.enviar_Paquete_Async("PA");
+            }
+            else
+                await cliente.enviar_Paquete_Async("PR");
+
+            cliente.cuenta.logger.log_informacion("Grupo", $"Nueva invitación de grupo del personaje: {nombre_invitador}");
+        });
+
         [PaqueteAtributo("PCK")]
         public Task get_Grupo_Aceptado(ClienteTcp cliente, string paquete) => Task.Run(() =>
         {
-            cliente.cuenta.logger.log_Error("GRUPO", "Grupo aceptado");
             cliente.cuenta.juego.personaje.en_grupo = true;
+            cliente.cuenta.logger.log_informacion("GRUPO", "Grupo aceptado");
         });
 
         [PaqueteAtributo("PV")]
         public Task get_Grupo_Abandonado(ClienteTcp cliente, string paquete) => Task.Run(() =>
         {
-            cliente.cuenta.logger.log_informacion("GRUPO", "Grupo abandonado");
             cliente.cuenta.juego.personaje.en_grupo = false;
+            cliente.cuenta.logger.log_informacion("GRUPO", "Grupo abandonado");
         });
 
         [PaqueteAtributo("ERK")]
@@ -200,5 +212,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             await cliente.enviar_Paquete_Async($"BC{id};{bytes}", false);
             cliente.cuenta.logger.log_Error("ANTI-BOT", $"Se ha revisado el archivo: {archivo}");
         });
+
+        [PaqueteAtributo("GCK")]
+        public Task get_Crear_Pantalla_Juego(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.Estado_Cuenta = EstadoCuenta.CONECTADO_INACTIVO);
     }
 }

@@ -6,7 +6,6 @@ using Bot_Dofus_Retro.Otros.Peleas;
 using Bot_Dofus_Retro.Otros.Peleas.Enums;
 using Bot_Dofus_Retro.Otros.Peleas.Peleadores;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,6 +54,17 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                 }
             }
 
+            if (cuenta.tiene_grupo && cuenta.es_lider_grupo)
+            {
+                await cliente.enviar_Paquete_Async("fP");
+                await cuenta.grupo.get_Esperar_Miembros_Unirse_Pelea();
+
+                if (pelea.pelea_iniciada)
+                    return;
+            }
+
+            await Task.Delay(300);
+
             if (cuenta.pelea_extension.configuracion.desactivar_espectador)
                 await cliente.enviar_Paquete_Async("fS");
 
@@ -67,14 +77,6 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     await cliente.enviar_Paquete_Async("Rr");
                     cuenta.juego.personaje.esta_utilizando_dragopavo = true;
                 }
-            }
-
-            if (cuenta.tiene_grupo && cuenta.es_lider_grupo)
-            {
-                await cuenta.grupo.get_Esperar_Miembros_Unirse_Pelea();
-
-                if (pelea.pelea_iniciada)
-                    return;
             }
 
             await Task.Delay(300);

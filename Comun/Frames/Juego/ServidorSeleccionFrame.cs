@@ -81,11 +81,13 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             cuenta.juego.personaje.timer_afk.Change(1200000, 1200000);
             cuenta.juego.personaje.evento_Personaje_Seleccionado();
 
-            await cliente.enviar_Paquete_Async("BYA");//Modo Ausente
             await cliente.enviar_Paquete_Async("GC1");
-        });
 
-        [PaqueteAtributo("GCK")]
-        public Task get_Crear_Pantalla_Juego(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.Estado_Cuenta = EstadoCuenta.CONECTADO_INACTIVO);
+            if (cuenta.es_lider_grupo && cuenta.tiene_grupo)
+            {
+                await cuenta.grupo.get_Esperar_Miembros_Conectados();
+                cuenta.grupo.get_Invitar_Grupo_Miembros();
+            }
+        });
     }
 }

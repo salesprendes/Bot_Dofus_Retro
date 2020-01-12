@@ -628,8 +628,18 @@ namespace Bot_Dofus_Retro.Otros.Scripts
         }
 
         #region Zona Eventos
-        private void get_Accion_Finalizada(bool mapa_cambiado)
+        private void get_Accion_Finalizada(Cuenta _cuenta, bool mapa_cambiado)
         {
+            if (cuenta.tiene_grupo)
+            {
+                if (!cuenta.es_lider_grupo)
+                    return;
+
+                cuenta.logger.log_informacion("GRUPO", "Esperando para acabar las acciones");
+                cuenta.grupo.esperar_Acciones_Terminadas();
+                cuenta.logger.log_informacion("GRUPO", "Acciones del grupo acabadas");
+            }
+
             if (verificar_Acciones_Especiales())
                 return;
 
@@ -639,8 +649,11 @@ namespace Bot_Dofus_Retro.Otros.Scripts
                 procesar_Actual_Bandera();
         }
 
-        private void get_Accion_Personalizada_Finalizada(bool mapa_cambiado)
+        private void get_Accion_Personalizada_Finalizada(Cuenta _cuenta, bool mapa_cambiado)
         {
+            if (cuenta.tiene_grupo && !cuenta.es_lider_grupo)
+                return;
+
             if (verificar_Acciones_Especiales())
                 return;
 

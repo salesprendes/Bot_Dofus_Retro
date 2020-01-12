@@ -93,6 +93,7 @@ namespace Bot_Dofus_Retro.Otros
         public bool esta_Luchando() => Estado_Cuenta == EstadoCuenta.LUCHANDO;
         public bool esta_Recolectando() => Estado_Cuenta == EstadoCuenta.RECOLECTANDO;
         public bool esta_Desplazando() => Estado_Cuenta == EstadoCuenta.MOVIMIENTO;
+        public bool esta_Conectado() => Estado_Cuenta == EstadoCuenta.CONECTADO_INACTIVO;
 
         #region Zona Dispose
         public void Dispose() => Dispose(true);
