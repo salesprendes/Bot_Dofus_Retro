@@ -6,6 +6,8 @@
     web: http://www.salesprendes.com
 */
 
+using Bot_Dofus_Retro.Otros.Enums;
+
 namespace Bot_Dofus_Retro.Otros.Game.Personaje.Stats
 {
     public class Caracteristicas : IEliminable
@@ -47,7 +49,511 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Stats
             criaturas_invocables = new StatsBase(0, 0, 0, 0);
         }
 
-        public void limpiar()
+		public int get_Capital_Necesario_Boost_Stats(byte id_raza, StatsBoosteables id_stat)
+		{
+			switch (id_stat)
+			{
+				case StatsBoosteables.VITALIDAD://Vitalidad
+					return 1;
+
+				case StatsBoosteables.SABIDURIA://Sabiduria
+					return 3;
+
+				case StatsBoosteables.FUERZA://Fuerza
+					switch (id_raza)
+					{
+						case 1:
+							if (fuerza.base_personaje < 50)
+								return 2;
+							if (fuerza.base_personaje < 150)
+								return 3;
+							if (fuerza.base_personaje < 250)
+								return 4;
+							return 5;
+
+						case 11:
+							return 3;
+
+						case 5:
+							if (fuerza.base_personaje < 50)
+								return 2;
+							if (fuerza.base_personaje < 150)
+								return 3;
+							if (fuerza.base_personaje < 250)
+								return 4;
+							return 5;
+
+						case 4:
+							if (fuerza.base_personaje < 100)
+								return 1;
+							if (fuerza.base_personaje < 200)
+								return 2;
+							if (fuerza.base_personaje < 300)
+								return 3;
+							if (fuerza.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 2:
+							if (fuerza.base_personaje < 50)
+								return 2;
+							if (fuerza.base_personaje < 150)
+								return 3;
+							if (fuerza.base_personaje < 250)
+								return 4;
+							return 5;
+
+						case 7:
+							if (fuerza.base_personaje < 50)
+								return 2;
+							if (fuerza.base_personaje < 150)
+								return 3;
+							if (fuerza.base_personaje < 250)
+								return 4;
+							return 5;
+
+						case 12:
+							if (fuerza.base_personaje < 50)
+								return 1;
+							if (fuerza.base_personaje < 200)
+								return 2;
+							return 3;
+
+						case 10:
+							if (fuerza.base_personaje < 50)
+								return 1;
+							if (fuerza.base_personaje < 250)
+								return 2;
+							if (fuerza.base_personaje < 300)
+								return 3;
+							if (fuerza.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 9:
+							if (fuerza.base_personaje < 50)
+								return 1;
+							if (fuerza.base_personaje < 150)
+								return 2;
+							if (fuerza.base_personaje < 250)
+								return 3;
+							if (fuerza.base_personaje < 350)
+								return 4;
+							return 5;
+
+						case 3:
+							if (fuerza.base_personaje < 50)
+								return 1;
+							if (fuerza.base_personaje < 150)
+								return 2;
+							if (fuerza.base_personaje < 250)
+								return 3;
+							if (fuerza.base_personaje < 350)
+								return 4;
+							return 5;
+
+						case 6:
+							if (fuerza.base_personaje < 100)
+								return 1;
+							if (fuerza.base_personaje < 200)
+								return 2;
+							if (fuerza.base_personaje < 300)
+								return 3;
+							if (fuerza.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 8:
+							if (fuerza.base_personaje < 100)
+								return 1;
+							if (fuerza.base_personaje < 200)
+								return 2;
+							if (fuerza.base_personaje < 300)
+								return 3;
+							if (fuerza.base_personaje < 400)
+								return 4;
+							return 5;
+
+					}
+					break;
+
+				case StatsBoosteables.SUERTE://Suerte
+					switch (id_raza)
+					{
+						case 1:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 5:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 11:
+							return 3;
+
+						case 4:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 10:
+							if (suerte.base_personaje < 100)
+								return 1;
+							if (suerte.base_personaje < 200)
+								return 2;
+							if (suerte.base_personaje < 300)
+								return 3;
+							if (suerte.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 12:
+							if (suerte.base_personaje < 50)
+								return 1;
+							if (suerte.base_personaje < 200)
+								return 2;
+							return 3;
+
+						case 8:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 3:
+							if (suerte.base_personaje < 100)
+								return 1;
+							if (suerte.base_personaje < 150)
+								return 2;
+							if (suerte.base_personaje < 230)
+								return 3;
+							if (suerte.base_personaje < 330)
+								return 4;
+							return 5;
+
+						case 2:
+							if (suerte.base_personaje < 100)
+								return 1;
+							if (suerte.base_personaje < 200)
+								return 2;
+							if (suerte.base_personaje < 300)
+								return 3;
+							if (suerte.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 6:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 7:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 9:
+							if (suerte.base_personaje < 20)
+								return 1;
+							if (suerte.base_personaje < 40)
+								return 2;
+							if (suerte.base_personaje < 60)
+								return 3;
+							if (suerte.base_personaje < 80)
+								return 4;
+							return 5;
+					}
+					break;
+
+				case StatsBoosteables.AGILIDAD://Agilidad
+					switch (id_raza)
+					{
+						case 1:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 5:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 11:
+							return 3;
+
+						case 4:
+							if (agilidad.base_personaje < 100)
+								return 1;
+							if (agilidad.base_personaje < 200)
+								return 2;
+							if (agilidad.base_personaje < 300)
+								return 3;
+							if (agilidad.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 10:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 12:
+							if (agilidad.base_personaje < 50)
+								return 1;
+							if (agilidad.base_personaje < 200)
+								return 2;
+							return 3;
+
+						case 7:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 8:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 3:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 6:
+							if (agilidad.base_personaje < 50)
+								return 1;
+							if (agilidad.base_personaje < 100)
+								return 2;
+							if (agilidad.base_personaje < 150)
+								return 3;
+							if (agilidad.base_personaje < 200)
+								return 4;
+							return 5;
+
+						case 9:
+							if (agilidad.base_personaje < 50)
+								return 1;
+							if (agilidad.base_personaje < 100)
+								return 2;
+							if (agilidad.base_personaje < 150)
+								return 3;
+							if (agilidad.base_personaje < 200)
+								return 4;
+							return 5;
+
+						case 2:
+							if (agilidad.base_personaje < 20)
+								return 1;
+							if (agilidad.base_personaje < 40)
+								return 2;
+							if (agilidad.base_personaje < 60)
+								return 3;
+							if (agilidad.base_personaje < 80)
+								return 4;
+							return 5;
+					}
+					break;
+
+				case StatsBoosteables.INTELIGENCIA://Inteligencia
+					switch (id_raza)
+					{
+						case 5:
+							if (inteligencia.base_personaje < 100)
+								return 1;
+							if (inteligencia.base_personaje < 200)
+								return 2;
+							if (inteligencia.base_personaje < 300)
+								return 3;
+							if (inteligencia.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 1:
+							if (inteligencia.base_personaje < 100)
+								return 1;
+							if (inteligencia.base_personaje < 200)
+								return 2;
+							if (inteligencia.base_personaje < 300)
+								return 3;
+							if (inteligencia.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 11:
+							return 3;
+
+						case 4:
+							if (inteligencia.base_personaje < 50)
+								return 2;
+							if (inteligencia.base_personaje < 150)
+								return 3;
+							if (inteligencia.base_personaje < 250)
+								return 4;
+							return 5;
+
+						case 10:
+							if (inteligencia.base_personaje < 100)
+								return 1;
+							if (inteligencia.base_personaje < 200)
+								return 2;
+							if (inteligencia.base_personaje < 300)
+								return 3;
+							if (inteligencia.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 3:
+							if (inteligencia.base_personaje < 20)
+								return 1;
+							if (inteligencia.base_personaje < 60)
+								return 2;
+							if (inteligencia.base_personaje < 100)
+								return 3;
+							if (inteligencia.base_personaje < 140)
+								return 4;
+							return 5;
+
+						case 12:
+							if (inteligencia.base_personaje < 50)
+								return 1;
+							if (inteligencia.base_personaje < 200)
+								return 2;
+							return 3;
+
+						case 8:
+							if (inteligencia.base_personaje < 20)
+								return 1;
+							if (inteligencia.base_personaje < 40)
+								return 2;
+							if (inteligencia.base_personaje < 60)
+								return 3;
+							if (inteligencia.base_personaje < 80)
+								return 4;
+							return 5;
+
+						case 7:
+							if (inteligencia.base_personaje < 100)
+								return 1;
+							if (inteligencia.base_personaje < 200)
+								return 2;
+							if (inteligencia.base_personaje < 300)
+								return 3;
+							if (inteligencia.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 9:
+							if (inteligencia.base_personaje < 50)
+								return 1;
+							if (inteligencia.base_personaje < 150)
+								return 2;
+							if (inteligencia.base_personaje < 250)
+								return 3;
+							if (inteligencia.base_personaje < 350)
+								return 4;
+							return 5;
+
+						case 2:
+							if (inteligencia.base_personaje < 100)
+								return 1;
+							if (inteligencia.base_personaje < 200)
+								return 2;
+							if (inteligencia.base_personaje < 300)
+								return 3;
+							if (inteligencia.base_personaje < 400)
+								return 4;
+							return 5;
+
+						case 6:
+							if (inteligencia.base_personaje < 20)
+								return 1;
+							if (inteligencia.base_personaje < 40)
+								return 2;
+							if (inteligencia.base_personaje < 60)
+								return 3;
+							if (inteligencia.base_personaje < 80)
+								return 4;
+							return 5;
+					}
+					break;
+			}
+			return 5;
+		}
+
+		public void limpiar()
         {
             experiencia_actual = 0;
             experiencia_minima_nivel = 0;

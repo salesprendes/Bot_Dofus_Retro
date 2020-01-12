@@ -19,11 +19,16 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             cuenta = _cuenta;
             DockText = nombre;
             Icon = icono;
+            get_Lista_Canales();
+        }
 
+        private void get_Lista_Canales()
+        {
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("General"));
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("Reclutamiento"));
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("Comercio"));
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("Mensaje privado"));
+            comboBox_lista_canales.SelectedItem = comboBox_lista_canales.Items[0];
         }
 
         private void UI_Chat_Load(object sender, EventArgs e)

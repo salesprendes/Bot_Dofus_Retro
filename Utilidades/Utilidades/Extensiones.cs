@@ -1,7 +1,9 @@
 ﻿using Bot_Dofus_Retro.Otros.Enums;
 using MoonSharp.Interpreter;
 using System;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Bot_Dofus_Retro.Utilidades.Extensiones
 {
@@ -62,5 +64,28 @@ namespace Bot_Dofus_Retro.Utilidades.Extensiones
             int seed = Convert.ToInt32(Regex.Match(Guid.NewGuid().ToString(), @"\d+").Value);
             return new Random(seed).Next(min, max);
         }
+        
+        #region Socket Task
+        public static Task ConnectAsync(this Socket socket, string host, int port)
+        {
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>(socket);
+            socket.BeginConnect(host, port, BeginConnectCallback, tcs);
+            return tcs.Task;
+        }
+
+        private static readonly AsyncCallback BeginConnectCallback = ar =>
+        {
+            var tcs = (TaskCompletionSource<bool>)ar.AsyncState;
+            try
+            {
+                ((Socket)tcs.Task.AsyncState).EndConnect(ar);
+                tcs.TrySetResult(true);
+            }
+            catch (Exception e)
+            {
+                tcs.TrySetException(e);
+            }
+        };
+        #endregion
     }
 }

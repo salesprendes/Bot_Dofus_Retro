@@ -1,5 +1,6 @@
 ﻿using Bot_Dofus_Retro.Comun.Frames.Transporte;
 using Bot_Dofus_Retro.Otros;
+using Bot_Dofus_Retro.Utilidades.Extensiones;
 using System;
 using System.Collections.Generic;
 using System.Linq;

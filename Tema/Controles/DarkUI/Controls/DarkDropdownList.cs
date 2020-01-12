@@ -1,25 +1,16 @@
 ﻿using Bot_Dofus_Retro.DarkUI.Config;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Bot_Dofus_Retro.DarkUI.Controls
 {
     public class DarkDropdownList : Control
     {
-        #region Event Region
-
         public event EventHandler SelectedItemChanged;
-
-        #endregion
-
-        #region Field Region
-
         private DarkControlState _controlState = DarkControlState.Normal;
 
         private readonly ObservableCollection<DarkDropdownItem> _items = new ObservableCollection<DarkDropdownItem>();
@@ -37,16 +28,9 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
 
         private ToolStripDropDownDirection _dropdownDirection = ToolStripDropDownDirection.Default;
 
-        #endregion
-
-        #region Property Region
-
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ObservableCollection<DarkDropdownItem> Items
-        {
-            get { return _items; }
-        }
+        public ObservableCollection<DarkDropdownItem> Items => _items;
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -120,10 +104,6 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
             set { _dropdownDirection = value; }
         }
 
-        #endregion
-
-        #region Constructor Region
-
         public DarkDropdownList()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer |ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.UserMouse, true);
@@ -136,10 +116,6 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
 
             SetControlState(DarkControlState.Normal);
         }
-
-        #endregion
-
-        #region Method Region
 
         private ToolStripMenuItem GetMenuItem(DarkDropdownItem item)
         {
@@ -195,7 +171,6 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
             if (height > _maxHeight)
                 height = _maxHeight;
 
-            // Dirty: Check what the autosized items are
             foreach (ToolStripMenuItem item in _menu.Items)
             {
                 item.AutoSize = true;
@@ -206,16 +181,11 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                 item.AutoSize = false;
             }
 
-            // Force the size
             foreach (ToolStripMenuItem item in _menu.Items)
                 item.Size = new Size(width - 1, _itemHeight);
 
             _menu.Size = new Size(width, height);
         }
-
-        #endregion
-
-        #region Event Handler Region
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -235,9 +205,6 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
 
                     _menu.Items.Add(menuItem);
                     menuItem.Click += Item_Select;
-
-                    if (SelectedItem == null)
-                        SelectedItem = item;
                 }
             }
 
@@ -378,21 +345,14 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                 SetControlState(DarkControlState.Hover);
         }
 
-        #endregion
-
-        #region Render Region
-
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
 
             // Draw background
             using (var b = new SolidBrush(Colors.MediumBackground))
-            {
                 g.FillRectangle(b, ClientRectangle);
-            }
 
-            // Draw normal state
             if (ControlState == DarkControlState.Normal)
             {
                 if (ShowBorder)
@@ -405,7 +365,6 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                 }
             }
 
-            // Draw hover state
             if (ControlState == DarkControlState.Hover)
             {
                 using (var b = new SolidBrush(Colors.DarkBorder))
@@ -426,7 +385,6 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                 }
             }
 
-            // Draw pressed state
             if (ControlState == DarkControlState.Pressed)
             {
                 using (var b = new SolidBrush(Colors.DarkBorder))
@@ -441,16 +399,11 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                 }
             }
 
-            // Draw dropdown arrow
             using (var img = Properties.Resources.small_arrow)
-            {
                 g.DrawImageUnscaled(img, ClientRectangle.Right - img.Width - 4, ClientRectangle.Top + (ClientRectangle.Height / 2) - (img.Height / 2));
-            }
 
-            // Draw selected item
             if (SelectedItem != null)
             {
-                // Draw Icon
                 var hasIcon = SelectedItem.Icon != null;
 
                 if (hasIcon)
@@ -458,8 +411,7 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                     g.DrawImageUnscaled(SelectedItem.Icon, new Point(ClientRectangle.Left + 5, ClientRectangle.Top + (ClientRectangle.Height / 2) - (_iconSize / 2)));
                 }
 
-                // Draw Text
-                using (var b = new SolidBrush(Colors.LightText))
+                using (SolidBrush b = new SolidBrush(Colors.LightText))
                 {
                     var stringFormat = new StringFormat
                     {
@@ -479,7 +431,5 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                 }
             }
         }
-
-        #endregion
     }
 }

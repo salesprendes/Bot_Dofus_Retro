@@ -36,7 +36,6 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.textBox_nombre_privado = new Bot_Dofus_Retro.DarkUI.Controls.DarkTextBox();
             this.comboBox_lista_canales = new Bot_Dofus_Retro.DarkUI.Controls.DarkDropdownList();
             this.tableLayout_Canales = new System.Windows.Forms.TableLayoutPanel();
-            this.textbox_logs = new Bot_Dofus_Retro.DarkUI.Controls.DarkRichTextBox();
             this.canal_incarnam = new Bot_Dofus_Retro.Tema.Controles.ColorCheckBox.ColorCheckBox();
             this.canal_informaciones = new Bot_Dofus_Retro.Tema.Controles.ColorCheckBox.ColorCheckBox();
             this.canal_comercio = new Bot_Dofus_Retro.Tema.Controles.ColorCheckBox.ColorCheckBox();
@@ -45,6 +44,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.canal_gremio = new Bot_Dofus_Retro.Tema.Controles.ColorCheckBox.ColorCheckBox();
             this.canal_privado = new Bot_Dofus_Retro.Tema.Controles.ColorCheckBox.ColorCheckBox();
             this.canal_general = new Bot_Dofus_Retro.Tema.Controles.ColorCheckBox.ColorCheckBox();
+            this.textbox_logs = new Bot_Dofus_Retro.DarkUI.Controls.DarkRichTextBox();
             this.tableLayoutPanel_inferiores_chat.SuspendLayout();
             this.tableLayout_Canales.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +55,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.tableLayoutPanel_inferiores_chat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.68493F));
             this.tableLayoutPanel_inferiores_chat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.27397F));
             this.tableLayoutPanel_inferiores_chat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 59.0411F));
-            this.tableLayoutPanel_inferiores_chat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 59F));
+            this.tableLayoutPanel_inferiores_chat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.tableLayoutPanel_inferiores_chat.Controls.Add(this.button_limpiar_consola, 3, 0);
             this.tableLayoutPanel_inferiores_chat.Controls.Add(this.textBox_enviar_consola, 2, 0);
             this.tableLayoutPanel_inferiores_chat.Controls.Add(this.textBox_nombre_privado, 1, 0);
@@ -74,11 +74,11 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             // 
             this.button_limpiar_consola.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_limpiar_consola.Image = global::Bot_Dofus_Retro.Properties.Resources.icono_limpiar;
-            this.button_limpiar_consola.Location = new System.Drawing.Point(733, 4);
+            this.button_limpiar_consola.Location = new System.Drawing.Point(728, 4);
             this.button_limpiar_consola.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_limpiar_consola.Name = "button_limpiar_consola";
             this.button_limpiar_consola.Padding = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.button_limpiar_consola.Size = new System.Drawing.Size(54, 29);
+            this.button_limpiar_consola.Size = new System.Drawing.Size(59, 29);
             this.button_limpiar_consola.TabIndex = 3;
             this.button_limpiar_consola.Click += new System.EventHandler(this.button_limpiar_consola_Click);
             // 
@@ -89,11 +89,11 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.textBox_enviar_consola.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox_enviar_consola.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.textBox_enviar_consola.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.textBox_enviar_consola.Location = new System.Drawing.Point(302, 4);
+            this.textBox_enviar_consola.Location = new System.Drawing.Point(300, 4);
             this.textBox_enviar_consola.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_enviar_consola.MaxLength = 249;
             this.textBox_enviar_consola.Name = "textBox_enviar_consola";
-            this.textBox_enviar_consola.Size = new System.Drawing.Size(425, 25);
+            this.textBox_enviar_consola.Size = new System.Drawing.Size(422, 25);
             this.textBox_enviar_consola.TabIndex = 2;
             this.textBox_enviar_consola.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_enviar_consola_KeyDown);
             // 
@@ -105,11 +105,11 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.textBox_nombre_privado.Enabled = false;
             this.textBox_nombre_privado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.textBox_nombre_privado.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.textBox_nombre_privado.Location = new System.Drawing.Point(154, 4);
+            this.textBox_nombre_privado.Location = new System.Drawing.Point(153, 4);
             this.textBox_nombre_privado.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_nombre_privado.MaxLength = 65;
             this.textBox_nombre_privado.Name = "textBox_nombre_privado";
-            this.textBox_nombre_privado.Size = new System.Drawing.Size(142, 25);
+            this.textBox_nombre_privado.Size = new System.Drawing.Size(141, 25);
             this.textBox_nombre_privado.TabIndex = 1;
             // 
             // comboBox_lista_canales
@@ -118,7 +118,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.comboBox_lista_canales.Location = new System.Drawing.Point(3, 4);
             this.comboBox_lista_canales.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBox_lista_canales.Name = "comboBox_lista_canales";
-            this.comboBox_lista_canales.Size = new System.Drawing.Size(145, 29);
+            this.comboBox_lista_canales.Size = new System.Drawing.Size(144, 29);
             this.comboBox_lista_canales.TabIndex = 0;
             this.comboBox_lista_canales.SelectedItemChanged += new System.EventHandler(this.comboBox_lista_canales_SelectedItemChanged);
             // 
@@ -151,20 +151,6 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.tableLayout_Canales.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayout_Canales.Size = new System.Drawing.Size(24, 463);
             this.tableLayout_Canales.TabIndex = 1;
-            // 
-            // textbox_logs
-            // 
-            this.textbox_logs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.textbox_logs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textbox_logs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textbox_logs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.textbox_logs.Location = new System.Drawing.Point(0, 0);
-            this.textbox_logs.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textbox_logs.MaxLength = 500;
-            this.textbox_logs.Name = "textbox_logs";
-            this.textbox_logs.Size = new System.Drawing.Size(766, 463);
-            this.textbox_logs.TabIndex = 0;
-            this.textbox_logs.Text = "";
             // 
             // canal_incarnam
             // 
@@ -277,6 +263,20 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.canal_general.TabIndex = 1;
             this.canal_general.UseVisualStyleBackColor = false;
             this.canal_general.CheckedChanged += new System.EventHandler(this.canal_Chat_Click);
+            // 
+            // textbox_logs
+            // 
+            this.textbox_logs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.textbox_logs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textbox_logs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textbox_logs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.textbox_logs.Location = new System.Drawing.Point(0, 0);
+            this.textbox_logs.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textbox_logs.MaxLength = 500;
+            this.textbox_logs.Name = "textbox_logs";
+            this.textbox_logs.Size = new System.Drawing.Size(766, 463);
+            this.textbox_logs.TabIndex = 0;
+            this.textbox_logs.Text = "";
             // 
             // UI_Chat
             // 

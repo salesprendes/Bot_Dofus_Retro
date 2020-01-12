@@ -64,7 +64,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
                 case EstadoCuenta.DIALOGANDO:
                     cuenta.juego.npcs.get_Cerrar_Dialogo();
-                    break;
+                break;
             }
         });
 
@@ -133,6 +133,19 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         {
             cliente.cuenta.juego.personaje.en_grupo = false;
             cliente.cuenta.logger.log_informacion("GRUPO", "Grupo abandonado");
+        });
+
+        [PaqueteAtributo("AN")]
+        public Task get_Nuevo_Nivel(ClienteTcp cliente, string paquete) => Task.Run(() =>
+        {
+            Cuenta cuenta = cliente.cuenta;
+            short nivel = short.Parse(paquete.Substring(2));
+            StatsBoosteables stat_boost = cuenta.pelea_extension.configuracion.stat_boost;
+
+            if (stat_boost != StatsBoosteables.NINGUNO)
+                cuenta.juego.personaje.get_Auto_Boostear_Caracteristicas(stat_boost);
+
+            cuenta.logger.log_informacion("DOFUS", $"El personaje ha subido al nivel {nivel}");
         });
 
         [PaqueteAtributo("ERK")]

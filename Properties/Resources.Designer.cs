@@ -348,19 +348,15 @@ namespace Bot_Dofus_Retro.Properties {
         ///			coroutine.yield()
         ///		end
         ///	end,
-        ///
-        ///	cambiarMapa = function(posicion)
-        ///		if api.mapa.cambiarMapa(posicion) then
+        ///	
+        ///	utilizarInteractivo = function(celda_id, habilidad)
+        ///		if api.mapa.utilizarInteractivo(celda_id, habilidad) then
         ///			coroutine.yield()
         ///		end
-        ///	end
-        ///}
+        ///	end,
         ///
-        ///npc =
-        ///{
-        ///	npcBanco = function(npc_id)
-        ///		if api.npc.npcBanco(npcId) then
-        ///			coroutine.yield( [resto de la cadena truncado]&quot;;.
+        ///	cambiarMapa = function(posicion)
+        ///		if api.mapa.camb [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string api_ayuda {
             get {

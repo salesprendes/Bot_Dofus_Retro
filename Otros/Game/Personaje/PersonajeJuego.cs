@@ -95,6 +95,38 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
         public void evento_Personaje_Pathfinding_Minimapa(List<Celda> lista) => movimiento_pathfinding_minimapa?.Invoke(lista);
         #endregion
 
+        #region Stats
+        public bool get_Auto_Boostear_Caracteristicas(StatsBoosteables stat)
+        {
+            if (puntos_caracteristicas == 0)
+                return false;
+
+            int puntos_necesarios = caracteristicas.get_Capital_Necesario_Boost_Stats(raza_id, stat);
+
+            while (puntos_caracteristicas >= puntos_necesarios)
+            {
+                cuenta.conexion.enviar_Paquete($"AB{(byte)stat}");
+                puntos_caracteristicas -= puntos_necesarios;
+                cuenta.logger.log_informacion("PERSONAJE", $"se ha aumentado un punto de {stat}");
+            }
+            
+            return true;
+        }
+
+        public void get_Boost_Stat(StatsBoosteables stat)
+        {
+            if (puntos_caracteristicas == 0)
+                return;
+
+            int puntos_necesarios = caracteristicas.get_Capital_Necesario_Boost_Stats(raza_id, stat);
+
+            if (puntos_caracteristicas < puntos_necesarios)
+                return;
+
+            cuenta.conexion.enviar_Paquete($"AB{(byte)stat}");
+            cuenta.logger.log_informacion("PERSONAJE", $"se ha aumentado un punto de {stat}");
+        }
+
         public void actualizar_Caracteristicas(string paquete)
         {
             string[] _loc3 = paquete.Substring(2).Split('|');
@@ -169,8 +201,9 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             }
             caracteristicas_actualizadas?.Invoke();
         }
+		#endregion
 
-        public void actualizar_Hechizos(string paquete)
+		public void actualizar_Hechizos(string paquete)
         {
             hechizos.Clear();
 

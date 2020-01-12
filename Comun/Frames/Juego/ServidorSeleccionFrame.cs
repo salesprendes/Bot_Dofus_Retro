@@ -79,6 +79,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             personaje.inventario.agregar_Objetos(_loc4[9]);
 
             cuenta.juego.personaje.timer_afk.Change(1200000, 1200000);
+            cuenta.pelea_extension.configuracion.cargar();
             cuenta.juego.personaje.evento_Personaje_Seleccionado();
 
             await cliente.enviar_Paquete_Async("GC1");
