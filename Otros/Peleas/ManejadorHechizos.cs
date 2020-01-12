@@ -59,8 +59,17 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 return ResultadoLanzandoHechizo.LANZADO;
             }
 
-            if (!get_Condiciones_Principales(hechizo))
+            if (!get_Distancia_Buena(hechizo))
                 return ResultadoLanzandoHechizo.NO_LANZADO;
+
+            if (hechizo.necesita_piedra)//Para capturar
+            {
+                ObjetosInventario arma = cuenta.juego.personaje.inventario.get_Objeto_en_Posicion(InventarioPosiciones.ARMA);
+                if (arma != null && arma.id_modelo != 83)
+                    return await get_Lanzar_Hechizo_Simple(hechizo);
+                else
+                    return ResultadoLanzandoHechizo.NO_LANZADO;
+            }
 
             if (hechizo.focus == HechizoFocus.CELDA_VACIA)
                 return await lanzar_Hechizo_Celda_Vacia(hechizo);
@@ -316,33 +325,23 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 if (cuenta.pelea_extension.configuracion.ignorar_invocaciones && luchador.es_invocacion)
                     return false;
 
-                return true;
+                return luchador.porcentaje_vida <= hechizo.vida_objetivo;
             }
 
             return hechizo.focus == HechizoFocus.ENEMIGO ? pelea.get_Enemigo_Mas_Cercano(filtro) : pelea.get_Obtener_Aliado_Mas_Cercano(filtro);
         }
 
-        private bool get_Condiciones_Principales(PeleaHechizos hechizo)
+        private bool get_Distancia_Buena(PeleaHechizos hechizo)
         {
             if (hechizo.distancia_minima == 0)
                 return true;
 
-            if (hechizo.necesita_piedra)//Para capturar en dungs
-            {
-                ObjetosInventario arma = cuenta.juego.personaje.inventario.get_Objeto_en_Posicion(InventarioPosiciones.ARMA);
-                if(arma != null && arma.id_modelo != 83)
-                    return false;
-            }
-
-            Luchadores enemigo_cercano = hechizo.metodo_distancia == MetodoDistanciaLanzamiento.CERCANO ? pelea.get_Enemigo_Mas_Cercano() : pelea.get_Enemigo_Mas_Lejano();
+            Luchadores enemigo_cercano = pelea.get_Enemigo_Mas_Cercano();
 
             if (enemigo_cercano == null)
                 return false;
-
-            if (hechizo.distancia_operador)
-                return pelea.jugador_luchador.celda.get_Distancia(enemigo_cercano.celda) >= hechizo.distancia_minima;
-            else
-                return pelea.jugador_luchador.celda.get_Distancia(enemigo_cercano.celda) <= hechizo.distancia_minima;
+            
+            return pelea.jugador_luchador.celda.get_Distancia(enemigo_cercano.celda) >= hechizo.distancia_minima;
         }
 
         #region Zona Dispose

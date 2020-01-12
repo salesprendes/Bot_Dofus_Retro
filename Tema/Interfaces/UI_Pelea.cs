@@ -61,8 +61,6 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             comboBox_lista_tactica.SelectedIndex = (byte)cuenta.pelea_extension.configuracion.tactica;
             comboBox_lista_posicionamiento.SelectedIndex = (byte)cuenta.pelea_extension.configuracion.posicionamiento;
             comboBox_modo_lanzamiento.SelectedIndex = 0;
-            comboBox_distancia_enemigo.SelectedIndex = 0;
-            comboBox_distancia_operador.SelectedIndex = 0;
             refrescar_Lista_Hechizos();
         }
 
@@ -79,8 +77,6 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
                     hechizo.focus.ToString(),
                     hechizo.lanzamientos_x_turno.ToString(),
                     hechizo.metodo_lanzamiento.ToString(),
-                    hechizo.metodo_distancia.ToString(),
-                    hechizo.metodo_distancia == MetodoDistanciaLanzamiento.NINGUNO ? "-" : (hechizo.distancia_operador ? "=>" : "<="),
                     hechizo.distancia_minima.ToString()
                 });
             }
@@ -93,13 +89,12 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             HechizoFocus focus = (HechizoFocus)comboBox_focus_hechizo.SelectedIndex;
             MetodoLanzamiento metodo_lanzamiento = (MetodoLanzamiento)comboBox_modo_lanzamiento.SelectedIndex;
             byte lanzamientos_turnos = Convert.ToByte(numeric_lanzamientos_turno.Value);
-            MetodoDistanciaLanzamiento metodo_distancia = (MetodoDistanciaLanzamiento)comboBox_distancia_enemigo.SelectedIndex;
-            bool operador = comboBox_distancia_operador.SelectedItem.Equals("=>");
-            byte distancia = metodo_distancia == MetodoDistanciaLanzamiento.NINGUNO ? Convert.ToByte(0) : Convert.ToByte(numeric_distancia.Value);
+            byte distancia = Convert.ToByte(numeric_distancia.Value);
             bool es_AOE = checkBox_AOE.Checked;
             bool necesita_piedra = checkBox_piedra_equipada.Checked;
+            byte vida_objetivo_necesaria = Convert.ToByte(numericUp_vida_minima.Value);
 
-            cuenta.pelea_extension.configuracion.hechizos.Add(new PeleaHechizos(hechizo.id, hechizo.nombre, focus, metodo_lanzamiento, lanzamientos_turnos, metodo_distancia, operador, distancia, es_AOE, necesita_piedra));
+            cuenta.pelea_extension.configuracion.hechizos.Add(new PeleaHechizos(hechizo.id, hechizo.nombre, focus, metodo_lanzamiento, lanzamientos_turnos, distancia, es_AOE, necesita_piedra, vida_objetivo_necesaria));
             cuenta.pelea_extension.configuracion.guardar();
             refrescar_Lista_Hechizos();
             ordenar_ListView(listView_hechizos_pelea);

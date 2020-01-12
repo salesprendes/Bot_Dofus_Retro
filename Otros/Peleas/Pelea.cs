@@ -166,27 +166,6 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             return enemigo;
         }
 
-        public Luchadores get_Enemigo_Mas_Lejano(Func<Luchadores, bool> filtro = null)
-        {
-            int distancia = -1, distancia_temporal;
-            Luchadores enemigo = null;
-
-            foreach (Luchadores luchador in filtro == null ? get_Enemigos : get_Enemigos.Where(e => filtro(e)))
-            {
-                if (!luchador.esta_vivo)
-                    continue;
-
-                distancia_temporal = jugador_luchador.celda.get_Distancia(luchador.celda);
-
-                if (distancia == -1 || distancia_temporal > distancia)
-                {
-                    distancia = distancia_temporal;
-                    enemigo = luchador;
-                }
-            }
-            return enemigo;
-        }
-
         public void get_Agregar_Luchador(Luchadores luchador)
         {
             if (luchador.id == cuenta.juego.personaje.id)
@@ -214,7 +193,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             }
         }
 
-        public short get_Celda_Mas_Cercana_O_Lejana(bool cercana, IEnumerable<Celda> celdas_posibles)
+        public short get_Celda_Mas_Cercana_O_Lejana(bool cercana, List<Celda> celdas_posibles)
         {
             short celda_id = -1;
             int distancia_total = -1;

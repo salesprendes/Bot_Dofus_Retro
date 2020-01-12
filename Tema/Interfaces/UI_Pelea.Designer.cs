@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI_Pelea));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_general_pelea = new System.Windows.Forms.TabPage();
@@ -52,8 +52,6 @@
             this.focus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.n_lanzamientos = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lanzamiento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.metodo_distancia = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.operador_distancia = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.distancia = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.button_subir_hechizo = new System.Windows.Forms.Button();
@@ -71,15 +69,16 @@
             this.label_agregar_lanzamientos = new System.Windows.Forms.Label();
             this.numeric_lanzamientos_turno = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox_piedra_equipada = new System.Windows.Forms.CheckBox();
             this.checkBox_AOE = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel_segundario = new System.Windows.Forms.TableLayoutPanel();
             this.label_agregar_distancia = new System.Windows.Forms.Label();
-            this.comboBox_distancia_enemigo = new System.Windows.Forms.ComboBox();
             this.numeric_distancia = new System.Windows.Forms.NumericUpDown();
-            this.comboBox_distancia_operador = new System.Windows.Forms.ComboBox();
             this.button_agregar_hechizo = new System.Windows.Forms.Button();
             this.lista_imagenes = new System.Windows.Forms.ImageList(this.components);
-            this.checkBox_piedra_equipada = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label_vida_minima = new System.Windows.Forms.Label();
+            this.numericUp_vida_minima = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage_general_pelea.SuspendLayout();
             this.groupBox_durante_combate.SuspendLayout();
@@ -93,6 +92,8 @@
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel_segundario.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_distancia)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUp_vida_minima)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -308,14 +309,12 @@
             this.focus,
             this.n_lanzamientos,
             this.lanzamiento,
-            this.metodo_distancia,
-            this.operador_distancia,
             this.distancia});
             this.listView_hechizos_pelea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView_hechizos_pelea.FullRowSelect = true;
             this.listView_hechizos_pelea.HideSelection = false;
             this.listView_hechizos_pelea.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem3});
             this.listView_hechizos_pelea.Location = new System.Drawing.Point(3, 3);
             this.listView_hechizos_pelea.Name = "listView_hechizos_pelea";
             this.listView_hechizos_pelea.Size = new System.Drawing.Size(712, 179);
@@ -347,16 +346,6 @@
             // 
             this.lanzamiento.Text = "Lanzamiento";
             this.lanzamiento.Width = 87;
-            // 
-            // metodo_distancia
-            // 
-            this.metodo_distancia.Text = "Método Distancia";
-            this.metodo_distancia.Width = 117;
-            // 
-            // operador_distancia
-            // 
-            this.operador_distancia.Text = "Operador";
-            this.operador_distancia.Width = 71;
             // 
             // distancia
             // 
@@ -569,6 +558,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Controls.Add(this.checkBox_piedra_equipada);
             this.groupBox1.Controls.Add(this.checkBox_AOE);
             this.groupBox1.Controls.Add(this.tableLayoutPanel_segundario);
@@ -579,6 +569,18 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Opciones";
+            // 
+            // checkBox_piedra_equipada
+            // 
+            this.checkBox_piedra_equipada.AutoSize = true;
+            this.checkBox_piedra_equipada.Dock = System.Windows.Forms.DockStyle.Left;
+            this.checkBox_piedra_equipada.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.checkBox_piedra_equipada.Location = new System.Drawing.Point(64, 52);
+            this.checkBox_piedra_equipada.Name = "checkBox_piedra_equipada";
+            this.checkBox_piedra_equipada.Size = new System.Drawing.Size(233, 35);
+            this.checkBox_piedra_equipada.TabIndex = 2;
+            this.checkBox_piedra_equipada.Text = "Necesita piedra de captura";
+            this.checkBox_piedra_equipada.UseVisualStyleBackColor = true;
             // 
             // checkBox_AOE
             // 
@@ -594,15 +596,11 @@
             // 
             // tableLayoutPanel_segundario
             // 
-            this.tableLayoutPanel_segundario.ColumnCount = 4;
-            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.19846F));
-            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.80154F));
-            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
-            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 152F));
+            this.tableLayoutPanel_segundario.ColumnCount = 2;
+            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.51948F));
+            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.48052F));
             this.tableLayoutPanel_segundario.Controls.Add(this.label_agregar_distancia, 0, 0);
-            this.tableLayoutPanel_segundario.Controls.Add(this.comboBox_distancia_enemigo, 1, 0);
-            this.tableLayoutPanel_segundario.Controls.Add(this.numeric_distancia, 3, 0);
-            this.tableLayoutPanel_segundario.Controls.Add(this.comboBox_distancia_operador, 2, 0);
+            this.tableLayoutPanel_segundario.Controls.Add(this.numeric_distancia, 1, 0);
             this.tableLayoutPanel_segundario.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel_segundario.Location = new System.Drawing.Point(3, 21);
             this.tableLayoutPanel_segundario.Name = "tableLayoutPanel_segundario";
@@ -618,48 +616,23 @@
             this.label_agregar_distancia.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label_agregar_distancia.Location = new System.Drawing.Point(3, 0);
             this.label_agregar_distancia.Name = "label_agregar_distancia";
-            this.label_agregar_distancia.Size = new System.Drawing.Size(318, 31);
+            this.label_agregar_distancia.Size = new System.Drawing.Size(460, 31);
             this.label_agregar_distancia.TabIndex = 1;
-            this.label_agregar_distancia.Text = "Verificar distancia entre bot y enemigo";
+            this.label_agregar_distancia.Text = "Distancia entre el bot y el enemigo mas proximo: >=";
             this.label_agregar_distancia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // comboBox_distancia_enemigo
-            // 
-            this.comboBox_distancia_enemigo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_distancia_enemigo.FormattingEnabled = true;
-            this.comboBox_distancia_enemigo.Items.AddRange(new object[] {
-            "Ninguno",
-            "Cercano",
-            "Lejano"});
-            this.comboBox_distancia_enemigo.Location = new System.Drawing.Point(327, 3);
-            this.comboBox_distancia_enemigo.Name = "comboBox_distancia_enemigo";
-            this.comboBox_distancia_enemigo.Size = new System.Drawing.Size(183, 25);
-            this.comboBox_distancia_enemigo.TabIndex = 8;
             // 
             // numeric_distancia
             // 
             this.numeric_distancia.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numeric_distancia.Location = new System.Drawing.Point(620, 3);
+            this.numeric_distancia.Location = new System.Drawing.Point(469, 3);
             this.numeric_distancia.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.numeric_distancia.Name = "numeric_distancia";
-            this.numeric_distancia.Size = new System.Drawing.Size(147, 25);
+            this.numeric_distancia.Size = new System.Drawing.Size(298, 25);
             this.numeric_distancia.TabIndex = 7;
-            // 
-            // comboBox_distancia_operador
-            // 
-            this.comboBox_distancia_operador.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_distancia_operador.FormattingEnabled = true;
-            this.comboBox_distancia_operador.Items.AddRange(new object[] {
-            "<=",
-            "=>"});
-            this.comboBox_distancia_operador.Location = new System.Drawing.Point(516, 3);
-            this.comboBox_distancia_operador.Name = "comboBox_distancia_operador";
-            this.comboBox_distancia_operador.Size = new System.Drawing.Size(98, 25);
-            this.comboBox_distancia_operador.TabIndex = 9;
             // 
             // button_agregar_hechizo
             // 
@@ -680,17 +653,40 @@
             this.lista_imagenes.Images.SetKeyName(0, "1 - Home24.png");
             this.lista_imagenes.Images.SetKeyName(1, "magic32.png");
             // 
-            // checkBox_piedra_equipada
+            // tableLayoutPanel1
             // 
-            this.checkBox_piedra_equipada.AutoSize = true;
-            this.checkBox_piedra_equipada.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_piedra_equipada.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.checkBox_piedra_equipada.Location = new System.Drawing.Point(64, 52);
-            this.checkBox_piedra_equipada.Name = "checkBox_piedra_equipada";
-            this.checkBox_piedra_equipada.Size = new System.Drawing.Size(233, 35);
-            this.checkBox_piedra_equipada.TabIndex = 2;
-            this.checkBox_piedra_equipada.Text = "Necesita piedra de captura";
-            this.checkBox_piedra_equipada.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.39496F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.60504F));
+            this.tableLayoutPanel1.Controls.Add(this.numericUp_vida_minima, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label_vida_minima, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(297, 52);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(476, 35);
+            this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // label_vida_minima
+            // 
+            this.label_vida_minima.AutoSize = true;
+            this.label_vida_minima.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_vida_minima.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label_vida_minima.Location = new System.Drawing.Point(3, 0);
+            this.label_vida_minima.Name = "label_vida_minima";
+            this.label_vida_minima.Size = new System.Drawing.Size(410, 35);
+            this.label_vida_minima.TabIndex = 2;
+            this.label_vida_minima.Text = "Lanzar cuando la vida del enemigo sea inferior a %";
+            this.label_vida_minima.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // numericUp_vida_minima
+            // 
+            this.numericUp_vida_minima.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUp_vida_minima.Location = new System.Drawing.Point(419, 3);
+            this.numericUp_vida_minima.Name = "numericUp_vida_minima";
+            this.numericUp_vida_minima.Size = new System.Drawing.Size(54, 25);
+            this.numericUp_vida_minima.TabIndex = 8;
             // 
             // UI_Pelea
             // 
@@ -721,6 +717,9 @@
             this.tableLayoutPanel_segundario.ResumeLayout(false);
             this.tableLayoutPanel_segundario.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_distancia)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUp_vida_minima)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -770,11 +769,10 @@
         private System.Windows.Forms.NumericUpDown numeric_distancia;
         private System.Windows.Forms.ColumnHeader distancia;
         private System.Windows.Forms.CheckBox checkBox_ignorar_invocaciones;
-        private System.Windows.Forms.ComboBox comboBox_distancia_enemigo;
-        private System.Windows.Forms.ComboBox comboBox_distancia_operador;
-        private System.Windows.Forms.ColumnHeader metodo_distancia;
-        private System.Windows.Forms.ColumnHeader operador_distancia;
         private System.Windows.Forms.CheckBox checkBox_AOE;
         private System.Windows.Forms.CheckBox checkBox_piedra_equipada;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.NumericUpDown numericUp_vida_minima;
+        private System.Windows.Forms.Label label_vida_minima;
     }
 }
