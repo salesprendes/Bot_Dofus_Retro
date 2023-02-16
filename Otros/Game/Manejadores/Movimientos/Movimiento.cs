@@ -4,7 +4,7 @@ using Bot_Dofus_Retro.Otros.Mapas;
 using Bot_Dofus_Retro.Otros.Mapas.Movimiento;
 using Bot_Dofus_Retro.Otros.Mapas.Movimiento.Mapas;
 using Bot_Dofus_Retro.Otros.Mapas.Movimiento.Peleas;
-using Bot_Dofus_Retro.Utilidades.Extensiones;
+using Bot_Dofus_Retro.Utilidades.Criptografia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -81,7 +81,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
 
             while (celdas_teleport.Count > 0)
             {
-                Celda celda = celdas_teleport[Extensiones.get_Nuevo_Random(0, celdas_teleport.Count)];
+                Celda celda = celdas_teleport[Hash.get_Nuevo_Random(0, celdas_teleport.Count)];
 
                 if (get_Cambiar_Mapa(direccion, celda))
                     return true;
@@ -150,7 +150,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
             nodo.Value.Value.camino.celdas_accesibles.Insert(0, cuenta.juego.pelea.jugador_luchador.celda.id);
             List<Celda> lista_celdas = nodo.Value.Value.camino.celdas_accesibles.Select(c => mapa.get_Celda_Id(c)).ToList();
 
-            await cuenta.conexion.enviar_Paquete_Async("GA001" + PathFinderUtil.get_Pathfinding_Limpio(lista_celdas), false);
+            await cuenta.conexion.enviar_Paquete_Async("GA001" + PathFinderUtil.get_Pathfinding_Limpio(lista_celdas));
             personaje.evento_Personaje_Pathfinding_Minimapa(lista_celdas);
         }
 
@@ -168,16 +168,16 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
             }
         }
 
-        private void enviar_Paquete_Movimiento()
+        private void enviar_Paquete_Movimiento() => Task.Run(async () =>
         {
             if (cuenta.Estado_Cuenta == EstadoCuenta.REGENERANDO)
-                cuenta.conexion.enviar_Paquete("eU1", true);
+                await cuenta.conexion.enviar_Paquete_Async("eU1");
 
             string path_string = PathFinderUtil.get_Pathfinding_Limpio(actual_path);
             cuenta.Estado_Cuenta = EstadoCuenta.MOVIMIENTO;
-            cuenta.conexion.enviar_Paquete("GA001" + path_string, true);
+            await cuenta.conexion.enviar_Paquete_Async("GA001" + path_string);
             personaje.evento_Personaje_Pathfinding_Minimapa(actual_path);
-        }
+        });
 
         public async Task evento_Movimiento_Finalizado(Celda celda_destino, byte tipo_gkk, bool correcto)
         {

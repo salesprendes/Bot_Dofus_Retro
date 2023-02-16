@@ -3,7 +3,7 @@
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -16,7 +16,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Acciones
         {
             if (cuenta.esta_Dialogando())
             {
-                cuenta.conexion.enviar_Paquete("EV");
+                cuenta.conexion.enviar_Paquete_Async("EV").Wait();
                 return resultado_procesado;
             }
 

@@ -5,6 +5,7 @@ using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Utilidades.Logs;
 using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Bot_Dofus_Retro.Tema.Interfaces
@@ -19,22 +20,16 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             cuenta = _cuenta;
             DockText = nombre;
             Icon = icono;
-            get_Lista_Canales();
-        }
 
-        private void get_Lista_Canales()
-        {
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("General"));
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("Reclutamiento"));
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("Comercio"));
             comboBox_lista_canales.Items.Add(new DarkDropdownItem("Mensaje privado"));
-            comboBox_lista_canales.SelectedItem = comboBox_lista_canales.Items[0];
         }
 
         private void UI_Chat_Load(object sender, EventArgs e)
         {
-            escribir_mensaje($"[{DateTime.Now.ToString("HH:mm:ss")}] -> [INFORMACIÓN] Bot creado por Alvaro, http://www.salesprendes.com versión: {Application.ProductVersion}", LogTipos.ERROR.ToString("X"));
-            escribir_mensaje($"[{DateTime.Now.ToString("HH:mm:ss")}] -> SI PAGASTE POR EL BOT, TE ESTAFARON", LogTipos.ERROR.ToString("X"));
+            escribir_mensaje($"[{DateTime.Now.ToString("HH:mm:ss")}] -> [INFORMACIÓN] Bot creado por Alvaro, http://www.salesprendes.com versión: {Application.ProductVersion} revolution", LogTipos.ERROR.ToString("X"));
             cargar_Eventos_Cuenta();
 
             if (cuenta.tiene_grupo)
@@ -79,20 +74,20 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             }));
         }
 
-        private void canal_Chat_Click(object sender, EventArgs e)
+        private void canal_Chat_Click(object sender, EventArgs e) => Task.Run(async () =>
         {
             if (cuenta?.Estado_Cuenta != EstadoCuenta.DESCONECTADO && cuenta?.Estado_Cuenta != EstadoCuenta.CONECTANDO)
             {
                 string[] canales = { "i", "*", "#$p", "%", "!", "?", ":", "^" };
                 CheckBox control = sender as CheckBox;
-                
-                cuenta.conexion.enviar_Paquete((control.Checked ? "cC+" : "cC-") + canales[control.TabIndex]);
+
+                await cuenta.conexion.enviar_Paquete_Async((control.Checked ? "cC+" : "cC-") + canales[control.TabIndex]);
             }
-        }
+        });
 
         private void button_limpiar_consola_Click(object sender, EventArgs e) => textbox_logs.Clear();
 
-        private void textBox_enviar_consola_KeyDown(object sender, KeyEventArgs e)
+        private void textBox_enviar_consola_KeyDown(object sender, KeyEventArgs e) => Task.Run(async () =>
         {
             if (e.KeyCode != Keys.Enter || textBox_enviar_consola.TextLength <= 0)
                 return;
@@ -109,27 +104,27 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
 
                 case "/PING":
                     if (cuenta.Estado_Cuenta != EstadoCuenta.DESCONECTADO)
-                        cuenta.conexion.enviar_Paquete("ping", true);
+                        await cuenta.conexion.enviar_Paquete_Async("ping");
                 break;
 
                 default:
                     switch (comboBox_lista_canales.SelectedItem.Text)
                     {
                         case "General":
-                            cuenta.conexion.enviar_Paquete("BM*|" + textBox_enviar_consola.Text + "|", true);
-                        break;
+                            await cuenta.conexion.enviar_Paquete_Async("BM*|" + textBox_enviar_consola.Text + "|");
+                            break;
 
                         case "Reclutamiento":
-                            cuenta.conexion.enviar_Paquete("BM?|" + textBox_enviar_consola.Text + "|", true);
-                        break;
+                            await cuenta.conexion.enviar_Paquete_Async("BM?|" + textBox_enviar_consola.Text + "|");
+                            break;
 
                         case "Comercio":
-                            cuenta.conexion.enviar_Paquete("BM:|" + textBox_enviar_consola.Text + "|", true);
-                       break;
+                            await cuenta.conexion.enviar_Paquete_Async("BM:|" + textBox_enviar_consola.Text + "|");
+                            break;
 
                         case "Mensaje privado":
-                            cuenta.conexion.enviar_Paquete("BM" + textBox_nombre_privado.Text + "|" + textBox_enviar_consola.Text + "|", true);
-                        break;
+                            await cuenta.conexion.enviar_Paquete_Async("BM" + textBox_nombre_privado.Text + "|" + textBox_enviar_consola.Text + "|");
+                            break;
                     }
                     break;
             }
@@ -138,7 +133,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             e.SuppressKeyPress = true;
             textBox_nombre_privado.Clear();
             textBox_enviar_consola.Clear();
-        }
+        });
 
         private void comboBox_lista_canales_SelectedItemChanged(object sender, EventArgs e)
         {

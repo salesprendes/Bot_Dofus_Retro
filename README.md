@@ -1,5 +1,4 @@
-# BOT DOFUS 1.30.14 CREADO POR SALESPRENDES
+# BOT DOFUS 1.30.14 CREADO POR Alvaro Ramon Prendes Sales (SalesPrendes)
 ## SI PAGASTE POR EL BOT, TE ESTAFARON
 
-### Busta conquisto la emulación, yo conquistare el boting de dofus.
-######### HISPAÑIA la mejor comunidad
+### www.salesprendes.com

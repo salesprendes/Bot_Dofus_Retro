@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -132,19 +132,19 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Recolecciones
             }
         }
 
-        private void get_Intentar_Recolectar_Interactivo()
+        private void get_Intentar_Recolectar_Interactivo() => Task.Run(async () =>
         {
             if (!robado)
             {
                 foreach (short habilidad in interactivo_recolectando.modelo.habilidades)
                 {
                     if (cuenta.juego.personaje.oficios.get_Skills_Recoleccion_Disponibles().Contains(habilidad))
-                        cuenta.conexion.enviar_Paquete("GA500" + interactivo_recolectando.celda.id + ";" + habilidad);
+                        await cuenta.conexion.enviar_Paquete_Async("GA500" + interactivo_recolectando.celda.id + ";" + habilidad);
                 }
             }
             else
                 evento_Recoleccion_Acabada(RecoleccionResultado.ROBADO, interactivo_recolectando.celda.id);
-        }
+        });
 
         private void get_Movimiento_Finalizado(bool correcto)
         {

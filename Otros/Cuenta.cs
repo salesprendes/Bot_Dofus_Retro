@@ -1,4 +1,5 @@
 ﻿using Bot_Dofus_Retro.Comun.Network;
+using Bot_Dofus_Retro.Licencia;
 using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game;
 using Bot_Dofus_Retro.Otros.Grupos;
@@ -8,13 +9,12 @@ using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Logs;
 using System;
 using System.Threading.Tasks;
-
 /*
-    Este archivo es parte del proyecto Bot Dofus Retro
+Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
-	Creado por Alvaro Prendes
-    web: http://www.salesprendes.com
+Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
+Creado por Alvaro Prendes
+web: http://www.salesprendes.com
 */
 
 namespace Bot_Dofus_Retro.Otros
@@ -55,7 +55,13 @@ namespace Bot_Dofus_Retro.Otros
 
         public async Task conectar()
         {
-            await conexion.conexion_Servidor(GlobalConf.ip_conexion, GlobalConf.puerto_conexion);
+            if (!VerificadorLicencia.comprobar())
+            {
+                logger.log_Error("LICENCIA", "Licencia no disponible");
+                return;
+            }
+
+            await conexion.conexion_Socket(GlobalConf.ip_conexion, GlobalConf.puerto_conexion);
             Estado_Cuenta = EstadoCuenta.CONECTANDO;
             cuenta_conectada?.Invoke();
         }
@@ -64,7 +70,7 @@ namespace Bot_Dofus_Retro.Otros
         {
             Estado_Cuenta = EstadoCuenta.CAMBIANDO_A_JUEGO;
             conexion.get_Desconectar_Socket();
-            await conexion.conexion_Servidor(ip, puerto);
+            await conexion.conexion_Socket(ip, puerto);
             Estado_Cuenta = EstadoCuenta.CONECTANDO;
         }
 
@@ -93,7 +99,6 @@ namespace Bot_Dofus_Retro.Otros
         public bool esta_Luchando() => Estado_Cuenta == EstadoCuenta.LUCHANDO;
         public bool esta_Recolectando() => Estado_Cuenta == EstadoCuenta.RECOLECTANDO;
         public bool esta_Desplazando() => Estado_Cuenta == EstadoCuenta.MOVIMIENTO;
-        public bool esta_Conectado() => Estado_Cuenta == EstadoCuenta.CONECTADO_INACTIVO;
 
         #region Zona Dispose
         public void Dispose() => Dispose(true);

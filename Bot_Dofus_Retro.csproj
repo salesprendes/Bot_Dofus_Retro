@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Bot_Dofus_Retro</RootNamespace>
     <AssemblyName>Bot_Dofus_Retro</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -32,7 +32,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>
     </DefineConstants>
@@ -74,18 +74,38 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>dll\MoonSharp.Interpreter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WinHttpHandler">
+      <HintPath>dll\System.Net.Http.WinHttpHandler.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Text.Encodings.Web, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -104,7 +124,11 @@
     <Compile Include="Comun\Frames\Transporte\PaqueteAtributo.cs" />
     <Compile Include="Comun\Frames\Transporte\PaqueteDatos.cs" />
     <Compile Include="Comun\Frames\Transporte\PaqueteRecibido.cs" />
-    <Compile Include="Otros\Enums\StatsBoosteables.cs" />
+    <Compile Include="Comun\Network\Ping.cs" />
+    <Compile Include="Comun\Network\ZaapConnect.cs" />
+    <Compile Include="Licencia\RefrescadorLicencia.cs" />
+    <Compile Include="Licencia\TiposLicencia.cs" />
+    <Compile Include="Licencia\VerificadorLicencia.cs" />
     <Compile Include="Otros\Game\Npcs\NpcsJuego.cs" />
     <Compile Include="Otros\Game\Personaje\Derechos.cs" />
     <Compile Include="Otros\Game\Personaje\Oficios\OficiosJuego.cs" />
@@ -455,6 +479,7 @@
     <Compile Include="Utilidades\Criptografia\AESEncriptacion.cs" />
     <Compile Include="Utilidades\Criptografia\Base36.cs" />
     <Compile Include="Utilidades\Criptografia\Hash.cs" />
+    <Compile Include="Utilidades\Criptografia\StringHelpercs.cs" />
     <Compile Include="Utilidades\Utilidades\Extensiones.cs" />
     <Compile Include="Utilidades\Logs\Logger.cs" />
     <Compile Include="Utilidades\Logs\LogMensajes.cs" />
@@ -840,6 +865,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dark_ui\close-selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

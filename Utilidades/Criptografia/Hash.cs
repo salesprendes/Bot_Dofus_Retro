@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Bot_Dofus_Retro.Utilidades.Criptografia
 {
@@ -12,7 +13,8 @@ namespace Bot_Dofus_Retro.Utilidades.Criptografia
             'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
             'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'
         };
-
+        
+        /** Metodo Antiguo **/
         public static string encriptar_Password(string password, string key)
         {
             StringBuilder str = new StringBuilder().Append("#1");
@@ -86,6 +88,12 @@ namespace Bot_Dofus_Retro.Utilidades.Criptografia
                 a++;
             }
             return (short)(code1 + code2);
+        }
+
+        public static int get_Nuevo_Random(int min, int max)
+        {
+            int seed = Convert.ToInt32(Regex.Match(Guid.NewGuid().ToString(), @"\d+").Value);
+            return new Random(seed).Next(min, max);
         }
     }
 }

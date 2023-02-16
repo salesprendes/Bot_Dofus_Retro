@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -33,18 +33,14 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             Cuenta cuenta = cliente.cuenta;
 
             string[] pregunta_separada = paquete.Substring(2).Split('|');
-            List<short> respuestas = new List<short>(0);
+            string[] respuestas_disponibles = pregunta_separada[1].Split(';');
 
-            if (pregunta_separada.Count() > 1)
-            {
-                string[] respuestas_disponibles = pregunta_separada[1].Split(';');
-                respuestas = new List<short>(respuestas_disponibles.Count());
+            short pregunta = short.Parse(pregunta_separada[0].Split(';')[0]);
+            List<short> respuestas = new List<short>(respuestas_disponibles.Count());
 
-                foreach (string respuesta in respuestas_disponibles)
-                    respuestas.Add(short.Parse(respuesta));
-            }
+            foreach (string respuesta in respuestas_disponibles)
+                respuestas.Add(short.Parse(respuesta));
 
-            short pregunta = short.Parse(pregunta_separada[0]);
             cuenta.juego.npcs.get_Respuestas_Recibidas(pregunta, respuestas);
         });
     }

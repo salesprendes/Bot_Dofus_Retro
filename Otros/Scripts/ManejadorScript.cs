@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -473,7 +473,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts
                     if (cuenta.Estado_Cuenta != EstadoCuenta.REGENERANDO)
                     {
                         if (!cuenta.esta_ocupado)
-                            cuenta.conexion.enviar_Paquete("eU1", true);
+                            await cuenta.conexion.enviar_Paquete_Async("eU1");
                     }
 
                     cuenta.logger.log_informacion("SCRIPTS", $"Regeneración comenzada, puntos de vida a recuperar: {vida_para_regenerar}, tiempo: {tiempo_estimado} segundos.");
@@ -487,7 +487,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts
                     if (cuenta.Estado_Cuenta == EstadoCuenta.REGENERANDO)
                     {
                         if (!cuenta.esta_ocupado)
-                            cuenta.conexion.enviar_Paquete("eU1", true);
+                            await cuenta.conexion.enviar_Paquete_Async("eU1");
                     }
 
                     cuenta.logger.log_informacion("SCRIPTS", "Regeneración finalizada.");
@@ -628,18 +628,8 @@ namespace Bot_Dofus_Retro.Otros.Scripts
         }
 
         #region Zona Eventos
-        private void get_Accion_Finalizada(Cuenta _cuenta, bool mapa_cambiado)
+        private void get_Accion_Finalizada(bool mapa_cambiado)
         {
-            if (cuenta.tiene_grupo)
-            {
-                if (!cuenta.es_lider_grupo)
-                    return;
-
-                cuenta.logger.log_informacion("GRUPO", "Esperando para acabar las acciones");
-                cuenta.grupo.esperar_Acciones_Terminadas();
-                cuenta.logger.log_informacion("GRUPO", "Acciones del grupo acabadas");
-            }
-
             if (verificar_Acciones_Especiales())
                 return;
 
@@ -649,11 +639,8 @@ namespace Bot_Dofus_Retro.Otros.Scripts
                 procesar_Actual_Bandera();
         }
 
-        private void get_Accion_Personalizada_Finalizada(Cuenta _cuenta, bool mapa_cambiado)
+        private void get_Accion_Personalizada_Finalizada(bool mapa_cambiado)
         {
-            if (cuenta.tiene_grupo && !cuenta.es_lider_grupo)
-                return;
-
             if (verificar_Acciones_Especiales())
                 return;
 

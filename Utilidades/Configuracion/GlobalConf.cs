@@ -5,7 +5,7 @@ using System.Linq;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -17,7 +17,7 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
         private static List<CuentaConf> lista_cuentas = new List<CuentaConf>();
         private static readonly string ruta_archivo_cuentas = Path.Combine(Directory.GetCurrentDirectory(), "cuentas.bot");
         public static bool mostrar_mensajes_debug { get; set; } = false;
-        public static string ip_conexion = "34.251.172.139", version_dofus = "1.30.14", password_encriptacion = "$AideMu$";
+        public static string ip_conexion = "172.65.213.92", version_dofus = "1.39.7";
         public static short puerto_conexion = 443;
         public static int peso_core = 2528660, peso_loader = 2362079;
 
@@ -32,14 +32,13 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
                 int registros_totales = br.ReadInt32();
 
                 for (int i = 0; i < registros_totales; i++)
-                    lista_cuentas.Add(CuentaConf.cargar_Cuenta(br, password_encriptacion));
+                    lista_cuentas.Add(CuentaConf.cargar_Cuenta(br));
 
                 mostrar_mensajes_debug = br.ReadBoolean();
                 ip_conexion = br.ReadString();
                 puerto_conexion = br.ReadInt16();
                 peso_core = br.ReadInt32();
                 peso_loader = br.ReadInt32();
-                password_encriptacion = br.ReadString();
             }
         }
 
@@ -48,13 +47,12 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
             using (BinaryWriter bw = new BinaryWriter(File.Open(ruta_archivo_cuentas, FileMode.Create)))
             {
                 bw.Write(lista_cuentas.Count);
-                lista_cuentas.ForEach(a => a.guardar_Cuenta(bw, password_encriptacion));
+                lista_cuentas.ForEach(a => a.guardar_Cuenta(bw));
                 bw.Write(mostrar_mensajes_debug);
                 bw.Write(ip_conexion);
                 bw.Write(puerto_conexion);
                 bw.Write(peso_core);
                 bw.Write(peso_loader);
-                bw.Write(password_encriptacion);
             }
         }
 

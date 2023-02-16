@@ -7,7 +7,7 @@ using Bot_Dofus_Retro.DarkUI.Controls;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -52,7 +52,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             {
                 BeginInvoke((Action)(() =>
                 {
-                    paquete = (paquete.Length > 50 ? paquete.Substring(0, 50) : paquete);
+                    paquete = (paquete.Length > 90 ? paquete.Substring(0, 90) : paquete);
                     if (ListView_paquete.Items.Count == 100)
                         ListView_paquete.Items.RemoveAt(0);
 

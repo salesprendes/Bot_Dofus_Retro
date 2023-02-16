@@ -1,15 +1,12 @@
-﻿using Bot_Dofus_Retro.DarkUI.Controls;
-using Bot_Dofus_Retro.DarkUI.Docking;
+﻿using Bot_Dofus_Retro.DarkUI.Docking;
 using Bot_Dofus_Retro.Otros;
-using Bot_Dofus_Retro.Otros.Enums;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -26,21 +23,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             cuenta = _cuenta;
             Icon = icono;
             DockText = nombre;
-            get_Eventos();
-        }
-
-        private void get_Eventos()
-        {
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Ninguno"));
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Fuerza"));
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Vitalidad"));
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Sabiduría"));
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Suerte"));
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Agilidad"));
-            DropdownList_stats.Items.Add(new DarkDropdownItem("Inteligencia"));
-
             cuenta.juego.personaje.caracteristicas_actualizadas += personaje_Caracteristicas_Actualizadas;
-            cuenta.juego.personaje.personaje_seleccionado += personaje_Seleccionado;
         }
 
         private void personaje_Caracteristicas_Actualizadas()
@@ -76,36 +59,6 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
                     label_nombre_personaje.Text = cuenta.juego.personaje.nombre;
                 }
             }));
-        }
-
-        private void button_stat_Click(object sender, EventArgs e)
-        {
-            StatsBoosteables stat = (StatsBoosteables)Convert.ToInt16((sender as Button).Tag);
-            cuenta.juego.personaje.get_Boost_Stat(stat);
-        }
-
-        private void personaje_Seleccionado()
-        {
-            BeginInvoke((Action)(() =>
-            {
-                byte stat_seleccionado = (byte)cuenta.pelea_extension.configuracion.stat_boost;
-                DropdownList_stats.SelectedItem = DropdownList_stats.Items[stat_seleccionado];
-                DropdownList_stats.Enabled = true;
-            }));
-        }
-        
-        private void DropdownList_stats_SelectedItemChanged(object sender, EventArgs e)
-        {
-            DarkDropdownList lista = sender as DarkDropdownList;
-            DarkDropdownItem item_seleccionado = lista.SelectedItem;
-            StatsBoosteables boost_antiguo = cuenta.pelea_extension.configuracion.stat_boost;
-            StatsBoosteables boost_nuevo = (StatsBoosteables)lista.Items.IndexOf(item_seleccionado);
-
-            if (boost_nuevo != boost_antiguo)
-            {
-                cuenta.pelea_extension.configuracion.stat_boost = boost_nuevo;
-                cuenta.pelea_extension.configuracion.guardar();
-            }
         }
     }
 }

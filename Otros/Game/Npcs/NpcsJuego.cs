@@ -3,6 +3,7 @@ using Bot_Dofus_Retro.Otros.Mapas.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bot_Dofus_Retro.Otros.Game.Npcs
 {
@@ -42,10 +43,10 @@ namespace Bot_Dofus_Retro.Otros.Game.Npcs
             if (npc == null)
                 return false;
 
-            cuenta.conexion.enviar_Paquete("DC" + npc.id, true);
+            cuenta.conexion.enviar_Paquete_Async("DC" + npc.id).Wait();
             return true;
         }
-        
+
         public bool responder(short respuesta_id)
         {
             if (!cuenta.esta_Dialogando())
@@ -63,7 +64,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Npcs
 
             if (respuestas.Contains(respuesta_id))
             {
-                cuenta.conexion.enviar_Paquete("DR" + pregunta + "|" + respuesta_id, true);
+                cuenta.conexion.enviar_Paquete_Async("DR" + pregunta + "|" + respuesta_id).Wait();
                 return true;
             }
 

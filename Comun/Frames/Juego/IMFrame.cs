@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -67,11 +67,5 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
         [PaqueteAtributo("Im1175")]
         public Task get_Error_Lanzar_Hechizo(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.logger.log_Error("DOFUS", "Imposible lanzar el hechizo actualmente."));
-
-        [PaqueteAtributo("Im093")]
-        public Task get_Pelea_Grupo_Activado(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.logger.log_informacion("DOFUS", "El equipo sólo acepta a miembros del grupo del personaje principal."));
-
-        [PaqueteAtributo("Im094")]
-        public Task get_Pelea_Grupo_Desactivado(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.logger.log_informacion("DOFUS", "El equipo acepta miembros de todos los grupos."));
     }
 }

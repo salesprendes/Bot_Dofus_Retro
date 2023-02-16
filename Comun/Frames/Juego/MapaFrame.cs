@@ -10,13 +10,12 @@ using Bot_Dofus_Retro.Otros.Peleas;
 using Bot_Dofus_Retro.Otros.Peleas.Peleadores;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
-using System;
 using System.Threading.Tasks;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -42,15 +41,15 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                 if (jugador.Length < 1)
                     continue;
 
+                informaciones = jugador.Substring(1).Split(';');
+
                 if (jugador[0].Equals('+'))
                 {
-                    informaciones = jugador.Substring(1).Split(';');
                     Celda celda = mapa.get_Celda_Id(short.Parse(informaciones[0]));
                     Pelea pelea = cuenta.juego.pelea;
                     id = int.Parse(informaciones[3]);
                     nombre_template = informaciones[4];
                     tipo = informaciones[5];
-
                     if (tipo.Contains(","))
                         tipo = tipo.Split(',')[0];
 
@@ -344,13 +343,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                 break;
 
                 case 900:
-                    await cuenta.conexion.enviar_Paquete_Async("GA902" + id_entidad, true);
+                    await cuenta.conexion.enviar_Paquete_Async("GA902" + id_entidad);
                     cuenta.logger.log_informacion("INFORMACIÓN", "Desafio del personaje id: " + id_entidad + " cancelado");
-                break;
-
-                case 905:
-                    cuenta.Estado_Cuenta = EstadoCuenta.LUCHANDO;
-                    cuenta.juego.pelea.get_Nueva_Espada_Combate(id_entidad);
                 break;
             }
         });
@@ -391,14 +385,14 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         [PaqueteAtributo("GDM")]
         public Task get_Nuevo_Mapa(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            cliente.cuenta.juego.mapa.get_Actualizar_Mapa(paquete.Substring(4));
             await cliente.enviar_Paquete_Async("GI");
+            cliente.cuenta.juego.mapa.get_Actualizar_Mapa(paquete.Substring(4));
         });
 
         [PaqueteAtributo("GDK")]
         public Task get_Mapa_Cambiado(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.juego.mapa.get_Mapa_Cambiado());
 
         [PaqueteAtributo("GV")]
-        public Task get_Reiniciar_Pantalla(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.enviar_Paquete("GC1"));
+        public Task get_Reiniciar_Pantalla(ClienteTcp cliente, string paquete) => Task.Run(async () => await cliente.enviar_Paquete_Async("GC1"));
     }
 }

@@ -5,12 +5,14 @@ using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Servidor;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -26,7 +28,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             cuenta.key_bienvenida = paquete.Substring(2);
 
             await cliente.enviar_Paquete_Async(GlobalConf.version_dofus);
-            await cliente.enviar_Paquete_Async($"{cliente.cuenta.configuracion.nombre_cuenta}\n{Hash.encriptar_Password(cliente.cuenta.configuracion.password, cliente.cuenta.key_bienvenida)}");
+            await cliente.enviar_Paquete_Async($"#Z\n{cliente.auth_getGameToken}");
             await cliente.enviar_Paquete_Async("Af");
         });
 
@@ -72,7 +74,9 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             while (cliente.cuenta.juego.servidor.estado != EstadosServidor.CONECTADO)
                 await Task.Delay(500);
 
-            await cliente.enviar_Paquete_Async("Ax", true);
+            await cliente.enviar_Paquete_Async($"Ap{GlobalConf.puerto_conexion}");
+            await cliente.enviar_Paquete_Async($"Ai{StringHelpercs.GetRandomNetworkKey()}");
+            await cliente.enviar_Paquete_Async("Ax");
         });
 
         [PaqueteAtributo("AxK")]
@@ -103,16 +107,32 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             }
 
             if (seleccionado)
-                await cliente.enviar_Paquete_Async($"AX{servidor.id}", true);
+                await cliente.enviar_Paquete_Async($"AX{servidor.id}");
         });
 
-        [PaqueteAtributo("AXK")]
-        public Task get_Seleccion_Servidor(ClienteTcp cliente, string paquete) => Task.Run(() =>
+        [PaqueteAtributo("AXK")]//metodo antiguo??
+        public Task get_Seleccion_Servidor_Encriptado(ClienteTcp cliente, string paquete) => Task.Run(() =>
         {
             Cuenta cuenta = cliente.cuenta;
             cuenta.tiquet_game = paquete.Substring(14);
+
             string ip = Hash.desencriptar_Ip(paquete.Substring(3, 8));
             int puerto = Hash.desencriptar_Puerto(paquete.Substring(11, 3).ToCharArray());
+
+            cliente.cuenta.cambiando_Al_Servidor_Juego(ip, puerto);
+        });
+
+        [PaqueteAtributo("AYK")]
+        public Task get_Seleccion_Servidor_Normal(ClienteTcp cliente, string paquete) => Task.Run(() =>
+        {
+            Cuenta cuenta = cliente.cuenta;
+            string[] loc6 = paquete.Substring(3).Split(';');
+            string[] loc7 = loc6[0].Split(':');//IP:PUERTO
+
+            cuenta.tiquet_game = loc6[1];
+            
+            string ip = Dns.GetHostAddresses(loc7[0])[0].ToString();
+            int puerto = int.Parse(loc7[1]);
             cliente.cuenta.cambiando_Al_Servidor_Juego(ip, puerto);
         });
     }

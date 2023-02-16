@@ -5,7 +5,7 @@ using System.Linq;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -34,7 +34,7 @@ namespace Bot_Dofus_Retro.Otros.Mapas.Movimiento.Mapas
             if (celdas_no_permitidas.Contains(celda_final))
                 celdas_no_permitidas.Remove(celda_final);
 
-            while (celdas_permitidas.Count > 0)
+            while (celdas_permitidas.Any())
             {
                 int index = 0;
                 for (int i = 1; i < celdas_permitidas.Count; i++)

@@ -1,6 +1,6 @@
 ﻿using Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos;
 using Bot_Dofus_Retro.Otros.Mapas;
-using Bot_Dofus_Retro.Utilidades.Extensiones;
+using Bot_Dofus_Retro.Utilidades.Criptografia;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -53,7 +53,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Acciones
         public static bool TryParse(string texto, out CambiarMapaAccion accion)
         {
             string[] partes = texto.Split('|');
-            string total_partes = partes[Extensiones.get_Nuevo_Random(0, partes.Length)];
+            string total_partes = partes[Hash.get_Nuevo_Random(0, partes.Length)];
 
             Match match = Regex.Match(total_partes, @"(?<direccion>arriba|derecha|abajo|izquierda)\((?<celda>\d{1,3})\)");
             if (match.Success)

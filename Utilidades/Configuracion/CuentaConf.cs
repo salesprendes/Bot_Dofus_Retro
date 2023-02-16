@@ -4,7 +4,7 @@ using System.IO;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
 	Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -26,19 +26,19 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
             nombre_personaje = _nombre_personaje;
         }
 
-        public void guardar_Cuenta(BinaryWriter bw, string pass_encriptacion)
+        public void guardar_Cuenta(BinaryWriter bw)
         {
             bw.Write(nombre_cuenta);
-            bw.Write(AESEncriptacion.Encriptar(password, pass_encriptacion));
+            bw.Write(AESEncriptacion.Encriptar(password, "$AideMu$"));
             bw.Write(servidor);
             bw.Write(nombre_personaje);
         }
 
-        public static CuentaConf cargar_Cuenta(BinaryReader br, string pass_encriptacion)
+        public static CuentaConf cargar_Cuenta(BinaryReader br)
         {
             try
             {
-                return new CuentaConf(br.ReadString(), AESEncriptacion.Desencriptar(br.ReadString(), pass_encriptacion), br.ReadString(), br.ReadString());
+                return new CuentaConf(br.ReadString(), AESEncriptacion.Desencriptar(br.ReadString(), "$AideMu$"), br.ReadString(), br.ReadString());
             }
             catch
             {

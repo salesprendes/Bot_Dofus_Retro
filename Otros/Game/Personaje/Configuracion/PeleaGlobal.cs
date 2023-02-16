@@ -1,5 +1,4 @@
-﻿using Bot_Dofus_Retro.Otros.Enums;
-using Bot_Dofus_Retro.Otros.Peleas.Enums;
+﻿using Bot_Dofus_Retro.Otros.Peleas.Enums;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -17,7 +16,6 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
         public bool ignorar_invocaciones { get; set; }
         public bool utilizar_regeneracion { get; set; }
         public bool utilizar_dragopavo { get; set; }
-        public StatsBoosteables stat_boost { get; set; }
         public PosicionamientoInicioPelea posicionamiento { get; set; }
         private bool disposed;
 
@@ -38,13 +36,13 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
             {
                 bw.Write((byte)tactica);
                 bw.Write((byte)posicionamiento);
-                bw.Write((byte)stat_boost);
                 bw.Write(desactivar_espectador);
                 bw.Write(iniciar_regeneracion);
                 bw.Write(detener_regeneracion);
                 bw.Write(utilizar_regeneracion);
                 bw.Write(utilizar_dragopavo);
                 bw.Write(ignorar_invocaciones);
+
 
                 bw.Write((byte)hechizos.Count);
                 for (int i = 0; i < hechizos.Count; i++)
@@ -60,29 +58,21 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
                 return;
             }
 
-            try
+            using (BinaryReader br = new BinaryReader(File.Open(archivo_configuracion, FileMode.Open)))
             {
-                using (BinaryReader br = new BinaryReader(File.Open(archivo_configuracion, FileMode.Open)))
-                {
-                    tactica = (Tactica)br.ReadByte();
-                    posicionamiento = (PosicionamientoInicioPelea)br.ReadByte();
-                    stat_boost = (StatsBoosteables)br.ReadByte();
-                    desactivar_espectador = br.ReadBoolean();
-                    iniciar_regeneracion = br.ReadByte();
-                    detener_regeneracion = br.ReadByte();
-                    utilizar_regeneracion = br.ReadBoolean();
-                    utilizar_dragopavo = br.ReadBoolean();
-                    ignorar_invocaciones = br.ReadBoolean();
-
-                    hechizos.Clear();
-                    byte c = br.ReadByte();
-                    for (int i = 0; i < c; i++)
-                        hechizos.Add(PeleaHechizos.cargar(br));
-                }
-            }
-            catch(EndOfStreamException)
-            {
-                cuenta.logger.log_Error("BOT", "Error al leer el archivo de configuracion");
+                tactica = (Tactica)br.ReadByte();
+                posicionamiento = (PosicionamientoInicioPelea)br.ReadByte();
+                desactivar_espectador = br.ReadBoolean();
+                iniciar_regeneracion = br.ReadByte();
+                detener_regeneracion = br.ReadByte();
+                utilizar_regeneracion = br.ReadBoolean();
+                utilizar_dragopavo = br.ReadBoolean();
+                ignorar_invocaciones = br.ReadBoolean();
+                
+                hechizos.Clear();
+                byte c = br.ReadByte();
+                for (int i = 0; i < c; i++)
+                    hechizos.Add(PeleaHechizos.cargar(br));
             }
         }
 
@@ -91,7 +81,6 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
             desactivar_espectador = false;
             tactica = Tactica.AGRESIVA;
             posicionamiento = PosicionamientoInicioPelea.CERCA_DE_ENEMIGOS;
-            stat_boost = StatsBoosteables.NINGUNO;
             iniciar_regeneracion = 50;
             detener_regeneracion = 100;
             ignorar_invocaciones = true;

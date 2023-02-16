@@ -126,6 +126,8 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
 
         private void personaje_Seleccionado()
         {
+            cuenta.pelea_extension.configuracion.cargar();
+
             darkDockPanel_principal.BeginInvoke((Action)(() =>
             {
                 darkDockPanel_principal.AddContent(new UI_Mapa(cuenta, "Mapa", Properties.Resources.icono_mapa));

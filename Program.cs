@@ -1,4 +1,5 @@
 ﻿using Bot_Dofus_Retro.Comun.Frames.Transporte;
+using Bot_Dofus_Retro.Licencia;
 using Bot_Dofus_Retro.Otros.Game.Personaje.Hechizos;
 using Bot_Dofus_Retro.Otros.Mapas.Interactivo;
 using Bot_Dofus_Retro.Otros.Scripts.Manejadores;
@@ -12,7 +13,7 @@ using System.Xml.Linq;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -24,6 +25,7 @@ namespace Bot_Dofus_Retro
         [STAThread]
         private static void Main()
         {
+            VerificadorLicencia.verificar();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

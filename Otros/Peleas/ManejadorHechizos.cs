@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -59,17 +59,8 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 return ResultadoLanzandoHechizo.LANZADO;
             }
 
-            if (!get_Distancia_Buena(hechizo))
+            if (!get_Condiciones_Principales(hechizo))
                 return ResultadoLanzandoHechizo.NO_LANZADO;
-
-            if (hechizo.necesita_piedra)//Para capturar
-            {
-                ObjetosInventario arma = cuenta.juego.personaje.inventario.get_Objeto_en_Posicion(InventarioPosiciones.ARMA);
-                if (arma != null && arma.id_modelo != 83)
-                    return await get_Lanzar_Hechizo_Simple(hechizo);
-                else
-                    return ResultadoLanzandoHechizo.NO_LANZADO;
-            }
 
             if (hechizo.focus == HechizoFocus.CELDA_VACIA)
                 return await lanzar_Hechizo_Celda_Vacia(hechizo);
@@ -191,51 +182,51 @@ namespace Bot_Dofus_Retro.Otros.Peleas
 
             Hechizo hechizo = cuenta.juego.personaje.get_Hechizo(hechizo_pelea.id);
             HechizoStats hechizo_stats = hechizo.get_Stats();
-            List<NodoRango> entradas = new List<NodoRango>();
-            NodoRango entrada;
+            List<NodoRango> entries = new List<NodoRango>();
+            NodoRango entry;
 
             //Celda actual del jugador
-            entrada = get_Nodo_Rango(pelea.jugador_luchador.celda, null, hechizo_pelea, hechizo_stats);
-            if (entrada.enemigos_atacos_en_celda.Count > 0)
-                entradas.Add(entrada);
+            entry = get_Nodo_Rango(pelea.jugador_luchador.celda, null, hechizo_stats);
+            if (entry.TouchedEnnemiesByCell.Count > 0)
+                entries.Add(entry);
 
             foreach (KeyValuePair<short, MovimientoNodo> kvp in PeleasPathfinder.get_Celdas_Accesibles(pelea, mapa, pelea.jugador_luchador.celda))
             {
                 if (!kvp.Value.alcanzable)
                     continue;
 
-                entrada = get_Nodo_Rango(mapa.get_Celda_Id(kvp.Key), kvp.Value, hechizo_pelea, hechizo_stats);
-                if (entrada.enemigos_atacos_en_celda.Count > 0)
-                    entradas.Add(entrada);
+                entry = get_Nodo_Rango(mapa.get_Celda_Id(kvp.Key), kvp.Value, hechizo_stats);
+                if (entry.TouchedEnnemiesByCell.Count > 0)
+                    entries.Add(entry);
             }
 
             short celda_id = -1;
-            short desde_celda_id = -1;
+            short fromCellId = -1;
             KeyValuePair<short, MovimientoNodo>? node = null;
-            byte enemigos_atacados = 0;
-            int pm_utilizados = 99;
+            byte touchedEnnemies = 0;
+            int usedMps = 99;
 
-            foreach (NodoRango nodo in entradas)
+            for (int i = 0; i < entries.Count; i++)
             {
-                foreach (KeyValuePair<short, byte> kvp in nodo.enemigos_atacos_en_celda)
+                foreach (KeyValuePair<short, byte> kvp in entries[i].TouchedEnnemiesByCell)
                 {
-                    if (hechizo_pelea.metodo_lanzamiento == MetodoLanzamiento.CAC && !pelea.esta_Cuerpo_A_Cuerpo_Con_Enemigo(nodo.celda))
+                    if (hechizo_pelea.metodo_lanzamiento == MetodoLanzamiento.CAC && !pelea.esta_Cuerpo_A_Cuerpo_Con_Enemigo(entries[i].celda))
                         continue;
 
-                    if (pelea.get_Puede_Lanzar_hechizo(hechizo_pelea.id, nodo.celda, mapa.get_Celda_Id(kvp.Key), mapa) != FallosLanzandoHechizo.NINGUNO)
+                    if (pelea.get_Puede_Lanzar_hechizo(hechizo_pelea.id, entries[i].celda, mapa.get_Celda_Id(kvp.Key), mapa) != FallosLanzandoHechizo.NINGUNO)
                         continue;
 
-                    if (kvp.Value >= enemigos_atacados)
+                    if (kvp.Value >= touchedEnnemies)
                     {
-                        if (kvp.Value > enemigos_atacados || (kvp.Value == enemigos_atacados && nodo.pm_utilizados <= pm_utilizados))
+                        if (kvp.Value > touchedEnnemies || (kvp.Value == touchedEnnemies && entries[i].MpUsed <= usedMps))
                         {
-                            enemigos_atacados = kvp.Value;
+                            touchedEnnemies = kvp.Value;
                             celda_id = kvp.Key;
-                            desde_celda_id = nodo.celda.id;
-                            pm_utilizados = nodo.pm_utilizados;
+                            fromCellId = entries[i].celda.id;
+                            usedMps = entries[i].MpUsed;
 
-                            if (nodo.nodo != null)
-                                node = new KeyValuePair<short, MovimientoNodo>(desde_celda_id, nodo.nodo);
+                            if (entries[i].Node != null)
+                                node = new KeyValuePair<short, MovimientoNodo>(fromCellId, entries[i].Node);
                         }
                     }
                 }
@@ -246,7 +237,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 if (node == null)
                 {
                     if (GlobalConf.mostrar_mensajes_debug)
-                        cuenta.logger.log_informacion("DEBUG", $"Se ha lanzado el hechizo {hechizo.nombre} atacando a {enemigos_atacados} enemigos en la celda {celda_id}");
+                        cuenta.logger.log_informacion("DEBUG", $"Se ha lanzado el hechizo {hechizo.nombre} tocando a {touchedEnnemies} enemigos en la celda {celda_id}");
                     
                     await pelea.get_Lanzar_Hechizo(hechizo_pelea.id, celda_id);
                     return ResultadoLanzandoHechizo.LANZADO;
@@ -255,7 +246,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 {
                     hechizo_para_lanzar = hechizo.id;
                     celda_objetivo = celda_id;
-                    enemigos_tocados = enemigos_atacados;
+                    enemigos_tocados = touchedEnnemies;
 
                     await cuenta.juego.manejador.movimientos.get_Mover_Celda_Pelea(node);
                     return ResultadoLanzandoHechizo.MOVIDO;
@@ -265,22 +256,22 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             return ResultadoLanzandoHechizo.NO_LANZADO;
         }
 
-        private NodoRango get_Nodo_Rango(Celda celda, MovimientoNodo node, PeleaHechizos hechizo_pelea, HechizoStats hechizo_stats)
+        private NodoRango get_Nodo_Rango(Celda celda, MovimientoNodo node, HechizoStats hechizo_stats)
         {
-            Dictionary<short, byte> enemigos_golpeados = new Dictionary<short, byte>();
+            Dictionary<short, byte> touchedEnnemiesByCell = new Dictionary<short, byte>();
             List<short> rango = pelea.get_Rango_Hechizo(celda, hechizo_stats, mapa);
 
             for (int i = 0; i < rango.Count; i++)
             {
-                byte tec = get_Total_Enemigos_Atacados(celda, mapa.get_Celda_Id(rango[i]), hechizo_pelea, hechizo_stats);
+                byte tec = get_Total_Enemigos_Atacados(celda, mapa.get_Celda_Id(rango[i]), hechizo_stats);
                 if (tec > 0)
-                    enemigos_golpeados.Add(rango[i], tec);
+                    touchedEnnemiesByCell.Add(rango[i], tec);
             }
 
-            return new NodoRango(celda, enemigos_golpeados, node);
+            return new NodoRango(celda, touchedEnnemiesByCell, node);
         }
 
-        private byte get_Total_Enemigos_Atacados(Celda celda_actual, Celda celda_objetivo, PeleaHechizos hechizo_pelea, HechizoStats hechizo_stats)
+        private byte get_Total_Enemigos_Atacados(Celda celda_actual, Celda celda_objetivo, HechizoStats hechizo_stats)
         {
             byte n = 0;
             List<Celda> zona = pelea.get_Zona_Hechizo(celda_actual, celda_objetivo, hechizo_stats, mapa);
@@ -289,21 +280,20 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             {
                 foreach (Celda celda in zona)
                 {
-                    if (hechizo_pelea.auto_golpearse && celda.id == celda_actual.id)
+                    //No tocarse a si mismo
+                    if (celda.id == celda_actual.id)
                         return 0;
 
-                    if(hechizo_pelea.golpear_aliados)
+                    //No tocar a aliados
+                    foreach (Luchadores ally in pelea.get_Aliados)
                     {
-                        foreach (Luchadores aliado in pelea.get_Aliados)
-                        {
-                            if (aliado.celda.id == celda.id)
-                                return 0;
-                        }
+                        if (ally.celda.id == celda.id)
+                            return 0;
                     }
 
-                    foreach (Luchadores enemigo in pelea.get_Enemigos)
+                    foreach (Luchadores ennemy in pelea.get_Enemigos)
                     {
-                        if (enemigo.celda.id == celda.id)
+                        if (ennemy.celda.id == celda.id)
                             n++;
                     }
                 }
@@ -326,23 +316,33 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 if (cuenta.pelea_extension.configuracion.ignorar_invocaciones && luchador.es_invocacion)
                     return false;
 
-                return luchador.porcentaje_vida <= hechizo.vida_objetivo;
+                return true;
             }
 
             return hechizo.focus == HechizoFocus.ENEMIGO ? pelea.get_Enemigo_Mas_Cercano(filtro) : pelea.get_Obtener_Aliado_Mas_Cercano(filtro);
         }
 
-        private bool get_Distancia_Buena(PeleaHechizos hechizo)
+        private bool get_Condiciones_Principales(PeleaHechizos hechizo)
         {
             if (hechizo.distancia_minima == 0)
                 return true;
 
-            Luchadores enemigo_cercano = pelea.get_Enemigo_Mas_Cercano();
+            if (hechizo.necesita_piedra)//Para capturar en dungs
+            {
+                ObjetosInventario arma = cuenta.juego.personaje.inventario.get_Objeto_en_Posicion(InventarioPosiciones.ARMA);
+                if(arma != null && arma.id_modelo != 83)
+                    return false;
+            }
+
+            Luchadores enemigo_cercano = hechizo.metodo_distancia == MetodoDistanciaLanzamiento.CERCANO ? pelea.get_Enemigo_Mas_Cercano() : pelea.get_Enemigo_Mas_Lejano();
 
             if (enemigo_cercano == null)
                 return false;
-            
-            return pelea.jugador_luchador.celda.get_Distancia(enemigo_cercano.celda) >= hechizo.distancia_minima;
+
+            if (hechizo.distancia_operador)
+                return pelea.jugador_luchador.celda.get_Distancia(enemigo_cercano.celda) >= hechizo.distancia_minima;
+            else
+                return pelea.jugador_luchador.celda.get_Distancia(enemigo_cercano.celda) <= hechizo.distancia_minima;
         }
 
         #region Zona Dispose
@@ -365,15 +365,15 @@ namespace Bot_Dofus_Retro.Otros.Peleas
     internal struct NodoRango
     {
         public Celda celda { get; private set; }
-        public Dictionary<short, byte> enemigos_atacos_en_celda { get; private set; }
-        public MovimientoNodo nodo { get; private set; }
-        public int pm_utilizados => nodo == null ? 0 : nodo.camino.celdas_accesibles.Count;
+        public Dictionary<short, byte> TouchedEnnemiesByCell { get; private set; }
+        public MovimientoNodo Node { get; private set; }
+        public int MpUsed => Node == null ? 0 : Node.camino.celdas_accesibles.Count;
 
-        internal NodoRango(Celda _celda, Dictionary<short, byte> _enemigos_atacos_en_celda, MovimientoNodo _nodo)
+        internal NodoRango(Celda _celda, Dictionary<short, byte> touchedEnnemiesByCell, MovimientoNodo node)
         {
             celda = _celda;
-            enemigos_atacos_en_celda = _enemigos_atacos_en_celda;
-            nodo = _nodo;
+            TouchedEnnemiesByCell = touchedEnnemiesByCell;
+            Node = node;
         }
     }
 }

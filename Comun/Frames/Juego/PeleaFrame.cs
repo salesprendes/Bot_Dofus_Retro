@@ -6,14 +6,12 @@ using Bot_Dofus_Retro.Otros.Peleas;
 using Bot_Dofus_Retro.Otros.Peleas.Enums;
 using Bot_Dofus_Retro.Otros.Peleas.Peleadores;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -37,33 +35,18 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             if (cuenta.pelea_extension.configuracion.posicionamiento != PosicionamientoInicioPelea.INMOVIL)
             {
                 string[] _loc3 = paquete.Substring(2).Split('|');
-                List<Celda> celdas_preparacion = new List<Celda>();
-
                 for (int a = 0; a < _loc3[0].Length; a += 2)
-                    celdas_preparacion.Add(mapa.get_Celda_Id((short)((Hash.get_Hash(_loc3[0][a]) << 6) + Hash.get_Hash(_loc3[0][a + 1]))));
-
-                List<Celda> celdas_preparacion_disponibles = celdas_preparacion.Except(cuenta.juego.pelea.get_Aliados.Select(aliado => aliado.celda)).ToList();
+                    cuenta.juego.pelea.celdas_preparacion.Add(mapa.get_Celda_Id((short)((Hash.get_Hash(_loc3[0][a]) << 6) + Hash.get_Hash(_loc3[0][a + 1]))));
 
                 /** la posicion es aleatoria pero el paquete GP siempre aparecera primero el team donde esta el pj **/
-                short celda_posicion = pelea.get_Celda_Mas_Cercana_O_Lejana(cuenta.pelea_extension.configuracion.posicionamiento == PosicionamientoInicioPelea.CERCA_DE_ENEMIGOS, celdas_preparacion_disponibles);
+                short celda_posicion = pelea.get_Celda_Mas_Cercana_O_Lejana(cuenta.pelea_extension.configuracion.posicionamiento == PosicionamientoInicioPelea.CERCA_DE_ENEMIGOS, pelea.celdas_preparacion);
 
                 if (celda_posicion != pelea.jugador_luchador.celda.id)
                 {
-                    await cliente.enviar_Paquete_Async("Gp" + celda_posicion, true);
+                    await cliente.enviar_Paquete_Async("Gp" + celda_posicion);
                     await Task.Delay(300);
                 }
             }
-
-            if (cuenta.tiene_grupo && cuenta.es_lider_grupo)
-            {
-                await cliente.enviar_Paquete_Async("fP");
-                await cuenta.grupo.get_Esperar_Miembros_Unirse_Pelea();
-
-                if (pelea.pelea_iniciada)
-                    return;
-            }
-
-            await Task.Delay(300);
 
             if (cuenta.pelea_extension.configuracion.desactivar_espectador)
                 await cliente.enviar_Paquete_Async("fS");
@@ -77,6 +60,14 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     await cliente.enviar_Paquete_Async("Rr");
                     cuenta.juego.personaje.esta_utilizando_dragopavo = true;
                 }
+            }
+
+            if (cuenta.tiene_grupo && cuenta.es_lider_grupo)
+            {
+                await cuenta.grupo.get_Esperar_Miembros_Unirse_Pelea();
+
+                if (pelea.pelea_iniciada)
+                    return;
             }
 
             await Task.Delay(300);
@@ -180,7 +171,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         });
 
         [PaqueteAtributo("GS")]
-        public Task get_Comienzo_Pelea(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.juego.pelea.get_Combate_Iniciado());
+        public Task get_Comienzo_Pelea(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.juego.pelea.estado_pelea = 3);
 
         [PaqueteAtributo("GTS")]
         public Task get_Combate_Inicio_Turno(ClienteTcp cliente, string paquete) => Task.Run(() =>

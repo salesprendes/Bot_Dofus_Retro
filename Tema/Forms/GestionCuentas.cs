@@ -1,4 +1,5 @@
 ﻿using Bot_Dofus_Retro.DarkUI.Forms;
+using Bot_Dofus_Retro.Licencia;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Microsoft.VisualBasic;
 using System;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
 	Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -109,6 +110,9 @@ namespace Bot_Dofus_Retro.Tema.Forms
 
         private void conectarToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!VerificadorLicencia.comprobar())
+                return;
+
             if (listViewCuentas.SelectedItems.Count <= 0 || listViewCuentas.FocusedItem == null)
                 return;
 

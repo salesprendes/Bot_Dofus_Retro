@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -21,9 +21,15 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         public Task get_Bienvenida_juego(ClienteTcp cliente, string paquete) => Task.Run(async () => await cliente.enviar_Paquete_Async("AT" + cliente.cuenta.tiquet_game));
 
         [PaqueteAtributo("ATK0")]
-        public Task resultado_Servidor_Seleccion(ClienteTcp cliente, string paquete) => Task.Run(async () =>
+        public Task resultado_Servidor_Seleccion_Antiguo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
             await cliente.enviar_Paquete_Async("Ak0");
+            await cliente.enviar_Paquete_Async("AV");
+        });
+
+        [PaqueteAtributo("ATK")]
+        public Task resultado_Servidor_Seleccion_Nuevo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
+        {
             await cliente.enviar_Paquete_Async("AV");
         });
 
@@ -58,7 +64,11 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             await Task.Delay(1000);
 
             if (!cuenta.juego.personaje.esta_conectado && encontrado)
-                await cliente.enviar_Paquete_Async("AS" + id_personaje, true);
+            {
+                await cliente.enviar_Paquete_Async("AS" + id_personaje);
+                await cliente.enviar_Paquete_Async("Af");
+            }
+                
         });
 
         [PaqueteAtributo("ASK")]
@@ -79,16 +89,17 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             personaje.inventario.agregar_Objetos(_loc4[9]);
 
             cuenta.juego.personaje.timer_afk.Change(1200000, 1200000);
-            cuenta.pelea_extension.configuracion.cargar();
             cuenta.juego.personaje.evento_Personaje_Seleccionado();
 
+            await cliente.enviar_Paquete_Async("BYA");//Modo Ausente
             await cliente.enviar_Paquete_Async("GC1");
+        });
 
-            if (cuenta.es_lider_grupo && cuenta.tiene_grupo)
-            {
-                await cuenta.grupo.get_Esperar_Miembros_Conectados();
-                cuenta.grupo.get_Invitar_Grupo_Miembros();
-            }
+        [PaqueteAtributo("GCK")]
+        public Task get_Crear_Pantalla_Juego(ClienteTcp cliente, string paquete) => Task.Run(() =>
+        {
+            Cuenta cuenta = cliente.cuenta;
+            cuenta.Estado_Cuenta = EstadoCuenta.CONECTADO_INACTIVO;
         });
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Bot_Dofus_Retro.Comun.Frames.Transporte;
 using Bot_Dofus_Retro.Otros;
-using Bot_Dofus_Retro.Utilidades.Extensiones;
+using Bot_Dofus_Retro.Utilidades.Criptografia;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -25,30 +24,39 @@ namespace Bot_Dofus_Retro.Comun.Network
         private byte[] buffer { get; set; }
         public Cuenta cuenta;
         private SemaphoreSlim semaforo;
-        private bool disposed;
+        public bool disposed { get; private set; } = false;
+        public Ping ping { get; private set; }
 
         public event Action<string> paquete_recibido;
         public event Action<string> paquete_enviado;
         public event Action<string> socket_informacion;
 
-        /** ping **/
-        private bool esperando_paquete;
-        private int ticks;
-        private List<int> pings;
+        /** API **/
+        public string api_key { get; private set; }
+        public string auth_getGameToken { get; private set; }
+        private bool api_conectada = false;
 
-        public ClienteTcp(Cuenta _cuenta) => cuenta = _cuenta;
 
-        public async Task conexion_Servidor(string ip, int puerto)
+        public ClienteTcp(Cuenta _cuenta)
+        {
+            semaforo = new SemaphoreSlim(1);
+            ping = new Ping();
+            cuenta = _cuenta;
+        }
+
+        public async Task conexion_Socket(string ip, int puerto)
         {
             try
             {
+                if (!cuenta.esta_Cambiando_A_Juego())
+                    api_conectada = await conexion_Zaap();
+
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 buffer = new byte[socket.ReceiveBufferSize];
-                semaforo = new SemaphoreSlim(1);
-                pings = new List<int>(50);
+
                 await socket.ConnectAsync(ip, puerto);
 
-                if (get_Esta_Conectado())
+                if (get_Esta_Conectado() && api_conectada)
                 {
                     socket_informacion?.Invoke("Socket conectado correctamente");
                     socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, recibir_CallBack, socket);
@@ -61,6 +69,23 @@ namespace Bot_Dofus_Retro.Comun.Network
             }
         }
 
+        public async Task<bool> conexion_Zaap()
+        {
+            api_key = await ZaapConnect.get_ApiKey(cuenta.configuracion.nombre_cuenta, cuenta.configuracion.password);
+            
+            if(!string.IsNullOrEmpty(api_key))
+                socket_informacion?.Invoke($"Conectado API Ankama API_KEY: {api_key}");
+
+            await Task.Delay(Hash.get_Nuevo_Random(1000, 3000));//Para evitar ban ip
+
+            auth_getGameToken = await ZaapConnect.get_Token(api_key);
+
+            if (!string.IsNullOrEmpty(auth_getGameToken) && auth_getGameToken.Length == 36)
+                socket_informacion?.Invoke($"Conectado API Ankama TOKEN_KEY: {auth_getGameToken}");
+
+            return true;
+        }
+        
         public void recibir_CallBack(IAsyncResult ar)
         {
             if (cuenta == null || cuenta.esta_Cambiando_A_Juego())
@@ -85,22 +110,15 @@ namespace Bot_Dofus_Retro.Comun.Network
             string datos = Encoding.UTF8.GetString(_buffer, 0, bytes_leidos);
             foreach (string paquete in datos.Replace("\x0a", string.Empty).Split('\0').Where(x => x != string.Empty))
             {
+                Console.WriteLine(paquete);
                 paquete_recibido?.Invoke(paquete);
-                if (esperando_paquete)
-                {
-                    pings.Add(Environment.TickCount - ticks);
-
-                    if (pings.Count > 48)
-                        pings.Clear();
-
-                    esperando_paquete = false;
-                }
+                ping.set_Actualizar();
                 PaqueteRecibido.Recibir(this, paquete);
             }
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, recibir_CallBack, socket);
         }
 
-        public async Task enviar_Paquete_Async(string paquete, bool necesita_respuesta = false)
+        public async Task enviar_Paquete_Async(string paquete)
         {
             if (cuenta == null)
                 return;
@@ -115,18 +133,10 @@ namespace Bot_Dofus_Retro.Comun.Network
 
             byte[] byte_paquete = Encoding.UTF8.GetBytes(string.Format($"{paquete}\n\x00"));
 
-            if (necesita_respuesta)
-            {
-                esperando_paquete = true;
-                ticks = Environment.TickCount;
-            }
-
             socket.Send(byte_paquete);
             paquete_enviado?.Invoke(paquete);
             semaforo.Release();
         }
-
-        public void enviar_Paquete(string paquete, bool necesita_respuesta = false) => enviar_Paquete_Async(paquete, necesita_respuesta).Wait();
 
         public void get_Desconectar_Socket()
         {
@@ -153,21 +163,6 @@ namespace Bot_Dofus_Retro.Comun.Network
                 return false;
             }
         }
-
-        #region Pings
-        public int get_Total_Pings() => pings.Count();
-        public int get_Actual_Ping() => Environment.TickCount - ticks;
-        public int get_Promedio_Pings()
-        {
-            int total_pings = 0, contador = 0;
-            while (contador < pings.Count)
-            {
-                total_pings += pings[contador];
-                contador++;
-            }
-            return total_pings / pings.Count;
-        }
-        #endregion
 
         #region Zona Dispose
         ~ClienteTcp() => Dispose(false);
@@ -196,6 +191,7 @@ namespace Bot_Dofus_Retro.Comun.Network
                 buffer = null;
                 paquete_recibido = null;
                 paquete_enviado = null;
+                ping = null;
                 disposed = true;
             }
         }

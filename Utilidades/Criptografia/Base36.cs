@@ -1,5 +1,13 @@
 ﻿using System.Numerics;
 
+/*
+    Este archivo es parte del proyecto Bot Dofus Retro
+
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
+    Creado por Alvaro Prendes
+    web: http://www.salesprendes.com
+*/
+
 namespace Bot_Dofus_Retro.Utilidades.Criptografia
 {
     public static class Base36

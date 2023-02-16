@@ -74,7 +74,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
             }
         }
 
-        public void eliminar_Objeto(ObjetosInventario obj, int cantidad, bool paquete_eliminar)
+        public void eliminar_Objeto(ObjetosInventario obj, int cantidad, bool paquete_eliminar) => Task.Run(async () =>
         {
             if (obj == null)
                 return;
@@ -92,12 +92,12 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
 
             if (paquete_eliminar)
             {
-                cuenta.conexion.enviar_Paquete($"Od{obj.id_inventario}|{cantidad}");
+                await cuenta.conexion.enviar_Paquete_Async($"Od{obj.id_inventario}|{cantidad}");
                 cuenta.logger.log_informacion("Inventario", $"{cantidad} {obj.nombre} eliminados(s).");
             }
 
             inventario_actualizado?.Invoke();
-        }
+        });
 
         public void eliminar_Objeto(uint id_inventario, int cantidad, bool paquete_eliminar)
         {
@@ -139,7 +139,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
             {
                 if (get_Objeto_en_Posicion(posicion) == null)
                 {
-                    cuenta.conexion.enviar_Paquete("OM" + objeto.id_inventario + "|" + (sbyte)posicion, true);
+                    cuenta.conexion.enviar_Paquete_Async("OM" + objeto.id_inventario + "|" + (sbyte)posicion).Wait();
                     cuenta.logger.log_informacion("INVENTARIO", $"{objeto.nombre} equipado.");
                     objeto.posicion = posicion;
                     inventario_actualizado?.Invoke();
@@ -151,10 +151,10 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
             if (_objetos.TryGetValue(get_Objeto_en_Posicion(possibles_posiciones[0]).id_inventario, out ObjetosInventario objeto_equipado))
             {
                 objeto_equipado.posicion = InventarioPosiciones.NO_EQUIPADO;
-                cuenta.conexion.enviar_Paquete("OM" + objeto_equipado.id_inventario + "|" + (sbyte)InventarioPosiciones.NO_EQUIPADO);
+                cuenta.conexion.enviar_Paquete_Async("OM" + objeto_equipado.id_inventario + "|" + (sbyte)InventarioPosiciones.NO_EQUIPADO).Wait();
             }
 
-            cuenta.conexion.enviar_Paquete("OM" + objeto.id_inventario + "|" + (sbyte)possibles_posiciones[0]);
+            cuenta.conexion.enviar_Paquete_Async("OM" + objeto.id_inventario + "|" + (sbyte)possibles_posiciones[0]).Wait();
 
             if (objeto.cantidad == 1)
                 objeto.posicion = possibles_posiciones[0];
@@ -164,7 +164,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
             return true;
         }
 
-        public bool desequipar_Objeto(ObjetosInventario objeto)
+        public Task<bool> desequipar_Objeto(ObjetosInventario objeto) => Task.Run(async () =>
         {
             if (objeto == null)
                 return false;
@@ -172,14 +172,15 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
             if (objeto.posicion == InventarioPosiciones.NO_EQUIPADO)
                 return false;
 
-            cuenta.conexion.enviar_Paquete("OM" + objeto.id_inventario + "|" + (sbyte)InventarioPosiciones.NO_EQUIPADO);
+            await cuenta.conexion.enviar_Paquete_Async("OM" + objeto.id_inventario + "|" + (sbyte)InventarioPosiciones.NO_EQUIPADO);
             objeto.posicion = InventarioPosiciones.NO_EQUIPADO;
             cuenta.logger.log_informacion("INVENTARIO", $"{objeto.nombre} desequipado.");
             inventario_actualizado?.Invoke();
-            return true;
-        }
 
-        public void utilizar_Objeto(ObjetosInventario objeto)
+            return true;
+        });
+
+        public void utilizar_Objeto(ObjetosInventario objeto) => Task.Run(async () =>
         {
             if (objeto == null)
                 return;
@@ -190,10 +191,10 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
                 return;
             }
 
-            cuenta.conexion.enviar_Paquete("OU" + objeto.id_inventario + "|");
+            await cuenta.conexion.enviar_Paquete_Async("OU" + objeto.id_inventario + "|");
             eliminar_Objeto(objeto, 1, false);
             cuenta.logger.log_informacion("INVENTARIO", $"{objeto.nombre} utilizado.");
-        }
+        });
 
         public void evento_Almacenamiento_Abierto() => almacenamiento_abierto?.Invoke();
         public void evento_Almacenamiento_Cerrado() => almacenamiento_cerrado?.Invoke();

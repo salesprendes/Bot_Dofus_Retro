@@ -26,7 +26,6 @@ namespace Bot_Dofus_Retro.Otros.Grupos
             miembros = new ObservableCollection<Cuenta>();
 
             lider.grupo = this;
-            lider.juego.pelea.pelea_id_recibida += id_Nueva_Pelea_Recibida;
         }
 
         public void agregar_Miembro(Cuenta miembro)
@@ -37,7 +36,6 @@ namespace Bot_Dofus_Retro.Otros.Grupos
             miembro.grupo = this;
             miembros.Add(miembro);
             cuentas_acabadas.Add(miembro, new ManualResetEvent(false));
-            miembro.script.manejar_acciones.evento_accion_normal += miembro_Acciones_Acabadas;
         }
 
         public void eliminar_Miembro(Cuenta miembro) => miembros.Remove(miembro);
@@ -98,58 +96,16 @@ namespace Bot_Dofus_Retro.Otros.Grupos
         public async Task get_Esperar_Miembros_Unirse_Pelea()
         {
             while (miembros.Any(m => !m.esta_Luchando()) && !lider.juego.pelea.pelea_iniciada)
-            {
-                lider.logger.log_informacion("GRUPO", "Esperando a que los miembros del grupo se unan a la pelea");
                 await Task.Delay(1000);
-            }
         }
 
-        public async Task get_Esperar_Miembros_Conectados()
-        {
-            while (miembros.Any(m => !m.esta_Conectado()))
-            {
-                lider.logger.log_informacion("GRUPO", "Esperando a la conexion de los miembros del grupo");
-                await Task.Delay(1000);
-            }
-        }
-
-        public void get_Invitar_Grupo_Miembros()
-        {
-            foreach (Cuenta miembro in miembros)
-            {
-                if (lider == miembro)
-                    continue;
-
-                if (miembro.juego.personaje.en_grupo)
-                    continue;
-
-                lider.conexion.enviar_Paquete($"PI{miembro.juego.personaje.nombre}");
-            }
-        }
-
-        public void get_Miembros_Unirse_Pelea()
-        {
-            if (!lider.esta_Luchando())
-                return;
-
-            foreach(Cuenta miembro in miembros)
-            {
-                if (miembro.esta_Luchando())
-                    continue;
-
-                miembro.conexion.enviar_Paquete($"GA903{lider.juego.personaje.id};{lider.juego.pelea.id_pelea}");
-            }
-        }
-
-        public bool get_Esta_En_Grupo(string nombre) => miembros.Any(miembro => miembro.juego.personaje.nombre.Equals(nombre));
-        private void id_Nueva_Pelea_Recibida() => get_Miembros_Unirse_Pelea();
         public bool get_Grupo_Esta_ocupado() => lider.esta_ocupado || miembros.Any(m => m.esta_ocupado);
         public void esperar_Acciones_Terminadas() => WaitHandle.WaitAll(cuentas_acabadas.Values.ToArray());
 
-        private void miembro_Acciones_Acabadas(Cuenta _cuenta, bool mapa_cambiado)
+        private void miembro_Acciones_Acabadas(Cuenta cuenta)
         {
-            _cuenta.logger.log_informacion("GRUPO", "Acciones acabadas");
-            cuentas_acabadas[_cuenta].Set();
+            cuenta.logger.log_informacion("GRUPO", "Acciones acabadas");
+            cuentas_acabadas[cuenta].Set();
         }
         #endregion
 

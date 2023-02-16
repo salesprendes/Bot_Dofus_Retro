@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
 
-    Bot Dofus Retro Copyright (C) 2020 - 2021 Alvaro Prendes — Todos los derechos reservados.
+    Bot Dofus Retro Copyright (C) 2020 - 2023 Alvaro Prendes — Todos los derechos reservados.
     Creado por Alvaro Prendes
     web: http://www.salesprendes.com
 */
@@ -29,10 +29,10 @@ namespace Bot_Dofus_Retro.Otros.Peleas
         private Dictionary<int, int> hechizos_intervalo;// hechizoID, turnos intervalo
         private Dictionary<int, int> total_hechizos_lanzados;//hechizoID, total veces
         private Dictionary<int, Dictionary<int, int>> total_hechizos_lanzados_en_celda;//hechizoID (celda, veces)
+        public List<Celda> celdas_preparacion { get; set; }
         public LuchadorPersonaje jugador_luchador { get; private set; }
         public byte estado_pelea { get; set; }// inicio = 1, posicion = 2, combate = 3, finalizado = 4
         private bool disposed;
-        internal object celdas_preparacion;
 
         public IEnumerable<Luchadores> get_Aliados => aliados.Values.Where(a => a.esta_vivo);
         public IEnumerable<Luchadores> get_Enemigos => enemigos.Values.Where(e => e.esta_vivo);
@@ -43,12 +43,10 @@ namespace Bot_Dofus_Retro.Otros.Peleas
 
         public bool pelea_iniciada { get; private set; }
         public bool turno_actual { get; private set; }
-        public int id_pelea { get; private set; }
 
         public event Action pelea_creada;
         public event Action pelea_acabada;
-        public event Action turno_iniciado; 
-        public event Action pelea_id_recibida;
+        public event Action turno_iniciado;
 
         public Pelea(Cuenta _cuenta)
         {
@@ -59,10 +57,11 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             hechizos_intervalo = new Dictionary<int, int>();
             total_hechizos_lanzados = new Dictionary<int, int>();
             total_hechizos_lanzados_en_celda = new Dictionary<int, Dictionary<int, int>>();
+            celdas_preparacion = new List<Celda>();
             estado_pelea = 1;
         }
 
-        public async Task get_Lanzar_Hechizo(short hechizo_id, short celda_id) => await cuenta.conexion.enviar_Paquete_Async($"GA300{hechizo_id};{celda_id}", false);
+        public async Task get_Lanzar_Hechizo(short hechizo_id, short celda_id) => await cuenta.conexion.enviar_Paquete_Async($"GA300{hechizo_id};{celda_id}");
 
         public void actualizar_Hechizo_Exito(short hechizo_id, short celda_id)
         {
@@ -166,6 +165,27 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             return enemigo;
         }
 
+        public Luchadores get_Enemigo_Mas_Lejano(Func<Luchadores, bool> filtro = null)
+        {
+            int distancia = -1, distancia_temporal;
+            Luchadores enemigo = null;
+
+            foreach (Luchadores luchador in filtro == null ? get_Enemigos : get_Enemigos.Where(e => filtro(e)))
+            {
+                if (!luchador.esta_vivo)
+                    continue;
+
+                distancia_temporal = jugador_luchador.celda.get_Distancia(luchador.celda);
+
+                if (distancia == -1 || distancia_temporal > distancia)
+                {
+                    distancia = distancia_temporal;
+                    enemigo = luchador;
+                }
+            }
+            return enemigo;
+        }
+
         public void get_Agregar_Luchador(Luchadores luchador)
         {
             if (luchador.id == cuenta.juego.personaje.id)
@@ -193,7 +213,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             }
         }
 
-        public short get_Celda_Mas_Cercana_O_Lejana(bool cercana, List<Celda> celdas_posibles)
+        public short get_Celda_Mas_Cercana_O_Lejana(bool cercana, IEnumerable<Celda> celdas_posibles)
         {
             short celda_id = -1;
             int distancia_total = -1;
@@ -471,29 +491,14 @@ namespace Bot_Dofus_Retro.Otros.Peleas
         }
 
         #region Zona Eventos
-        public void get_Nueva_Espada_Combate(int _id_pelea)
-        {
-            if (cuenta.esta_Luchando() && id_pelea == 0)
-            {
-                id_pelea = _id_pelea;
-                pelea_id_recibida?.Invoke();
-            }
-        }
-
         public void get_Combate_Creado(byte _estado_pelea)
         {
             estado_pelea = _estado_pelea;
-            pelea_iniciada = _estado_pelea > 2;
-            cuenta.juego.personaje.timer_regeneracion.Change(Timeout.Infinite, Timeout.Infinite);
             cuenta.Estado_Cuenta = EstadoCuenta.LUCHANDO;
-            cuenta.logger.log_informacion("PELEA", "Nueva pelea");
-            pelea_creada?.Invoke();
-        }
-
-        public void get_Combate_Iniciado()
-        {
-            estado_pelea = 3;
             pelea_iniciada = true;
+            pelea_creada?.Invoke();
+            cuenta.juego.personaje.timer_regeneracion.Change(Timeout.Infinite, Timeout.Infinite);
+            cuenta.logger.log_informacion("PELEA", "Nueva pelea iniciada");
         }
 
         public void get_Turno_Iniciado()
@@ -533,10 +538,10 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             hechizos_intervalo.Clear();
             total_hechizos_lanzados.Clear();
             total_hechizos_lanzados_en_celda.Clear();
+            celdas_preparacion.Clear();
             jugador_luchador = null;
             estado_pelea = 4;
             pelea_iniciada = false;
-            id_pelea = 0;
         }
         #endregion
 
