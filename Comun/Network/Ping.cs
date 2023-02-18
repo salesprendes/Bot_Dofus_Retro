@@ -6,34 +6,40 @@ namespace Bot_Dofus_Retro.Comun.Network
 {
     public class Ping
     {
-        private List<int> pings { get; set; }
+        private readonly List<int> latencia;
+        private const int latencia_promedio = 50;
         private int ticks;
 
         public Ping()
         {
-            pings = new List<int>(50);
+            latencia = new List<int>();
             ticks = 0;
         }
 
-        public int get_Total_Pings() => pings.Count();
-        public int get_Actual_Ping() => Environment.TickCount - ticks;
+        public int get_Total_Pings() => latencia.Count();
+        public void set_ticks() => ticks = Environment.TickCount;
+        public int get_latencias_totales() => latencia_promedio;
 
-        public int get_Promedio_Pings()
+        public int get_Promedio_Latencia()
         {
-            int total_pings = 0, contador = 0;
-            while (contador < pings.Count)
-            {
-                total_pings += pings[contador];
-                contador++;
-            }
-            return total_pings / pings.Count;
+            if (latencia.Count == 0)
+                return 0;
+
+            int latencia_total = latencia.Aggregate(0, (actual, latencia) => actual + latencia);
+            return latencia_total / latencia.Count;
         }
 
-        public void set_Actualizar()
+        public void set_Agregar_Latencia()
         {
-            pings.Add(get_Actual_Ping());
-            if (pings.Count > 48)
-                pings.Clear();
+            int _ticks = Environment.TickCount;
+
+            if (ticks == 0) return;
+
+            latencia.Add(_ticks - ticks);
+            ticks = 0;
+
+            if (latencia.Count > latencia_promedio)
+                latencia.RemoveAt(0);
         }
     }
 }

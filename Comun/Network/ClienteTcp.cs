@@ -112,7 +112,7 @@ namespace Bot_Dofus_Retro.Comun.Network
             {
                 Console.WriteLine(paquete);
                 paquete_recibido?.Invoke(paquete);
-                ping.set_Actualizar();
+                ping.set_Agregar_Latencia();
                 PaqueteRecibido.Recibir(this, paquete);
             }
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, recibir_CallBack, socket);
@@ -134,6 +134,8 @@ namespace Bot_Dofus_Retro.Comun.Network
             byte[] byte_paquete = Encoding.UTF8.GetBytes(string.Format($"{paquete}\n\x00"));
 
             socket.Send(byte_paquete);
+            ping.set_ticks();
+
             paquete_enviado?.Invoke(paquete);
             semaforo.Release();
         }

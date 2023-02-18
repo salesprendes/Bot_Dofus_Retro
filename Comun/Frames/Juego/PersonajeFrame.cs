@@ -170,10 +170,15 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         });
 
         [PaqueteAtributo("Bp")]
-        public Task get_Ping_Promedio(ClienteTcp cliente, string paquete) => Task.Run(async() => await cliente.enviar_Paquete_Async($"Bp{cliente.ping.get_Promedio_Pings()}|{cliente.ping.get_Total_Pings()}|50"));
+        public Task get_Ping_Promedio(ClienteTcp cliente, string paquete) => Task.Run(async () =>
+        {
+            Ping ping = cliente.ping;
+
+            await cliente.enviar_Paquete_Async($"Bp{ping.get_Promedio_Latencia()}|{ping.get_Total_Pings()}|{ping.get_latencias_totales()}");
+        });
 
         [PaqueteAtributo("pong")]
-        public Task get_Ping_Pong(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.logger.log_informacion("DOFUS", $"Ping: {cliente.ping.get_Actual_Ping()} ms"));
+        public Task get_Ping_Pong(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.logger.log_informacion("DOFUS", $"Ping: {cliente.ping.get_Promedio_Latencia()} ms"));
 
         [PaqueteAtributo("AR")]
         public Task get_Restricciones(ClienteTcp cliente, string paquete) => Task.Run(() =>
