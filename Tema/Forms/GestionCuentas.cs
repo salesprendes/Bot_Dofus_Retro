@@ -1,5 +1,4 @@
 ﻿using Bot_Dofus_Retro.DarkUI.Forms;
-using Bot_Dofus_Retro.Licencia;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Microsoft.VisualBasic;
 using System;
@@ -110,9 +109,6 @@ namespace Bot_Dofus_Retro.Tema.Forms
 
         private void conectarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!VerificadorLicencia.comprobar())
-                return;
-
             if (listViewCuentas.SelectedItems.Count <= 0 || listViewCuentas.FocusedItem == null)
                 return;
 

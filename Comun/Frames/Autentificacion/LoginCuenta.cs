@@ -27,9 +27,9 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             Cuenta cuenta = cliente.cuenta;
             cuenta.key_bienvenida = paquete.Substring(2);
 
-            await cliente.enviar_Paquete_Async(GlobalConf.version_dofus);
-            await cliente.enviar_Paquete_Async($"#Z\n{cliente.auth_getGameToken}");
-            await cliente.enviar_Paquete_Async("Af");
+            await cliente.enviar(GlobalConf.version_dofus);
+            await cliente.enviar($"#Z\n{cliente.auth_getGameToken}");
+            await cliente.enviar("Af");
         });
 
         [PaqueteAtributo("Ad")]
@@ -65,7 +65,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             }
 
             if (!primera_vez && servidor.estado == EstadosServidor.CONECTADO)
-                await cliente.enviar_Paquete_Async("Ax");
+                await cliente.enviar("Ax");
         });
 
         [PaqueteAtributo("AQ")]
@@ -74,9 +74,9 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             while (cliente.cuenta.juego.servidor.estado != EstadosServidor.CONECTADO)
                 await Task.Delay(500);
 
-            await cliente.enviar_Paquete_Async($"Ap{GlobalConf.puerto_conexion}");
-            await cliente.enviar_Paquete_Async($"Ai{StringHelpercs.GetRandomNetworkKey()}");
-            await cliente.enviar_Paquete_Async("Ax");
+            await cliente.enviar($"Ap{GlobalConf.puerto_conexion}");
+            await cliente.enviar($"Ai{StringHelpercs.GetRandomNetworkKey()}");
+            await cliente.enviar("Ax");
         });
 
         [PaqueteAtributo("AxK")]
@@ -107,7 +107,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             }
 
             if (seleccionado)
-                await cliente.enviar_Paquete_Async($"AX{servidor.id}");
+                await cliente.enviar($"AX{servidor.id}");
         });
 
         [PaqueteAtributo("AXK")]//metodo antiguo??

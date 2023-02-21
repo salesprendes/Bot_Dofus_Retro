@@ -87,7 +87,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Interactivos
                 habilidad = interactivo_utilizado.modelo.habilidades[index];
             }
 
-            await cuenta.conexion.enviar_Paquete_Async($"GA500{interactivo_utilizado.celda.id};{habilidad}");
+            await cuenta.conexion.enviar($"GA500{interactivo_utilizado.celda.id};{habilidad}");
         });
 
         private void get_Finalizar_Interactivo(bool success)

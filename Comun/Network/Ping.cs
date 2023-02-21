@@ -7,7 +7,7 @@ namespace Bot_Dofus_Retro.Comun.Network
     public class Ping
     {
         private readonly List<int> latencia;
-        private const int latencia_promedio = 50;
+        private const int maximas_latencias = 50;
         private int ticks;
 
         public Ping()
@@ -18,7 +18,7 @@ namespace Bot_Dofus_Retro.Comun.Network
 
         public int get_Total_Pings() => latencia.Count();
         public void set_ticks() => ticks = Environment.TickCount;
-        public int get_latencias_totales() => latencia_promedio;
+        public int get_maximas_latencias() => maximas_latencias;
 
         public int get_Promedio_Latencia()
         {
@@ -38,7 +38,7 @@ namespace Bot_Dofus_Retro.Comun.Network
             latencia.Add(_ticks - ticks);
             ticks = 0;
 
-            if (latencia.Count > latencia_promedio)
+            if (latencia.Count > maximas_latencias)
                 latencia.RemoveAt(0);
         }
     }

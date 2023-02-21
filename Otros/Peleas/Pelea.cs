@@ -61,7 +61,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             estado_pelea = 1;
         }
 
-        public async Task get_Lanzar_Hechizo(short hechizo_id, short celda_id) => await cuenta.conexion.enviar_Paquete_Async($"GA300{hechizo_id};{celda_id}");
+        public async Task get_Lanzar_Hechizo(short hechizo_id, short celda_id) => await cuenta.conexion.enviar($"GA300{hechizo_id};{celda_id}");
 
         public void actualizar_Hechizo_Exito(short hechizo_id, short celda_id)
         {

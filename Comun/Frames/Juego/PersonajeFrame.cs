@@ -23,8 +23,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         [PaqueteAtributo("As")]
         public Task get_Stats_Actualizados(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            await cliente.enviar_Paquete_Async("Ir742;556;0");//envia informaciones pantalla
-            await cliente.enviar_Paquete_Async("BD");
+            await cliente.enviar("Ir742;556;0");//envia informaciones pantalla
+            await cliente.enviar("BD");
             cliente.cuenta.juego.personaje.actualizar_Caracteristicas(paquete);
         });
 
@@ -32,7 +32,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         public Task get_Peticion_Grupo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
             cliente.cuenta.logger.log_informacion("Grupo", $"Nueva invitación de grupo del personaje: {paquete.Substring(3).Split('|')[0]}");
-            await cliente.enviar_Paquete_Async("PR");
+            await cliente.enviar("PR");
             cliente.cuenta.logger.log_informacion("Grupo", "Petición rechazada");
         });
 
@@ -124,7 +124,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         public Task get_Peticion_Intercambio(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
             cliente.cuenta.logger.log_informacion("INFORMACIÓN", "Invitación de intercambio recibida, rechazando");
-            await cliente.enviar_Paquete_Async("EV");
+            await cliente.enviar("EV");
         });
 
         [PaqueteAtributo("ILS")]
@@ -174,7 +174,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         {
             Ping ping = cliente.ping;
 
-            await cliente.enviar_Paquete_Async($"Bp{ping.get_Promedio_Latencia()}|{ping.get_Total_Pings()}|{ping.get_latencias_totales()}");
+            await cliente.enviar($"Bp{ping.get_Promedio_Latencia()}|{ping.get_Total_Pings()}|{ping.get_maximas_latencias()}");
         });
 
         [PaqueteAtributo("pong")]
@@ -199,7 +199,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             else if (archivo.Contains("loader.swf"))
                 bytes = GlobalConf.peso_loader;
 
-            await cliente.enviar_Paquete_Async($"BC{id};{bytes}");
+            await cliente.enviar($"BC{id};{bytes}");
             cliente.cuenta.logger.log_Error("ANTI-BOT", $"Se ha revisado el archivo: {archivo}");
         });
 
@@ -208,7 +208,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         {
             Cuenta cuenta = cliente.cuenta;
             cuenta.logger.log_informacion("PERSONAJE", "Invitación al gremio rechazada");
-            await cliente.enviar_Paquete_Async("gJE");
+            await cliente.enviar("gJE");
         });
 
 
@@ -240,7 +240,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         public void get_TelemetryCallback(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
             Cuenta cuenta = cliente.cuenta;
-            await cliente.enviar_Paquete_Async("HTSt^md^kd^r`hr^o`r^dmbnqd+^l`hr^st^dr^c");//no legit
+            await cliente.enviar("HTSt^md^kd^r`hr^o`r^dmbnqd+^l`hr^st^dr^c");//no legit
         });
 
     }

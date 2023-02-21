@@ -17,7 +17,7 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
         private static List<CuentaConf> lista_cuentas = new List<CuentaConf>();
         private static readonly string ruta_archivo_cuentas = Path.Combine(Directory.GetCurrentDirectory(), "cuentas.bot");
         public static bool mostrar_mensajes_debug { get; set; } = false;
-        public static string ip_conexion = "172.65.213.92", version_dofus = "1.39.7";
+        public static string ip_conexion = "172.65.213.92", version_dofus = "1.39.8";
         public static short puerto_conexion = 443;
         public static int peso_core = 2528660, peso_loader = 2362079;
 

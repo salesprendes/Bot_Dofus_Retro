@@ -1,5 +1,4 @@
 ﻿using Bot_Dofus_Retro.Comun.Frames.Transporte;
-using Bot_Dofus_Retro.Licencia;
 using Bot_Dofus_Retro.Otros.Game.Personaje.Hechizos;
 using Bot_Dofus_Retro.Otros.Mapas.Interactivo;
 using Bot_Dofus_Retro.Otros.Scripts.Manejadores;
@@ -25,7 +24,6 @@ namespace Bot_Dofus_Retro
         [STAThread]
         private static void Main()
         {
-            VerificadorLicencia.verificar();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

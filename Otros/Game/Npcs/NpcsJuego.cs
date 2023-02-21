@@ -43,7 +43,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Npcs
             if (npc == null)
                 return false;
 
-            cuenta.conexion.enviar_Paquete_Async("DC" + npc.id).Wait();
+            cuenta.conexion.enviar("DC" + npc.id).Wait();
             return true;
         }
 
@@ -64,7 +64,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Npcs
 
             if (respuestas.Contains(respuesta_id))
             {
-                cuenta.conexion.enviar_Paquete_Async("DR" + pregunta + "|" + respuesta_id).Wait();
+                cuenta.conexion.enviar("DR" + pregunta + "|" + respuesta_id).Wait();
                 return true;
             }
 

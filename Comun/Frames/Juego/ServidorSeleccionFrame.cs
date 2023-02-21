@@ -3,6 +3,7 @@ using Bot_Dofus_Retro.Comun.Network;
 using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Personaje;
+using System;
 using System.Threading.Tasks;
 
 /*
@@ -18,27 +19,27 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
     internal class ServidorSeleccionFrame : Frame
     {
         [PaqueteAtributo("HG")]
-        public Task get_Bienvenida_juego(ClienteTcp cliente, string paquete) => Task.Run(async () => await cliente.enviar_Paquete_Async("AT" + cliente.cuenta.tiquet_game));
+        public Task get_Bienvenida_juego(ClienteTcp cliente, string paquete) => Task.Run(async () => await cliente.enviar("AT" + cliente.cuenta.tiquet_game));
 
         [PaqueteAtributo("ATK0")]
         public Task resultado_Servidor_Seleccion_Antiguo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            await cliente.enviar_Paquete_Async("Ak0");
-            await cliente.enviar_Paquete_Async("AV");
+            await cliente.enviar("Ak0");
+            await cliente.enviar("AV");
         });
 
         [PaqueteAtributo("ATK")]
         public Task resultado_Servidor_Seleccion_Nuevo(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            await cliente.enviar_Paquete_Async("AV");
+            await cliente.enviar("AV");
         });
 
         [PaqueteAtributo("AV0")]
         public Task get_Idioma_Core(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            await cliente.enviar_Paquete_Async("Ages");
-            await cliente.enviar_Paquete_Async("AL");
-            await cliente.enviar_Paquete_Async("Af");
+            await cliente.enviar("Ages");
+            await cliente.enviar("AL");
+            await cliente.enviar("Af");
         });
 
         [PaqueteAtributo("ALK")]
@@ -65,8 +66,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
             if (!cuenta.juego.personaje.esta_conectado && encontrado)
             {
-                await cliente.enviar_Paquete_Async("AS" + id_personaje);
-                await cliente.enviar_Paquete_Async("Af");
+                await cliente.enviar("AS" + id_personaje);
+                await cliente.enviar("Af");
             }
                 
         });
@@ -91,8 +92,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             cuenta.juego.personaje.timer_afk.Change(1200000, 1200000);
             cuenta.juego.personaje.evento_Personaje_Seleccionado();
 
-            await cliente.enviar_Paquete_Async("BYA");//Modo Ausente
-            await cliente.enviar_Paquete_Async("GC1");
+            await cliente.enviar("BYA");//Modo Ausente
+            await cliente.enviar("GC1");
         });
 
         [PaqueteAtributo("GCK")]

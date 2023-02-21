@@ -1,5 +1,4 @@
 ﻿using Bot_Dofus_Retro.Comun.Network;
-using Bot_Dofus_Retro.Licencia;
 using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game;
 using Bot_Dofus_Retro.Otros.Grupos;
@@ -55,13 +54,7 @@ namespace Bot_Dofus_Retro.Otros
 
         public async Task conectar()
         {
-            if (!VerificadorLicencia.comprobar())
-            {
-                logger.log_Error("LICENCIA", "Licencia no disponible");
-                return;
-            }
-
-            await conexion.conexion_Socket(GlobalConf.ip_conexion, GlobalConf.puerto_conexion);
+            await conexion.conectar(GlobalConf.ip_conexion, GlobalConf.puerto_conexion);
             Estado_Cuenta = EstadoCuenta.CONECTANDO;
             cuenta_conectada?.Invoke();
         }
@@ -70,7 +63,7 @@ namespace Bot_Dofus_Retro.Otros
         {
             Estado_Cuenta = EstadoCuenta.CAMBIANDO_A_JUEGO;
             conexion.get_Desconectar_Socket();
-            await conexion.conexion_Socket(ip, puerto);
+            await conexion.conectar(ip, puerto);
             Estado_Cuenta = EstadoCuenta.CONECTANDO;
         }
 

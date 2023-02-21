@@ -40,7 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileAlignment>1024</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -52,6 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -115,9 +116,6 @@
     <Compile Include="Comun\Frames\Transporte\PaqueteRecibido.cs" />
     <Compile Include="Comun\Network\Ping.cs" />
     <Compile Include="Comun\Network\ZaapConnect.cs" />
-    <Compile Include="Licencia\RefrescadorLicencia.cs" />
-    <Compile Include="Licencia\TiposLicencia.cs" />
-    <Compile Include="Licencia\VerificadorLicencia.cs" />
     <Compile Include="Otros\Game\Npcs\NpcsJuego.cs" />
     <Compile Include="Otros\Game\Personaje\Derechos.cs" />
     <Compile Include="Otros\Game\Personaje\Oficios\OficiosJuego.cs" />

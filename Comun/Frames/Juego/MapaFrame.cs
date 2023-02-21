@@ -159,7 +159,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
             if (cuenta.juego.personaje.id == id_personaje)
             {
-                await cliente.cuenta.conexion.enviar_Paquete_Async("GKK" + id_accion);
+                await cliente.cuenta.conexion.enviar("GKK" + id_accion);
 
                 if (cuenta.esta_Luchando())
                 {
@@ -228,7 +228,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     else if (id_entidad == personaje.id && personaje.celda.id != celda.id)
                     {
                         personaje.celda = celda;
-                        await cuenta.conexion.enviar_Paquete_Async("GKK1");
+                        await cuenta.conexion.enviar("GKK1");
                     }
 
                     mapa.get_Entidad_Actualizada();
@@ -246,7 +246,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     if (luchador != null)
                         luchador.celda = mapa.get_Celda_Id(short.Parse(separador[1]));
 
-                    await cuenta.conexion.enviar_Paquete_Async($"GKK{gkk}");
+                    await cuenta.conexion.enviar($"GKK{gkk}");
                 break;
 
                 /** Modificación puntos de pelea **/
@@ -343,7 +343,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                 break;
 
                 case 900:
-                    await cuenta.conexion.enviar_Paquete_Async("GA902" + id_entidad);
+                    await cuenta.conexion.enviar("GA902" + id_entidad);
                     cuenta.logger.log_informacion("INFORMACIÓN", "Desafio del personaje id: " + id_entidad + " cancelado");
                 break;
             }
@@ -385,7 +385,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         [PaqueteAtributo("GDM")]
         public Task get_Nuevo_Mapa(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            await cliente.enviar_Paquete_Async("GI");
+            await cliente.enviar("GI");
             cliente.cuenta.juego.mapa.get_Actualizar_Mapa(paquete.Substring(4));
         });
 
@@ -393,6 +393,6 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         public Task get_Mapa_Cambiado(ClienteTcp cliente, string paquete) => Task.Run(() => cliente.cuenta.juego.mapa.get_Mapa_Cambiado());
 
         [PaqueteAtributo("GV")]
-        public Task get_Reiniciar_Pantalla(ClienteTcp cliente, string paquete) => Task.Run(async () => await cliente.enviar_Paquete_Async("GC1"));
+        public Task get_Reiniciar_Pantalla(ClienteTcp cliente, string paquete) => Task.Run(async () => await cliente.enviar("GC1"));
     }
 }

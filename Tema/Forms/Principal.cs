@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Bot_Dofus_Retro.DarkUI.Forms;
 using Bot_Dofus_Retro.DarkUI.Docking;
 using Bot_Dofus_Retro.DarkUI.Controls;
-using Bot_Dofus_Retro.Licencia;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
@@ -29,7 +28,6 @@ namespace Bot_Dofus_Retro.Tema.Forms
         public Principal()
         {
             InitializeComponent();
-            RefrescadorLicencia.iniciar();
             cuentas_cargadas = new Dictionary<string, DarkDockContent>();
         }
 

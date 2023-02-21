@@ -206,7 +206,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
         private async Task fin_Turno(int delay)
         {
             await Task.Delay(delay);
-            await cuenta.conexion.enviar_Paquete_Async("Gt");
+            await cuenta.conexion.enviar("Gt");
         }
 
         public async Task get_Mover(bool cercano, Luchadores enemigo)

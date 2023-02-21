@@ -8,7 +8,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Acciones.Npc
         {
             if (cuenta.esta_Dialogando())
             {
-                cuenta.conexion.enviar_Paquete_Async("DV").Wait();
+                cuenta.conexion.enviar("DV").Wait();
                 return resultado_procesado;
             }
 

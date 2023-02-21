@@ -81,7 +81,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
                 string[] canales = { "i", "*", "#$p", "%", "!", "?", ":", "^" };
                 CheckBox control = sender as CheckBox;
 
-                await cuenta.conexion.enviar_Paquete_Async((control.Checked ? "cC+" : "cC-") + canales[control.TabIndex]);
+                await cuenta.conexion.enviar((control.Checked ? "cC+" : "cC-") + canales[control.TabIndex]);
             }
         });
 
@@ -104,26 +104,26 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
 
                 case "/PING":
                     if (cuenta.Estado_Cuenta != EstadoCuenta.DESCONECTADO)
-                        await cuenta.conexion.enviar_Paquete_Async("ping");
+                        await cuenta.conexion.enviar("ping");
                 break;
 
                 default:
                     switch (comboBox_lista_canales.SelectedItem.Text)
                     {
                         case "General":
-                            await cuenta.conexion.enviar_Paquete_Async("BM*|" + textBox_enviar_consola.Text + "|");
+                            await cuenta.conexion.enviar("BM*|" + textBox_enviar_consola.Text + "|");
                             break;
 
                         case "Reclutamiento":
-                            await cuenta.conexion.enviar_Paquete_Async("BM?|" + textBox_enviar_consola.Text + "|");
+                            await cuenta.conexion.enviar("BM?|" + textBox_enviar_consola.Text + "|");
                             break;
 
                         case "Comercio":
-                            await cuenta.conexion.enviar_Paquete_Async("BM:|" + textBox_enviar_consola.Text + "|");
+                            await cuenta.conexion.enviar("BM:|" + textBox_enviar_consola.Text + "|");
                             break;
 
                         case "Mensaje privado":
-                            await cuenta.conexion.enviar_Paquete_Async("BM" + textBox_nombre_privado.Text + "|" + textBox_enviar_consola.Text + "|");
+                            await cuenta.conexion.enviar("BM" + textBox_nombre_privado.Text + "|" + textBox_enviar_consola.Text + "|");
                             break;
                     }
                     break;

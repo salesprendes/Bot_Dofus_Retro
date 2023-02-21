@@ -150,7 +150,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
             nodo.Value.Value.camino.celdas_accesibles.Insert(0, cuenta.juego.pelea.jugador_luchador.celda.id);
             List<Celda> lista_celdas = nodo.Value.Value.camino.celdas_accesibles.Select(c => mapa.get_Celda_Id(c)).ToList();
 
-            await cuenta.conexion.enviar_Paquete_Async("GA001" + PathFinderUtil.get_Pathfinding_Limpio(lista_celdas));
+            await cuenta.conexion.enviar("GA001" + PathFinderUtil.get_Pathfinding_Limpio(lista_celdas));
             personaje.evento_Personaje_Pathfinding_Minimapa(lista_celdas);
         }
 
@@ -171,11 +171,11 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
         private void enviar_Paquete_Movimiento() => Task.Run(async () =>
         {
             if (cuenta.Estado_Cuenta == EstadoCuenta.REGENERANDO)
-                await cuenta.conexion.enviar_Paquete_Async("eU1");
+                await cuenta.conexion.enviar("eU1");
 
             string path_string = PathFinderUtil.get_Pathfinding_Limpio(actual_path);
             cuenta.Estado_Cuenta = EstadoCuenta.MOVIMIENTO;
-            await cuenta.conexion.enviar_Paquete_Async("GA001" + path_string);
+            await cuenta.conexion.enviar("GA001" + path_string);
             personaje.evento_Personaje_Pathfinding_Minimapa(actual_path);
         });
 
@@ -188,7 +188,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
                 else
                     await Task.Delay(PathFinderUtil.get_Tiempo_Desplazamiento_Mapa(personaje.celda, actual_path, personaje.esta_utilizando_dragopavo));
 
-                await cuenta.conexion.enviar_Paquete_Async("GKK" + tipo_gkk);
+                await cuenta.conexion.enviar("GKK" + tipo_gkk);
                 personaje.celda = celda_destino;
             }
 

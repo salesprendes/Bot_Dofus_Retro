@@ -231,7 +231,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts
         {
             if (cuenta.juego.personaje.restricciones.ES_TUMBA)
             {
-                await cuenta.conexion.enviar_Paquete_Async("GF");
+                await cuenta.conexion.enviar("GF");
                 cuenta.logger.log_informacion("SCRIPT", "El personaje se ha convertido en fantasma");
 
                 await cuenta.juego.mapa.get_Esperar_Mapa_Cambiado(100);
@@ -473,7 +473,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts
                     if (cuenta.Estado_Cuenta != EstadoCuenta.REGENERANDO)
                     {
                         if (!cuenta.esta_ocupado)
-                            await cuenta.conexion.enviar_Paquete_Async("eU1");
+                            await cuenta.conexion.enviar("eU1");
                     }
 
                     cuenta.logger.log_informacion("SCRIPTS", $"Regeneración comenzada, puntos de vida a recuperar: {vida_para_regenerar}, tiempo: {tiempo_estimado} segundos.");
@@ -487,7 +487,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts
                     if (cuenta.Estado_Cuenta == EstadoCuenta.REGENERANDO)
                     {
                         if (!cuenta.esta_ocupado)
-                            await cuenta.conexion.enviar_Paquete_Async("eU1");
+                            await cuenta.conexion.enviar("eU1");
                     }
 
                     cuenta.logger.log_informacion("SCRIPTS", "Regeneración finalizada.");

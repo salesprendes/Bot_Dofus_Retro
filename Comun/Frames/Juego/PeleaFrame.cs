@@ -43,13 +43,13 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
                 if (celda_posicion != pelea.jugador_luchador.celda.id)
                 {
-                    await cliente.enviar_Paquete_Async("Gp" + celda_posicion);
+                    await cliente.enviar("Gp" + celda_posicion);
                     await Task.Delay(300);
                 }
             }
 
             if (cuenta.pelea_extension.configuracion.desactivar_espectador)
-                await cliente.enviar_Paquete_Async("fS");
+                await cliente.enviar("fS");
 
             await Task.Delay(300);
 
@@ -57,7 +57,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             {
                 if (cuenta.pelea_extension.configuracion.utilizar_dragopavo && !cuenta.juego.personaje.esta_utilizando_dragopavo)
                 {
-                    await cliente.enviar_Paquete_Async("Rr");
+                    await cliente.enviar("Rr");
                     cuenta.juego.personaje.esta_utilizando_dragopavo = true;
                 }
             }
@@ -71,7 +71,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             }
 
             await Task.Delay(300);
-            await cliente.enviar_Paquete_Async("GR1");//boton listo
+            await cliente.enviar("GR1");//boton listo
         });
 
         [PaqueteAtributo("GICE")]
@@ -158,7 +158,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                 cuenta.juego.pelea.get_Turno_Acabado();
 
             await Task.Delay(200);
-            await cliente.enviar_Paquete_Async("GT");
+            await cliente.enviar("GT");
         });
 
         [PaqueteAtributo("GJK")]
@@ -188,7 +188,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         public Task get_Combate_Finalizado(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
             cliente.cuenta.juego.pelea.get_Combate_Acabado();
-            await cliente.enviar_Paquete_Async("GC1");
+            await cliente.enviar("GC1");
         });
     }
 }

@@ -217,7 +217,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             try
             {
                 if (cuenta.Estado_Cuenta != EstadoCuenta.DESCONECTADO)
-                    await cuenta.conexion.enviar_Paquete_Async("ping");
+                    await cuenta.conexion.enviar("ping");
             }
             catch (Exception e)
             {

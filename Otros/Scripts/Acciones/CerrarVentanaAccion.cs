@@ -16,7 +16,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Acciones
         {
             if (cuenta.esta_Dialogando())
             {
-                cuenta.conexion.enviar_Paquete_Async("EV").Wait();
+                cuenta.conexion.enviar("EV").Wait();
                 return resultado_procesado;
             }
 
