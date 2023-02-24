@@ -33,13 +33,13 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             this.button_probar_proxy = new Bot_Dofus_Retro.DarkUI.Controls.DarkButton();
             this.button_guardar_proxy = new Bot_Dofus_Retro.DarkUI.Controls.DarkButton();
             this.tableLayoutPanel_proxy_login = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox_password_proxy = new Bot_Dofus_Retro.DarkUI.Controls.DarkTextBox();
+            this.textBox_password_proxy = new System.Windows.Forms.TextBox();
             this.label_password_proxy = new System.Windows.Forms.Label();
             this.label_cuenta_proxy = new System.Windows.Forms.Label();
-            this.textBox_cuenta_proxy = new Bot_Dofus_Retro.DarkUI.Controls.DarkTextBox();
+            this.textBox_cuenta_proxy = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel_ip_proxy = new System.Windows.Forms.TableLayoutPanel();
             this.label_ip_proxy = new System.Windows.Forms.Label();
-            this.textBox_ip_proxy = new Bot_Dofus_Retro.DarkUI.Controls.DarkTextBox();
+            this.textBox_ip_proxy = new System.Windows.Forms.TextBox();
             this.label_puerto_proxy = new System.Windows.Forms.Label();
             this.numericUpDown_puerto_proxy = new System.Windows.Forms.NumericUpDown();
             this.darkSectionPanel_proxy = new Bot_Dofus_Retro.DarkUI.Controls.DarkSectionPanel();
@@ -335,14 +335,14 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
         #endregion
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_ip_proxy;
         private System.Windows.Forms.Label label_ip_proxy;
-        private DarkTextBox textBox_ip_proxy;
+        private System.Windows.Forms.TextBox textBox_ip_proxy;
         private System.Windows.Forms.Label label_puerto_proxy;
         private System.Windows.Forms.NumericUpDown numericUpDown_puerto_proxy;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_proxy_login;
         private System.Windows.Forms.Label label_cuenta_proxy;
-        private DarkTextBox textBox_password_proxy;
+        private System.Windows.Forms.TextBox textBox_password_proxy;
         private System.Windows.Forms.Label label_password_proxy;
-        private DarkTextBox textBox_cuenta_proxy;
+        private System.Windows.Forms.TextBox textBox_cuenta_proxy;
         private DarkButton button_guardar_proxy;
         private DarkButton button_probar_proxy;
         private DarkSectionPanel darkSectionPanel_proxy;

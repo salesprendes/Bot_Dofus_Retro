@@ -192,13 +192,13 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     {
                         case EstadoCuenta.MOVIMIENTO:
                             await cuenta.juego.manejador.movimientos.evento_Movimiento_Finalizado(null, 0, false);
-                        break;
+                            break;
 
                         case EstadoCuenta.LUCHANDO:
                             await cuenta.pelea_extension.get_Procesar_Accion_Sin_Lanzar_Hechizo();
-                        break;
+                            break;
                     }
-                break;
+                    break;
 
                 case 1:
                     celda = mapa.get_Celda_Id(Hash.get_Celda_Id_Desde_hash(separador[3].Substring(separador[3].Length - 2)));
@@ -213,9 +213,10 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                         entidad.celda = celda;
 
                     mapa.get_Entidad_Actualizada();
+
                     if (GlobalConf.mostrar_mensajes_debug)
-                        cuenta.logger.log_informacion("DEBUG", "Movimiento finalizado de una entidad, casilla: " + celda.id);
-                break;
+                        cuenta.logger.log_informacion("DEBUG", "Movimiento de una entidad a la casilla: " + celda.id);
+                    break;
 
                 case 4:
                     separador = separador[3].Split(',');
@@ -233,7 +234,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
                     mapa.get_Entidad_Actualizada();
                     cuenta.juego.manejador.movimientos.movimiento_Actualizado(true);
-                break;
+                    break;
 
                 case 5:
                     if (!cuenta.esta_Luchando())
@@ -247,7 +248,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                         luchador.celda = mapa.get_Celda_Id(short.Parse(separador[1]));
 
                     await cuenta.conexion.enviar($"GKK{gkk}");
-                break;
+                    break;
 
                 /** Modificación puntos de pelea **/
                 case 100:
@@ -269,7 +270,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     string[] _loc43_ = separador[3].Split(',');
 
                     luchador.get_Actualizar_Puntos_Pelea(id_accion, _loc43_[1]);
-                break;
+                    break;
 
                 case 103:
                     if (!cuenta.esta_Luchando())
@@ -286,7 +287,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
                     if (GlobalConf.mostrar_mensajes_debug)
                         cuenta.logger.log_informacion("DEBUG", "Ha muerto un enemigo");
-                break;
+                    break;
 
                 case 151://obstaculos invisibles
                     if (!cuenta.esta_Luchando() || luchador == null)
@@ -298,7 +299,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                         await Task.Delay(1000);
                         await cuenta.pelea_extension.get_Procesar_Accion_Sin_Lanzar_Hechizo();
                     }
-                break;
+                    break;
 
                 /** Efecto de invocacion **/
                 case 180:
@@ -316,7 +317,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                         equipo = byte.Parse(separador[18]);
 
                     pelea.get_Agregar_Luchador(new Luchadores(id_luchador, true, vida, pa, pm, celda, vida, equipo, id_luchador, true));
-                break;
+                    break;
 
                 case 300: //hechizo lanzado con exito
                     if (!cuenta.esta_Luchando() || id_entidad != personaje.id)
@@ -325,14 +326,14 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     short hechizo_id = short.Parse(separador[3].Split(',')[0]);
                     short celda_id = short.Parse(separador[3].Split(',')[1]);
                     pelea.actualizar_Hechizo_Exito(hechizo_id, celda_id);
-                break;
+                    break;
 
                 case 302://fallo crítico
                     if (!cuenta.esta_Luchando() || id_entidad != personaje.id)
                         return;
 
                     await cuenta.pelea_extension.get_Procesar_Accion_Sin_Lanzar_Hechizo();
-                break;
+                    break;
 
                 case 501:
                     int tiempo_recoleccion = int.Parse(separador[3].Split(',')[1]);
@@ -340,12 +341,12 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     byte tipo_gkk_recoleccion = byte.Parse(separador[0]);
 
                     await cuenta.juego.manejador.recoleccion.evento_Recoleccion_Iniciada(id_entidad, tiempo_recoleccion, celda.id, tipo_gkk_recoleccion);
-                break;
+                    break;
 
                 case 900:
                     await cuenta.conexion.enviar("GA902" + id_entidad);
                     cuenta.logger.log_informacion("INFORMACIÓN", "Desafio del personaje id: " + id_entidad + " cancelado");
-                break;
+                    break;
             }
         });
 
@@ -373,11 +374,11 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                             cuenta.juego.manejador.recoleccion.evento_Recoleccion_Acabada(RecoleccionResultado.RECOLECTADO, celda_id);
                         else
                             cuenta.juego.manejador.recoleccion.evento_Recoleccion_Acabada(RecoleccionResultado.ROBADO, celda_id);
-                    break;
+                        break;
 
                     case 4:// reaparece asi se fuerza el cambio de mapa 
                         cuenta.juego.mapa.interactivos[celda_id].es_utilizable = false;
-                    break;
+                        break;
                 }
             }
         }, TaskCreationOptions.LongRunning);

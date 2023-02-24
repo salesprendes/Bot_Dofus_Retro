@@ -10,7 +10,6 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
         public HechizoFocus focus { get; private set; }
         public byte lanzamientos_x_turno { get; private set; }
         public byte lanzamientos_restantes { get; set; }
-        public byte turno_lanzado { get; set; }
         public MetodoLanzamiento metodo_lanzamiento { get; private set; }
         public bool es_aoe { get; private set; }
         public bool necesita_piedra { get; private set; }
@@ -33,7 +32,6 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
             distancia_minima = _distancia_minima;
             es_aoe = _es_aoe;
             necesita_piedra = _necesita_piedra;
-            turno_lanzado = 0;
         }
 
         public void guardar(BinaryWriter bw)

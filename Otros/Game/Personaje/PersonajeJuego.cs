@@ -6,7 +6,9 @@ using Bot_Dofus_Retro.Otros.Game.Personaje.Stats;
 using Bot_Dofus_Retro.Otros.Mapas;
 using Bot_Dofus_Retro.Otros.Mapas.Entidades;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 /*
@@ -33,6 +35,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
         public int kamas { get; private set; }
         public Caracteristicas caracteristicas { get; set; }
         public Dictionary<short, Hechizo> hechizos { get; set; }//id_hechizo, hechizo
+        public ConcurrentDictionary<short, ConcurrentDictionary<int, byte>> bonus_set_clase { get; private set; }
         public OficiosJuego oficios { get; private set; }
         public Timer timer_regeneracion { get; private set; }
         public Timer timer_afk { get; private set; }
@@ -43,7 +46,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
         public bool en_grupo { get; set; }
         public bool esta_utilizando_dragopavo { get; set; } = false;
         private bool disposed;
-       
+
 
         public int porcentaje_experiencia => (int)((caracteristicas.experiencia_actual - caracteristicas.experiencia_minima_nivel) / (caracteristicas.experiencia_siguiente_nivel - caracteristicas.experiencia_minima_nivel) * 100);
 
@@ -64,6 +67,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             inventario = new InventarioGeneral(cuenta);
             caracteristicas = new Caracteristicas();
             hechizos = new Dictionary<short, Hechizo>();
+            bonus_set_clase = new ConcurrentDictionary<short, ConcurrentDictionary<int, byte>>();
             oficios = new OficiosJuego();
             derechos = new Derechos(0);
             restricciones = new Restricciones(0);
@@ -130,43 +134,43 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
                 {
                     case 9:
                         caracteristicas.puntos_accion.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 10:
                         caracteristicas.puntos_movimiento.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 11:
                         caracteristicas.fuerza.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 12:
                         caracteristicas.vitalidad.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 13:
                         caracteristicas.sabiduria.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 14:
                         caracteristicas.suerte.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 15:
                         caracteristicas.agilidad.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 16:
                         caracteristicas.inteligencia.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 17:
                         caracteristicas.alcanze.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
 
                     case 18:
                         caracteristicas.criaturas_invocables.actualizar_Stats(base_personaje, equipamiento, dones, boost);
-                    break;
+                        break;
                 }
             }
             caracteristicas_actualizadas?.Invoke();
@@ -190,7 +194,49 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
 
                 hechizos.Add(hechizo_id, hechizo);
             }
+
             hechizos_actualizados?.Invoke();
+        }
+
+        public void gestionar_Bonus_Set_Clase()
+        {
+            foreach (short hechizo_id in bonus_set_clase.Keys)
+            {
+                Hechizo hechizo = get_Hechizo(hechizo_id);
+
+                //Si no tiene el hechizo dentro del diccionario o el hechizo es nulo
+                if (hechizo == null || !bonus_set_clase.ContainsKey(hechizo.id))
+                    continue;
+
+                foreach (KeyValuePair<int, byte> bonus in bonus_set_clase[hechizo.id])
+                {
+                    int stat = bonus.Key;
+                    byte efecto = bonus.Value;
+
+                    switch (stat)
+                    {
+                        case 285://REDUCE_COSTE_PA
+                            byte pa_total = efecto > 0 ? (byte)(hechizo.get_Stats().coste_pa - efecto) : (byte)(hechizo.get_Stats().coste_pa + efecto);
+                            hechizo.get_Stats().coste_pa = pa_total;
+                            cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} {(efecto > 0 ? "reduce" : "aumenta")} {efecto} PA");
+                            break;
+
+                        case 286://TURNOS_VOLVER_LANZAR
+                            byte intervalo_total = efecto > 0 ? (byte)(hechizo.get_Stats().intervalo - efecto) : (byte)(hechizo.get_Stats().intervalo + efecto);
+                            hechizo.get_Stats().intervalo = intervalo_total;
+                            cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} {(efecto > 0 ? "reduce" : "aumenta")} {efecto} turno(s)");
+                            break;
+
+                        case 288://DESACTIVA_LINEA_RECTA
+                            hechizo.get_Stats().es_lanzado_linea = false;
+                            cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} desactiva la linea recta");
+                            break;
+                    }
+
+                }
+            }
+
+
         }
 
         private void regeneracion_TimerCallback(object state)
@@ -225,7 +271,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             }
         }
 
-        public Hechizo get_Hechizo(short id) => hechizos[id];
+        public Hechizo get_Hechizo(short id) => hechizos.FirstOrDefault(x => x.Key == id).Value;
 
         #region Zona Dispose
         public void Dispose() => Dispose(true);
@@ -240,6 +286,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             inventario.limpiar();
             caracteristicas.limpiar();
 
+            bonus_set_clase.Clear();
             timer_regeneracion.Change(Timeout.Infinite, Timeout.Infinite);
             timer_afk.Change(Timeout.Infinite, Timeout.Infinite);
         }
@@ -263,6 +310,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
                 timer_regeneracion = null;
                 timer_afk = null;
                 restricciones = null;
+                bonus_set_clase = null;
                 disposed = true;
             }
         }

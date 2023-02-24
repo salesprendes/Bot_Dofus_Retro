@@ -164,7 +164,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos
 
                 default:
                     cuenta.logger.log_Error("MOVIMIENTOS", $"camino hacia {celda.id} fallado o bloqueado");
-                return false;
+                    return false;
             }
         }
 

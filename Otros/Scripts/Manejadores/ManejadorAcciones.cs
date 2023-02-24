@@ -1,7 +1,6 @@
 ﻿using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Recolecciones;
 using Bot_Dofus_Retro.Otros.Game.Personaje;
-using Bot_Dofus_Retro.Otros.Mapas.Entidades;
 using Bot_Dofus_Retro.Otros.Scripts.Acciones;
 using Bot_Dofus_Retro.Otros.Scripts.Acciones.Mapas;
 using Bot_Dofus_Retro.Otros.Scripts.Acciones.Npc;
@@ -9,8 +8,6 @@ using Bot_Dofus_Retro.Utilidades;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bot_Dofus_Retro.Otros.Scripts.Manejadores
@@ -155,7 +152,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Manejadores
 
             if (accion_actual is NpcBanco nba)
             {
-                if(!cuenta.juego.npcs.responder(nba.respuesta))
+                if (!cuenta.juego.npcs.responder(nba.respuesta))
                     cuenta.script.detener_Script($"Error al responder a la pregunta del npc banco");
             }
             else if (accion_actual is IniciarDialogo || accion_actual is ResponderDialogo)

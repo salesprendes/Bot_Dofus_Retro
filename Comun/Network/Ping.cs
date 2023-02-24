@@ -18,7 +18,13 @@ namespace Bot_Dofus_Retro.Comun.Network
 
         public int get_Total_Pings() => latencia.Count();
         public void set_ticks() => ticks = Environment.TickCount;
-        public int get_maximas_latencias() => maximas_latencias;
+        public int get_Maximas_latencias() => maximas_latencias;
+
+        public void set_Limpiar_latencias()
+        {
+            latencia.Clear();
+            ticks = 0;
+        }
 
         public int get_Promedio_Latencia()
         {

@@ -3,6 +3,7 @@ using Bot_Dofus_Retro.Otros.Mapas;
 using Bot_Dofus_Retro.Otros.Mapas.Movimiento.Peleas;
 using Bot_Dofus_Retro.Otros.Peleas.Enums;
 using Bot_Dofus_Retro.Otros.Peleas.Peleadores;
+using Bot_Dofus_Retro.Utilidades.Configuracion;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,25 +50,22 @@ namespace Bot_Dofus_Retro.Otros.Peleas
         {
             pelea.pelea_creada += get_Pelea_Creada;
             pelea.turno_iniciado += get_Pelea_Turno_iniciado;
-            hechizos.CollectionChanged += (sender, e) => get_Reordenar_Hechizos();
+            hechizos.CollectionChanged += (sender, e) => get_Ordenar_Hechizos();
         }
 
         private void get_Pelea_Creada()
         {
             turno = 0;
-            get_Reordenar_Hechizos();
+            get_Ordenar_Hechizos();
         }
 
-        private void get_Reordenar_Hechizos()
+        private void get_Ordenar_Hechizos()
         {
             if (!cuenta.esta_Luchando())
                 return;
 
-            foreach(PeleaHechizos hechizo in hechizos)
-            {
-                hechizo.turno_lanzado = 0;
+            foreach (PeleaHechizos hechizo in hechizos)
                 hechizo.lanzamientos_restantes = hechizo.lanzamientos_x_turno;
-            }
         }
 
         private async void get_Pelea_Turno_iniciado()
@@ -94,6 +92,9 @@ namespace Bot_Dofus_Retro.Otros.Peleas
 
             if (hechizo_index >= hechizos.Count)
             {
+                if (GlobalConf.mostrar_mensajes_debug)
+                    cuenta.logger.log_informacion("DEBUG", "get_Procesar_hechizo(): Indice superado");
+
                 await antes_Fin_Turno();
                 return;
             }
@@ -102,45 +103,43 @@ namespace Bot_Dofus_Retro.Otros.Peleas
 
             if (hechizo_actual.lanzamientos_restantes == 0)
             {
-                await get_Procesar_Siguiente_Hechizo(hechizo_actual, true);
-                return;
-            }
+                if (GlobalConf.mostrar_mensajes_debug)
+                    cuenta.logger.log_informacion("DEBUG", "get_Procesar_hechizo(): Máximos lanzamientos alcanzados");
 
-            if (!(turno == 1 || hechizo_actual.turno_lanzado == 0 || turno == (hechizo_actual.turno_lanzado + 1)))
-            {
                 await get_Procesar_Siguiente_Hechizo(hechizo_actual);
                 return;
             }
 
             ResultadoLanzandoHechizo resultado = await manejador_hechizos.manejador_Hechizos(hechizo_actual);
+
+            if (GlobalConf.mostrar_mensajes_debug)
+                cuenta.logger.log_informacion("DEBUG", $"manejador_Hechizos(): {resultado}");
+
             switch (resultado)
             {
                 case ResultadoLanzandoHechizo.NO_LANZADO:
                     await get_Procesar_Siguiente_Hechizo(hechizo_actual);
-                break;
+                    break;
 
                 case ResultadoLanzandoHechizo.LANZADO:
                     hechizo_lanzado = true;
                     hechizo_actual.lanzamientos_restantes--;
                     esperando_sequencia = true;
-                break;
+                    break;
 
                 case ResultadoLanzandoHechizo.MOVIDO:
                     esperando_sequencia = true;
-                break;
+                    break;
             }
         }
 
-        private async Task get_Procesar_Siguiente_Hechizo(PeleaHechizos hechizo_actual, bool actualizar_turno = false)
+        private async Task get_Procesar_Siguiente_Hechizo(PeleaHechizos hechizo_actual)
         {
             if (cuenta?.esta_Luchando() == false)
                 return;
 
             hechizo_actual.lanzamientos_restantes = hechizo_actual.lanzamientos_x_turno;
             hechizo_index++;
-
-            if (actualizar_turno)
-                hechizo_actual.turno_lanzado = turno;
 
             await get_Procesar_hechizo();
         }
@@ -154,7 +153,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 else
                     await get_Procesar_Siguiente_Hechizo(hechizos[hechizo_index]);
             }
-            catch {}
+            catch { }
         }
 
         public async Task get_Procesar_Accion_Finalizada()
@@ -173,6 +172,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             else
                 return;
 
+            await Task.Delay(400);
             await get_Procesar_hechizo();
         }
 
@@ -222,19 +222,19 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 if (!kvp.Value.alcanzable)
                     continue;
 
-                int temporal_distancia = Get_Total_Distancia_Enemigo(mapa.get_Celda_Id(kvp.Key));
+                int distancia_temporal = Get_Total_Distancia_Enemigo(mapa.get_Celda_Id(kvp.Key));
 
-                if ((cercano && temporal_distancia <= distancia_total) || (!cercano && temporal_distancia >= distancia_total))
+                if ((cercano && distancia_temporal <= distancia_total) || (!cercano && distancia_temporal >= distancia_total))
                 {
                     if (cercano)
                     {
                         nodo = kvp;
-                        distancia_total = temporal_distancia;
+                        distancia_total = distancia_temporal;
                     }
                     else if (kvp.Value.camino.celdas_accesibles.Count >= distancia)
                     {
                         nodo = kvp;
-                        distancia_total = temporal_distancia;
+                        distancia_total = distancia_temporal;
                         distancia = kvp.Value.camino.celdas_accesibles.Count;
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using Bot_Dofus_Retro.Otros;
+﻿using Bot_Dofus_Retro.DarkUI.Docking;
+using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos;
 using Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion;
 using Bot_Dofus_Retro.Otros.Game.Personaje.Hechizos;
@@ -11,7 +12,6 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Bot_Dofus_Retro.DarkUI.Docking;
 
 namespace Bot_Dofus_Retro.Tema.Interfaces
 {
@@ -144,17 +144,17 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
                 if (celda_actual.id != celda_monstruo_destino.id & celda_monstruo_destino.id > 0)
                 {
                     cuenta.logger.log_informacion("UI_PELEAS", "Monstruo encontrado en la casilla " + celda_monstruo_destino.id);
-                    
+
                     switch (cuenta.juego.manejador.movimientos.get_Mover_A_Celda(celda_monstruo_destino, new List<Celda>()))
                     {
                         case ResultadoMovimientos.EXITO:
                             cuenta.logger.log_informacion("UI_PELEA", "Desplazando para comenzar el combate");
-                        break;
+                            break;
 
                         case ResultadoMovimientos.MISMA_CELDA:
                         case ResultadoMovimientos.FALLO:
                         case ResultadoMovimientos.PATHFINDING_ERROR:
-                        break;
+                            break;
                     }
                 }
             }

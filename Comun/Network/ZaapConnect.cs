@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -26,13 +25,12 @@ namespace Bot_Dofus_Retro.Comun.Network
                     },
                     Content = new StringContent($"login={login}&password={password}", Encoding.UTF8, "text/plain")
                 };
-                HttpResponseMessage respuesta = await cliente_web.SendAsync(req);
 
-                if(respuesta.StatusCode == HttpStatusCode.OK)
+                HttpResponseMessage respuesta = await cliente_web.SendAsync(req);
+                if (respuesta.IsSuccessStatusCode)
                 {
                     Dictionary<string, object> get_ApiRespuesta = await JsonSerializer.DeserializeAsync<Dictionary<string, object>>(await respuesta.Content.ReadAsStreamAsync());
-                    string key = get_ApiRespuesta?["key"].ToString();
-                    return key;
+                    return get_ApiRespuesta?["key"].ToString();
                 }
 
                 return null;
@@ -55,13 +53,12 @@ namespace Bot_Dofus_Retro.Comun.Network
                         { "user-agent", "Zaap 3.7.4" }
                     }
                 };
-                HttpResponseMessage respuesta = await cliente_web.SendAsync(req);
 
-                if (respuesta.StatusCode == HttpStatusCode.OK)
+                HttpResponseMessage respuesta = await cliente_web.SendAsync(req);
+                if (respuesta.IsSuccessStatusCode)
                 {
                     Dictionary<string, object> get_ApiRespuesta = await JsonSerializer.DeserializeAsync<Dictionary<string, object>>(await respuesta.Content.ReadAsStreamAsync());
-                    string token = get_ApiRespuesta?["token"].ToString();
-                    return token;
+                    return get_ApiRespuesta?["token"].ToString(); ;
                 }
 
                 return null;

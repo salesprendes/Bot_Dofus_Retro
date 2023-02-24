@@ -1,5 +1,4 @@
 ﻿using Bot_Dofus_Retro.DarkUI.Config;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Bot_Dofus_Retro.DarkUI.Controls

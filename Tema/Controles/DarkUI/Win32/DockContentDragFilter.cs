@@ -82,7 +82,7 @@ namespace Bot_Dofus_Retro.DarkUI.Win32
                         case DockInsertType.After:
                             _dockPanel.InsertContent(_dragContent, _targetGroup, _insertType);
                             break;
-                    }                        
+                    }
                 }
 
                 StopDrag();

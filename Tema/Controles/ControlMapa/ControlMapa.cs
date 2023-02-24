@@ -126,14 +126,14 @@ namespace Bot_Dofus_Retro.Tema.Controles.ControlMapa
                     g.CompositingQuality = CompositingQuality.HighSpeed;
                     g.InterpolationMode = InterpolationMode.Low;
                     g.SmoothingMode = SmoothingMode.HighSpeed;
-                break;
+                    break;
 
                 case CalidadMapa.MEDIA:
                     g.CompositingMode = CompositingMode.SourceOver;
                     g.CompositingQuality = CompositingQuality.GammaCorrected;
                     g.InterpolationMode = InterpolationMode.High;
                     g.SmoothingMode = SmoothingMode.AntiAlias;
-                break;
+                    break;
 
 
                 case CalidadMapa.ALTA:
@@ -141,7 +141,7 @@ namespace Bot_Dofus_Retro.Tema.Controles.ControlMapa
                     g.CompositingQuality = CompositingQuality.HighQuality;
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     g.SmoothingMode = SmoothingMode.HighQuality;
-                break;
+                    break;
             }
         }
 

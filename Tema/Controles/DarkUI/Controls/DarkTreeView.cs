@@ -735,7 +735,7 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
                         {
                             if (!SelectedNodes.Contains(node))
                                 SelectNode(node);
-                            
+
                             _dragPos = OffsetMousePosition;
                             _provisionalDragging = true;
                             _provisionalNode = node;
@@ -1151,8 +1151,8 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
             return true;
         }
 
-        protected virtual void MoveNodes(List<DarkTreeNode> dragNodes, DarkTreeNode dropNode){}
-        protected virtual void NodesMoved(List<DarkTreeNode> nodesMoved){}
+        protected virtual void MoveNodes(List<DarkTreeNode> dragNodes, DarkTreeNode dropNode) { }
+        protected virtual void NodesMoved(List<DarkTreeNode> nodesMoved) { }
 
         #endregion
 
@@ -1202,7 +1202,7 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
 
             // 3. Draw icon
             if (ShowIcons && node.Icon != null)
-            { 
+            {
                 if (node.Expanded && node.ExpandedIcon != null)
                     g.DrawImageUnscaled(node.ExpandedIcon, node.IconArea.Location);
                 else

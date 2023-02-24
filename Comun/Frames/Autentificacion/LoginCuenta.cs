@@ -5,7 +5,6 @@ using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Servidor;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -130,7 +129,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
             string[] loc7 = loc6[0].Split(':');//IP:PUERTO
 
             cuenta.tiquet_game = loc6[1];
-            
+
             string ip = Dns.GetHostAddresses(loc7[0])[0].ToString();
             int puerto = int.Parse(loc7[1]);
             cliente.cuenta.cambiando_Al_Servidor_Juego(ip, puerto);

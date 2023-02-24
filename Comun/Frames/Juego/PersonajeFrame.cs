@@ -5,6 +5,7 @@ using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Personaje;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,9 +24,11 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         [PaqueteAtributo("As")]
         public Task get_Stats_Actualizados(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
-            await cliente.enviar("Ir742;556;0");//envia informaciones pantalla
+            PersonajeJuego personaje = cliente.cuenta.juego.personaje;
+
             await cliente.enviar("BD");
-            cliente.cuenta.juego.personaje.actualizar_Caracteristicas(paquete);
+            personaje.actualizar_Caracteristicas(paquete);
+            personaje.gestionar_Bonus_Set_Clase();
         });
 
         [PaqueteAtributo("PIK")]
@@ -69,7 +72,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
 
                 case EstadoCuenta.DIALOGANDO:
                     cuenta.juego.npcs.get_Cerrar_Dialogo();
-                break;
+                    break;
             }
         });
 
@@ -142,7 +145,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         });
 
         [PaqueteAtributo("ILF")]
-        public Task get_Cantidad_Vida_Regenerada(ClienteTcp cliente, string paquete) => Task.Run(()=>
+        public Task get_Cantidad_Vida_Regenerada(ClienteTcp cliente, string paquete) => Task.Run(() =>
         {
             paquete = paquete.Substring(3);
             int vida = int.Parse(paquete);
@@ -174,7 +177,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
         {
             Ping ping = cliente.ping;
 
-            await cliente.enviar($"Bp{ping.get_Promedio_Latencia()}|{ping.get_Total_Pings()}|{ping.get_maximas_latencias()}");
+            await cliente.enviar($"Bp{ping.get_Promedio_Latencia()}|{ping.get_Total_Pings()}|{ping.get_Maximas_latencias()}");
         });
 
         [PaqueteAtributo("pong")]
@@ -211,6 +214,24 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             await cliente.enviar("gJE");
         });
 
+        /** OCRA TEST SET BONUS HECHIZOS
+         * SB285;174;1
+         * SB286;166;1
+         * SB287;175;30
+         * SB288;177;1**/
+        [PaqueteAtributo("SB")]
+        public void get_Modificar_Stats_Hechizos(ClienteTcp cliente, string paquete) => Task.Run(() =>
+        {
+            PersonajeJuego personaje = cliente.cuenta.juego.personaje;
+            string[] separador = paquete.Substring(2).Split(';');
+
+            int stat = int.Parse(separador[0]);
+            short hechizo_id = short.Parse(separador[1]);
+            byte efecto = byte.Parse(separador[2]);
+
+            //@TODO: No agrega el diccionario a los valores del hechizo falta arreglar
+            personaje.bonus_set_clase.TryAdd(hechizo_id, new ConcurrentDictionary<int, byte>(stat, efecto));
+        });
 
         /**
          * var _loc2_ = new Object();
@@ -242,6 +263,5 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             Cuenta cuenta = cliente.cuenta;
             await cliente.enviar("HTSt^md^kd^r`hr^o`r^dmbnqd+^l`hr^st^dr^c");//no legit
         });
-
     }
 }

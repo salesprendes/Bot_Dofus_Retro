@@ -1,8 +1,6 @@
 ﻿using Bot_Dofus_Retro.Comun.Frames.Transporte;
 using Bot_Dofus_Retro.Comun.Network;
 using Bot_Dofus_Retro.Otros;
-using Bot_Dofus_Retro.Otros.Enums;
-using Bot_Dofus_Retro.Otros.Mapas.Entidades;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

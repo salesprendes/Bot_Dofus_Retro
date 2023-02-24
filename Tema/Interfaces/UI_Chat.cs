@@ -29,16 +29,16 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
 
         private void UI_Chat_Load(object sender, EventArgs e)
         {
-            escribir_mensaje($"[{DateTime.Now.ToString("HH:mm:ss")}] -> [INFORMACIÓN] Bot creado por Alvaro, http://www.salesprendes.com versión: {Application.ProductVersion} revolution", LogTipos.ERROR.ToString("X"));
+            escribir_mensaje("[INFORMACIÓN] Bot creado por Alvaro, https://www.salesprendes.com", LogTipos.ERROR.ToString("X"));
             cargar_Eventos_Cuenta();
 
             if (cuenta.tiene_grupo)
-                escribir_mensaje("[" + DateTime.Now.ToString("HH:mm:ss") + "] -> El líder del grupo es: " + cuenta.grupo.lider.configuracion.nombre_cuenta, LogTipos.ERROR.ToString("X"));
+                escribir_mensaje("[INFORMACIÓN] El líder del grupo es: " + cuenta.grupo.lider.configuracion.nombre_cuenta, LogTipos.ERROR.ToString("X"));
         }
 
         private void personaje_Seleccionado() => BeginInvoke((Action)(() =>
         {
-            tableLayoutPanel_inferiores_chat.Enabled = true;
+            tableLayoutPanel_chat.Enabled = true;
             tableLayout_Canales.Enabled = true;
 
             canal_informaciones.Checked = cuenta.juego.personaje.canales.Contains("i");
@@ -48,7 +48,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             canal_alineamiento.Checked = cuenta.juego.personaje.canales.Contains("!");
             canal_reclutamiento.Checked = cuenta.juego.personaje.canales.Contains("?");
             canal_comercio.Checked = cuenta.juego.personaje.canales.Contains(":");
-            canal_incarnam.Checked = cuenta.juego.personaje.canales.Contains("^");
+            canal_eventos.Checked = cuenta.juego.personaje.canales.Contains("e");
         }));
 
         private void cargar_Eventos_Cuenta()
@@ -58,7 +58,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             cuenta.juego.personaje.personaje_seleccionado += personaje_Seleccionado;
         }
 
-        private void get_Mensajes_Socket_Informacion(object error) => escribir_mensaje("[" + DateTime.Now.ToString("HH:mm:ss") + "] [Conexión] " + error, LogTipos.PELIGRO.ToString("X"));
+        private void get_Mensajes_Socket_Informacion(object mensaje) => escribir_mensaje("[Conexión] " + mensaje, LogTipos.PELIGRO.ToString("X"));
 
         private void escribir_mensaje(string mensaje, string color)
         {
@@ -68,8 +68,10 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             textbox_logs.BeginInvoke((Action)(() =>
             {
                 textbox_logs.Select(textbox_logs.TextLength, 0);
-                textbox_logs.SelectionColor = ColorTranslator.FromHtml("#" + color);
-                textbox_logs.AppendText(mensaje + Environment.NewLine);
+                textbox_logs.SelectionColor = ColorTranslator.FromHtml($"#{color}");
+                textbox_logs.AppendText($"[{DateTime.Now:HH:mm:ss}] ");
+                textbox_logs.AppendText(mensaje);
+                textbox_logs.AppendText(Environment.NewLine);
                 textbox_logs.ScrollToCaret();
             }));
         }
@@ -78,7 +80,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
         {
             if (cuenta?.Estado_Cuenta != EstadoCuenta.DESCONECTADO && cuenta?.Estado_Cuenta != EstadoCuenta.CONECTANDO)
             {
-                string[] canales = { "i", "*", "#$p", "%", "!", "?", ":", "^" };
+                string[] canales = { "i", "*", "#$p", "%", "!", "?", ":", "e" };
                 CheckBox control = sender as CheckBox;
 
                 await cuenta.conexion.enviar((control.Checked ? "cC+" : "cC-") + canales[control.TabIndex]);
@@ -89,10 +91,10 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
 
         private void textBox_enviar_consola_KeyDown(object sender, KeyEventArgs e) => Task.Run(async () =>
         {
-            if (e.KeyCode != Keys.Enter || textBox_enviar_consola.TextLength <= 0)
+            if (e.KeyCode != Keys.Return)
                 return;
 
-            switch (textBox_enviar_consola.Text.ToUpper())
+            switch (txtBox_escribir_consola.Text.ToUpper())
             {
                 case "/MAPID":
                     escribir_mensaje(cuenta.juego.mapa.id.ToString(), "0040FF");
@@ -105,25 +107,31 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
                 case "/PING":
                     if (cuenta.Estado_Cuenta != EstadoCuenta.DESCONECTADO)
                         await cuenta.conexion.enviar("ping");
-                break;
+                    break;
 
                 default:
                     switch (comboBox_lista_canales.SelectedItem.Text)
                     {
                         case "General":
-                            await cuenta.conexion.enviar("BM*|" + textBox_enviar_consola.Text + "|");
+                            if (cuenta.juego.personaje.canales.Contains("*"))
+                                await cuenta.conexion.enviar("BM*|" + txtBox_escribir_consola.Text + "|");
+                            else
+                                escribir_mensaje($"[{DateTime.Now.ToString("HH:mm:ss")}] [INFORMACIÓN] Bot creado por Alvaro, https://www.salesprendes.com", LogTipos.ERROR.ToString("X"));
                             break;
 
                         case "Reclutamiento":
-                            await cuenta.conexion.enviar("BM?|" + textBox_enviar_consola.Text + "|");
+                            if (cuenta.juego.personaje.canales.Contains("?"))
+                                await cuenta.conexion.enviar("BM?|" + txtBox_escribir_consola.Text + "|");
                             break;
 
                         case "Comercio":
-                            await cuenta.conexion.enviar("BM:|" + textBox_enviar_consola.Text + "|");
+                            if (cuenta.juego.personaje.canales.Contains(":"))
+                                await cuenta.conexion.enviar("BM:|" + txtBox_escribir_consola.Text + "|");
                             break;
 
                         case "Mensaje privado":
-                            await cuenta.conexion.enviar("BM" + textBox_nombre_privado.Text + "|" + textBox_enviar_consola.Text + "|");
+                            if (cuenta.juego.personaje.canales.Contains("$"))
+                                await cuenta.conexion.enviar("BM" + textBox_nombre_privado.Text + "|" + txtBox_escribir_consola.Text + "|");
                             break;
                     }
                     break;
@@ -132,7 +140,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             e.Handled = true;
             e.SuppressKeyPress = true;
             textBox_nombre_privado.Clear();
-            textBox_enviar_consola.Clear();
+            txtBox_escribir_consola.Clear();
         });
 
         private void comboBox_lista_canales_SelectedItemChanged(object sender, EventArgs e)

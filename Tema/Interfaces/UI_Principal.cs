@@ -1,4 +1,5 @@
-﻿using Bot_Dofus_Retro.Otros;
+﻿using Bot_Dofus_Retro.DarkUI.Docking;
+using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Personaje;
 using Bot_Dofus_Retro.Tema.Forms;
@@ -6,7 +7,6 @@ using Bot_Dofus_Retro.Utilidades.Extensiones;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Bot_Dofus_Retro.DarkUI.Docking;
 
 namespace Bot_Dofus_Retro.Tema.Interfaces
 {
@@ -23,7 +23,6 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             DockText = nombre_cuenta;
 
             darkDockPanel_principal.AddContent(new UI_Chat(cuenta, "Consola", Properties.Resources.terminal));
-            darkDockPanel_principal.AddContent(new UI_Debugger(cuenta, "Debugger", Properties.Resources.debugger));
         }
 
         private void UI_Principal_Load(object sender, EventArgs e) => cargar_Eventos_Cuenta();

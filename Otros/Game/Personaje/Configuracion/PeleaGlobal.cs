@@ -68,7 +68,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Configuracion
                 utilizar_regeneracion = br.ReadBoolean();
                 utilizar_dragopavo = br.ReadBoolean();
                 ignorar_invocaciones = br.ReadBoolean();
-                
+
                 hechizos.Clear();
                 byte c = br.ReadByte();
                 for (int i = 0; i < c; i++)

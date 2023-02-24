@@ -38,7 +38,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas.Peleadores
                 case 100:
                     byte vida_perdida = byte.Parse(_valor.Substring(1));
                     vida_actual -= vida_perdida;
-                break;
+                    break;
 
                 /** Ganancia de vida **/
                 case 108:
@@ -47,7 +47,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas.Peleadores
                     vida_actual += vida_ganada;
                     if (vida_actual > vida_maxima)
                         vida_actual = vida_maxima;
-                break;
+                    break;
 
                 /** Perdida de PA **/
                 case 101:
@@ -55,12 +55,12 @@ namespace Bot_Dofus_Retro.Otros.Peleas.Peleadores
                 case 168:
                     byte pa_perdidos = byte.Parse(_valor.Substring(1));
                     pa -= pa_perdidos;
-                break;
+                    break;
 
                 case 120://Ganancia de pa
                     byte pa_ganados = byte.Parse(_valor);
                     pa += pa_ganados;
-                break;
+                    break;
 
                 /** Perdida de PM **/
                 case 127:
@@ -69,14 +69,14 @@ namespace Bot_Dofus_Retro.Otros.Peleas.Peleadores
                 case 169:
                     byte pm_perdidos = byte.Parse(_valor.Substring(1));
                     pm -= pm_perdidos;
-                break;
+                    break;
 
                 /** Ganancia de PM **/
                 case 78:
                 case 128:
                     byte pm_ganados = byte.Parse(_valor);
                     pm += pm_ganados;
-                break;
+                    break;
             }
         }
     }

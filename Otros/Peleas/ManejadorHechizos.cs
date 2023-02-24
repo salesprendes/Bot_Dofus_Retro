@@ -59,6 +59,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 return ResultadoLanzandoHechizo.LANZADO;
             }
 
+            // Para la distancia
             if (!get_Condiciones_Principales(hechizo))
                 return ResultadoLanzandoHechizo.NO_LANZADO;
 
@@ -77,21 +78,23 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             if (hechizo.metodo_lanzamiento == MetodoLanzamiento.CAC && !hechizo.es_aoe && !pelea.esta_Cuerpo_A_Cuerpo_Con_Enemigo())
                 return await get_Mover_Lanzar_hechizo_Simple(hechizo, get_Objetivo_Mas_Cercano(hechizo));
 
-            if(hechizo.es_aoe)
-            {
-                if(pelea.total_enemigos_vivos > 1)
-                    return await lanzar_Hechizo_AOE(hechizo);
-                else
-                    return await get_Lanzar_Hechizo_Simple(hechizo);
-            }
+            if (hechizo.es_aoe)
+                return await lanzar_Hechizo_AOE(hechizo);
 
             return ResultadoLanzandoHechizo.NO_LANZADO;
         }
 
         private async Task<ResultadoLanzandoHechizo> get_Lanzar_Hechizo_Simple(PeleaHechizos hechizo)
         {
-            if (pelea.get_Puede_Lanzar_hechizo(hechizo.id) != FallosLanzandoHechizo.NINGUNO)
+            FallosLanzandoHechizo condiciones_lanzando_hechizo = pelea.get_Puede_Lanzar_hechizo(hechizo.id);
+
+            if (condiciones_lanzando_hechizo != FallosLanzandoHechizo.NINGUNO)
+            {
+                if (GlobalConf.mostrar_mensajes_debug)
+                    cuenta.logger.log_informacion("DEBUG", $"get_Lanzar_Hechizo_Simple(): {condiciones_lanzando_hechizo}");
+
                 return ResultadoLanzandoHechizo.NO_LANZADO;
+            }
 
             Luchadores enemigo = get_Objetivo_Mas_Cercano(hechizo);
             if (enemigo != null)
@@ -238,7 +241,7 @@ namespace Bot_Dofus_Retro.Otros.Peleas
                 {
                     if (GlobalConf.mostrar_mensajes_debug)
                         cuenta.logger.log_informacion("DEBUG", $"Se ha lanzado el hechizo {hechizo.nombre} tocando a {touchedEnnemies} enemigos en la celda {celda_id}");
-                    
+
                     await pelea.get_Lanzar_Hechizo(hechizo_pelea.id, celda_id);
                     return ResultadoLanzandoHechizo.LANZADO;
                 }
@@ -330,11 +333,11 @@ namespace Bot_Dofus_Retro.Otros.Peleas
             if (hechizo.necesita_piedra)//Para capturar en dungs
             {
                 ObjetosInventario arma = cuenta.juego.personaje.inventario.get_Objeto_en_Posicion(InventarioPosiciones.ARMA);
-                if(arma != null && arma.id_modelo != 83)
+                if (arma != null && arma.id_modelo != 83)
                     return false;
             }
 
-            Luchadores enemigo_cercano = hechizo.metodo_distancia == MetodoDistanciaLanzamiento.CERCANO ? pelea.get_Enemigo_Mas_Cercano() : pelea.get_Enemigo_Mas_Lejano();
+            Luchadores enemigo_cercano = pelea.get_Enemigo_Mas_Cercano();
 
             if (enemigo_cercano == null)
                 return false;

@@ -1,4 +1,5 @@
-﻿using Bot_Dofus_Retro.Otros;
+﻿using Bot_Dofus_Retro.DarkUI.Docking;
+using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Game.Personaje.Inventario;
 using Bot_Dofus_Retro.Otros.Game.Personaje.Inventario.Enums;
 using Microsoft.VisualBasic;
@@ -7,7 +8,6 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Bot_Dofus_Retro.DarkUI.Docking;
 
 namespace Bot_Dofus_Retro.Tema.Interfaces
 {
@@ -70,16 +70,16 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             {
                 case "Equipar":
                     cuenta.juego.personaje.inventario.equipar_Objeto(objeto);
-                break;
+                    break;
 
                 case "Desequipar":
                     cuenta.juego.personaje.inventario.desequipar_Objeto(objeto);
-                break;
+                    break;
 
                 case "Eliminar":
                     if (MessageBox.Show("Realmente deseas eliminar " + objeto.nombre + "?", "Eliminar un objeto", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         cuenta.juego.personaje.inventario.eliminar_Objeto(objeto, 1, true);
-                break;
+                    break;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Bot_Dofus_Retro.Tema.Interfaces
             {
                 case "Eliminar":
                     cuenta.juego.personaje.inventario.eliminar_Objeto(objeto, cantidad, true);
-                break;
+                    break;
             }
         }
 

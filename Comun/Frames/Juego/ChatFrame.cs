@@ -28,8 +28,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     canal = "COMERCIO";
                     break;
 
-                case "^":
-                    canal = "INCARNAM";
+                case "e":
+                    canal = "EVENTO";
                     break;
 
                 case "i":
@@ -56,6 +56,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                     cliente.cuenta.logger.log_privado("ENVIADO-PRIVADO", separador[2] + ": " + separador[3]);
                     break;
 
+                case "*":
                 default:
                     canal = "GENERAL";
                     break;

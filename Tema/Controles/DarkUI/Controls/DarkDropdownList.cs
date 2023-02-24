@@ -1,11 +1,9 @@
 ﻿using Bot_Dofus_Retro.DarkUI.Config;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Bot_Dofus_Retro.DarkUI.Controls
@@ -126,7 +124,7 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
 
         public DarkDropdownList()
         {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer |ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.UserMouse, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.UserMouse, true);
 
             _menu.AutoSize = false;
             _menu.Closed += Menu_Closed;

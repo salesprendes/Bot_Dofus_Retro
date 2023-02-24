@@ -71,6 +71,8 @@
             this.label_agregar_lanzamientos = new System.Windows.Forms.Label();
             this.numeric_lanzamientos_turno = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBox_piedra_equipada = new System.Windows.Forms.CheckBox();
             this.checkBox_AOE = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel_segundario = new System.Windows.Forms.TableLayoutPanel();
             this.label_agregar_distancia = new System.Windows.Forms.Label();
@@ -79,7 +81,6 @@
             this.comboBox_distancia_operador = new System.Windows.Forms.ComboBox();
             this.button_agregar_hechizo = new System.Windows.Forms.Button();
             this.lista_imagenes = new System.Windows.Forms.ImageList(this.components);
-            this.checkBox_piedra_equipada = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage_general_pelea.SuspendLayout();
             this.groupBox_durante_combate.SuspendLayout();
@@ -91,6 +92,7 @@
             this.tableLayoutPanel_principal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_lanzamientos_turno)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel_segundario.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_distancia)).BeginInit();
             this.SuspendLayout();
@@ -133,9 +135,9 @@
             this.checkBox_ignorar_invocaciones.AutoSize = true;
             this.checkBox_ignorar_invocaciones.Dock = System.Windows.Forms.DockStyle.Top;
             this.checkBox_ignorar_invocaciones.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.checkBox_ignorar_invocaciones.Location = new System.Drawing.Point(3, 187);
+            this.checkBox_ignorar_invocaciones.Location = new System.Drawing.Point(3, 208);
             this.checkBox_ignorar_invocaciones.Name = "checkBox_ignorar_invocaciones";
-            this.checkBox_ignorar_invocaciones.Size = new System.Drawing.Size(776, 25);
+            this.checkBox_ignorar_invocaciones.Size = new System.Drawing.Size(776, 32);
             this.checkBox_ignorar_invocaciones.TabIndex = 0;
             this.checkBox_ignorar_invocaciones.Text = "Ignorar Invocaciones";
             this.checkBox_ignorar_invocaciones.UseVisualStyleBackColor = true;
@@ -147,9 +149,9 @@
             this.checkBox_utilizar_dragopavo.Dock = System.Windows.Forms.DockStyle.Top;
             this.checkBox_utilizar_dragopavo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.checkBox_utilizar_dragopavo.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.checkBox_utilizar_dragopavo.Location = new System.Drawing.Point(3, 162);
+            this.checkBox_utilizar_dragopavo.Location = new System.Drawing.Point(3, 176);
             this.checkBox_utilizar_dragopavo.Name = "checkBox_utilizar_dragopavo";
-            this.checkBox_utilizar_dragopavo.Size = new System.Drawing.Size(776, 25);
+            this.checkBox_utilizar_dragopavo.Size = new System.Drawing.Size(776, 32);
             this.checkBox_utilizar_dragopavo.TabIndex = 1;
             this.checkBox_utilizar_dragopavo.Text = "Utilizar Dragopavo";
             this.checkBox_utilizar_dragopavo.UseVisualStyleBackColor = true;
@@ -161,9 +163,9 @@
             this.checkBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.checkBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.checkBox1.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.checkBox1.Location = new System.Drawing.Point(3, 137);
+            this.checkBox1.Location = new System.Drawing.Point(3, 144);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(776, 25);
+            this.checkBox1.Size = new System.Drawing.Size(776, 32);
             this.checkBox1.TabIndex = 2;
             this.checkBox1.Text = "Bloquear el combate";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -176,7 +178,7 @@
             this.checkbox_espectadores.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             this.checkbox_espectadores.Location = new System.Drawing.Point(3, 112);
             this.checkbox_espectadores.Name = "checkbox_espectadores";
-            this.checkbox_espectadores.Size = new System.Drawing.Size(776, 25);
+            this.checkbox_espectadores.Size = new System.Drawing.Size(776, 32);
             this.checkbox_espectadores.TabIndex = 0;
             this.checkbox_espectadores.Text = "Desactivar espectador";
             this.checkbox_espectadores.UseVisualStyleBackColor = true;
@@ -203,9 +205,9 @@
             "Agresiva",
             "Pasiva",
             "Fugitiva"});
-            this.comboBox_lista_tactica.Location = new System.Drawing.Point(70, 21);
+            this.comboBox_lista_tactica.Location = new System.Drawing.Point(86, 25);
             this.comboBox_lista_tactica.Name = "comboBox_lista_tactica";
-            this.comboBox_lista_tactica.Size = new System.Drawing.Size(703, 25);
+            this.comboBox_lista_tactica.Size = new System.Drawing.Size(687, 29);
             this.comboBox_lista_tactica.TabIndex = 1;
             this.comboBox_lista_tactica.SelectedIndexChanged += new System.EventHandler(this.comboBox_lista_tactica_SelectedIndexChanged);
             // 
@@ -214,9 +216,9 @@
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Left;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 21);
+            this.label2.Location = new System.Drawing.Point(3, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 21);
+            this.label2.Size = new System.Drawing.Size(83, 28);
             this.label2.TabIndex = 0;
             this.label2.Text = "Táctica:";
             // 
@@ -241,9 +243,9 @@
             "Lejos de los enemigos",
             "Cerca de los enemigos",
             "No moverse"});
-            this.comboBox_lista_posicionamiento.Location = new System.Drawing.Point(332, 21);
+            this.comboBox_lista_posicionamiento.Location = new System.Drawing.Point(408, 25);
             this.comboBox_lista_posicionamiento.Name = "comboBox_lista_posicionamiento";
-            this.comboBox_lista_posicionamiento.Size = new System.Drawing.Size(441, 25);
+            this.comboBox_lista_posicionamiento.Size = new System.Drawing.Size(365, 29);
             this.comboBox_lista_posicionamiento.TabIndex = 2;
             this.comboBox_lista_posicionamiento.SelectedIndexChanged += new System.EventHandler(this.comboBox_lista_posicionamiento_SelectedIndexChanged);
             // 
@@ -252,9 +254,9 @@
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Left;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(3, 21);
+            this.label1.Location = new System.Drawing.Point(3, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(329, 21);
+            this.label1.Size = new System.Drawing.Size(405, 28);
             this.label1.TabIndex = 1;
             this.label1.Text = "Posicionamiento al comenzar el combate:";
             // 
@@ -450,14 +452,14 @@
             this.tableLayoutPanel_principal.Controls.Add(this.label_agregar_lanzamientos, 0, 2);
             this.tableLayoutPanel_principal.Controls.Add(this.numeric_lanzamientos_turno, 1, 2);
             this.tableLayoutPanel_principal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel_principal.Location = new System.Drawing.Point(3, 21);
+            this.tableLayoutPanel_principal.Location = new System.Drawing.Point(3, 25);
             this.tableLayoutPanel_principal.Name = "tableLayoutPanel_principal";
             this.tableLayoutPanel_principal.RowCount = 4;
             this.tableLayoutPanel_principal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel_principal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel_principal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel_principal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel_principal.Size = new System.Drawing.Size(770, 128);
+            this.tableLayoutPanel_principal.Size = new System.Drawing.Size(770, 124);
             this.tableLayoutPanel_principal.TabIndex = 2;
             // 
             // comboBox_modo_lanzamiento
@@ -469,9 +471,9 @@
             "CAC",
             "ALEJADO",
             "AMBOS"});
-            this.comboBox_modo_lanzamiento.Location = new System.Drawing.Point(343, 99);
+            this.comboBox_modo_lanzamiento.Location = new System.Drawing.Point(343, 96);
             this.comboBox_modo_lanzamiento.Name = "comboBox_modo_lanzamiento";
-            this.comboBox_modo_lanzamiento.Size = new System.Drawing.Size(424, 25);
+            this.comboBox_modo_lanzamiento.Size = new System.Drawing.Size(424, 29);
             this.comboBox_modo_lanzamiento.TabIndex = 8;
             // 
             // label_agregar_metodo
@@ -480,9 +482,9 @@
             this.label_agregar_metodo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label_agregar_metodo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label_agregar_metodo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label_agregar_metodo.Location = new System.Drawing.Point(3, 96);
+            this.label_agregar_metodo.Location = new System.Drawing.Point(3, 93);
             this.label_agregar_metodo.Name = "label_agregar_metodo";
-            this.label_agregar_metodo.Size = new System.Drawing.Size(334, 32);
+            this.label_agregar_metodo.Size = new System.Drawing.Size(334, 31);
             this.label_agregar_metodo.TabIndex = 7;
             this.label_agregar_metodo.Text = "Método de lanzamiento";
             this.label_agregar_metodo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -492,9 +494,9 @@
             this.label_agregar_focus.AutoSize = true;
             this.label_agregar_focus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label_agregar_focus.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label_agregar_focus.Location = new System.Drawing.Point(3, 32);
+            this.label_agregar_focus.Location = new System.Drawing.Point(3, 31);
             this.label_agregar_focus.Name = "label_agregar_focus";
-            this.label_agregar_focus.Size = new System.Drawing.Size(334, 32);
+            this.label_agregar_focus.Size = new System.Drawing.Size(334, 31);
             this.label_agregar_focus.TabIndex = 3;
             this.label_agregar_focus.Text = "Focus:";
             this.label_agregar_focus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -506,7 +508,7 @@
             this.label_agregar_nombre.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label_agregar_nombre.Location = new System.Drawing.Point(3, 0);
             this.label_agregar_nombre.Name = "label_agregar_nombre";
-            this.label_agregar_nombre.Size = new System.Drawing.Size(334, 32);
+            this.label_agregar_nombre.Size = new System.Drawing.Size(334, 31);
             this.label_agregar_nombre.TabIndex = 0;
             this.label_agregar_nombre.Text = "Hechizo:";
             this.label_agregar_nombre.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -518,7 +520,7 @@
             this.comboBox_lista_hechizos.FormattingEnabled = true;
             this.comboBox_lista_hechizos.Location = new System.Drawing.Point(343, 3);
             this.comboBox_lista_hechizos.Name = "comboBox_lista_hechizos";
-            this.comboBox_lista_hechizos.Size = new System.Drawing.Size(424, 25);
+            this.comboBox_lista_hechizos.Size = new System.Drawing.Size(424, 29);
             this.comboBox_lista_hechizos.TabIndex = 1;
             // 
             // comboBox_focus_hechizo
@@ -531,9 +533,9 @@
             "Aliado",
             "Encima",
             "Celda vacía"});
-            this.comboBox_focus_hechizo.Location = new System.Drawing.Point(343, 35);
+            this.comboBox_focus_hechizo.Location = new System.Drawing.Point(343, 34);
             this.comboBox_focus_hechizo.Name = "comboBox_focus_hechizo";
-            this.comboBox_focus_hechizo.Size = new System.Drawing.Size(424, 25);
+            this.comboBox_focus_hechizo.Size = new System.Drawing.Size(424, 29);
             this.comboBox_focus_hechizo.TabIndex = 4;
             // 
             // label_agregar_lanzamientos
@@ -542,9 +544,9 @@
             this.label_agregar_lanzamientos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label_agregar_lanzamientos.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label_agregar_lanzamientos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label_agregar_lanzamientos.Location = new System.Drawing.Point(3, 64);
+            this.label_agregar_lanzamientos.Location = new System.Drawing.Point(3, 62);
             this.label_agregar_lanzamientos.Name = "label_agregar_lanzamientos";
-            this.label_agregar_lanzamientos.Size = new System.Drawing.Size(334, 32);
+            this.label_agregar_lanzamientos.Size = new System.Drawing.Size(334, 31);
             this.label_agregar_lanzamientos.TabIndex = 5;
             this.label_agregar_lanzamientos.Text = "Número de lanzamientos por turno:";
             this.label_agregar_lanzamientos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -552,14 +554,14 @@
             // numeric_lanzamientos_turno
             // 
             this.numeric_lanzamientos_turno.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numeric_lanzamientos_turno.Location = new System.Drawing.Point(343, 67);
+            this.numeric_lanzamientos_turno.Location = new System.Drawing.Point(343, 65);
             this.numeric_lanzamientos_turno.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.numeric_lanzamientos_turno.Name = "numeric_lanzamientos_turno";
-            this.numeric_lanzamientos_turno.Size = new System.Drawing.Size(424, 25);
+            this.numeric_lanzamientos_turno.Size = new System.Drawing.Size(424, 29);
             this.numeric_lanzamientos_turno.TabIndex = 6;
             this.numeric_lanzamientos_turno.Value = new decimal(new int[] {
             1,
@@ -569,8 +571,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox_piedra_equipada);
-            this.groupBox1.Controls.Add(this.checkBox_AOE);
+            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Controls.Add(this.tableLayoutPanel_segundario);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Location = new System.Drawing.Point(3, 341);
@@ -580,14 +581,42 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Opciones";
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48F));
+            this.tableLayoutPanel1.Controls.Add(this.checkBox_piedra_equipada, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox_AOE, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 56);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(770, 31);
+            this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // checkBox_piedra_equipada
+            // 
+            this.checkBox_piedra_equipada.AutoSize = true;
+            this.checkBox_piedra_equipada.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox_piedra_equipada.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.checkBox_piedra_equipada.Location = new System.Drawing.Point(95, 3);
+            this.checkBox_piedra_equipada.Name = "checkBox_piedra_equipada";
+            this.checkBox_piedra_equipada.Size = new System.Drawing.Size(302, 25);
+            this.checkBox_piedra_equipada.TabIndex = 2;
+            this.checkBox_piedra_equipada.Text = "Necesita piedra de captura";
+            this.checkBox_piedra_equipada.UseVisualStyleBackColor = true;
+            // 
             // checkBox_AOE
             // 
             this.checkBox_AOE.AutoSize = true;
-            this.checkBox_AOE.Dock = System.Windows.Forms.DockStyle.Left;
+            this.checkBox_AOE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkBox_AOE.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.checkBox_AOE.Location = new System.Drawing.Point(3, 52);
+            this.checkBox_AOE.Location = new System.Drawing.Point(3, 3);
             this.checkBox_AOE.Name = "checkBox_AOE";
-            this.checkBox_AOE.Size = new System.Drawing.Size(61, 35);
+            this.checkBox_AOE.Size = new System.Drawing.Size(86, 25);
             this.checkBox_AOE.TabIndex = 1;
             this.checkBox_AOE.Text = "AOE";
             this.checkBox_AOE.UseVisualStyleBackColor = true;
@@ -598,13 +627,13 @@
             this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.19846F));
             this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.80154F));
             this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
-            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 152F));
+            this.tableLayoutPanel_segundario.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
             this.tableLayoutPanel_segundario.Controls.Add(this.label_agregar_distancia, 0, 0);
             this.tableLayoutPanel_segundario.Controls.Add(this.comboBox_distancia_enemigo, 1, 0);
             this.tableLayoutPanel_segundario.Controls.Add(this.numeric_distancia, 3, 0);
             this.tableLayoutPanel_segundario.Controls.Add(this.comboBox_distancia_operador, 2, 0);
             this.tableLayoutPanel_segundario.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel_segundario.Location = new System.Drawing.Point(3, 21);
+            this.tableLayoutPanel_segundario.Location = new System.Drawing.Point(3, 25);
             this.tableLayoutPanel_segundario.Name = "tableLayoutPanel_segundario";
             this.tableLayoutPanel_segundario.RowCount = 1;
             this.tableLayoutPanel_segundario.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.9697F));
@@ -618,7 +647,7 @@
             this.label_agregar_distancia.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label_agregar_distancia.Location = new System.Drawing.Point(3, 0);
             this.label_agregar_distancia.Name = "label_agregar_distancia";
-            this.label_agregar_distancia.Size = new System.Drawing.Size(318, 31);
+            this.label_agregar_distancia.Size = new System.Drawing.Size(316, 31);
             this.label_agregar_distancia.TabIndex = 1;
             this.label_agregar_distancia.Text = "Verificar distancia entre bot y enemigo";
             this.label_agregar_distancia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -631,22 +660,22 @@
             "Ninguno",
             "Cercano",
             "Lejano"});
-            this.comboBox_distancia_enemigo.Location = new System.Drawing.Point(327, 3);
+            this.comboBox_distancia_enemigo.Location = new System.Drawing.Point(325, 3);
             this.comboBox_distancia_enemigo.Name = "comboBox_distancia_enemigo";
-            this.comboBox_distancia_enemigo.Size = new System.Drawing.Size(183, 25);
+            this.comboBox_distancia_enemigo.Size = new System.Drawing.Size(182, 29);
             this.comboBox_distancia_enemigo.TabIndex = 8;
             // 
             // numeric_distancia
             // 
             this.numeric_distancia.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numeric_distancia.Location = new System.Drawing.Point(620, 3);
+            this.numeric_distancia.Location = new System.Drawing.Point(617, 3);
             this.numeric_distancia.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.numeric_distancia.Name = "numeric_distancia";
-            this.numeric_distancia.Size = new System.Drawing.Size(147, 25);
+            this.numeric_distancia.Size = new System.Drawing.Size(150, 29);
             this.numeric_distancia.TabIndex = 7;
             // 
             // comboBox_distancia_operador
@@ -656,9 +685,9 @@
             this.comboBox_distancia_operador.Items.AddRange(new object[] {
             "<=",
             "=>"});
-            this.comboBox_distancia_operador.Location = new System.Drawing.Point(516, 3);
+            this.comboBox_distancia_operador.Location = new System.Drawing.Point(513, 3);
             this.comboBox_distancia_operador.Name = "comboBox_distancia_operador";
-            this.comboBox_distancia_operador.Size = new System.Drawing.Size(98, 25);
+            this.comboBox_distancia_operador.Size = new System.Drawing.Size(98, 29);
             this.comboBox_distancia_operador.TabIndex = 9;
             // 
             // button_agregar_hechizo
@@ -680,21 +709,9 @@
             this.lista_imagenes.Images.SetKeyName(0, "1 - Home24.png");
             this.lista_imagenes.Images.SetKeyName(1, "magic32.png");
             // 
-            // checkBox_piedra_equipada
-            // 
-            this.checkBox_piedra_equipada.AutoSize = true;
-            this.checkBox_piedra_equipada.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_piedra_equipada.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.checkBox_piedra_equipada.Location = new System.Drawing.Point(64, 52);
-            this.checkBox_piedra_equipada.Name = "checkBox_piedra_equipada";
-            this.checkBox_piedra_equipada.Size = new System.Drawing.Size(233, 35);
-            this.checkBox_piedra_equipada.TabIndex = 2;
-            this.checkBox_piedra_equipada.Text = "Necesita piedra de captura";
-            this.checkBox_piedra_equipada.UseVisualStyleBackColor = true;
-            // 
             // UI_Pelea
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -717,7 +734,8 @@
             this.tableLayoutPanel_principal.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_lanzamientos_turno)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel_segundario.ResumeLayout(false);
             this.tableLayoutPanel_segundario.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_distancia)).EndInit();
@@ -776,5 +794,6 @@
         private System.Windows.Forms.ColumnHeader operador_distancia;
         private System.Windows.Forms.CheckBox checkBox_AOE;
         private System.Windows.Forms.CheckBox checkBox_piedra_equipada;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

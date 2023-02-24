@@ -51,7 +51,6 @@ namespace Bot_Dofus_Retro.Otros.Mapas
             {
                 objeto_interactivo = new ObjetoInteractivo(_objeto_interactivo_id, this);
                 _mapa.interactivos.TryAdd(id, objeto_interactivo);
-                Console.WriteLine($"{_objeto_interactivo_id} : {objeto_interactivo.modelo.nombre} : {objeto_interactivo.modelo.habilidades}");
             }
 
             byte mapa_anchura = _mapa.anchura;

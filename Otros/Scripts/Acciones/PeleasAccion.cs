@@ -38,16 +38,16 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Acciones
                     {
                         case ResultadoMovimientos.EXITO:
                             cuenta.logger.log_informacion("SCRIPT", $"Movimiento hacia un grupo de monstruos celda: {grupo_monstruo.celda.id}, total de monstruos: {grupo_monstruo.get_Total_Monstruos}, nivel total del grupo: {grupo_monstruo.get_Total_Nivel_Grupo}");
-                        return resultado_procesado;
+                            return resultado_procesado;
 
                         case ResultadoMovimientos.PATHFINDING_ERROR:
                         case ResultadoMovimientos.MISMA_CELDA:
                             cuenta.logger.log_Peligro("SCRIPT", "El camino hacia el grupo de monstruos está bloqueado");
-                        continue;
+                            continue;
 
                         case ResultadoMovimientos.FALLO:
                             cuenta.script.detener_Script("Movimiento hacia el grupo de monstruos erróneo");
-                        return resultado_fallado;
+                            return resultado_fallado;
                     }
                 }
             }

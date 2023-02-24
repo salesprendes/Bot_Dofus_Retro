@@ -3,7 +3,6 @@ using Bot_Dofus_Retro.Comun.Network;
 using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Personaje;
-using System;
 using System.Threading.Tasks;
 
 /*
@@ -69,7 +68,6 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
                 await cliente.enviar("AS" + id_personaje);
                 await cliente.enviar("Af");
             }
-                
         });
 
         [PaqueteAtributo("ASK")]
@@ -92,8 +90,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             cuenta.juego.personaje.timer_afk.Change(1200000, 1200000);
             cuenta.juego.personaje.evento_Personaje_Seleccionado();
 
-            await cliente.enviar("BYA");//Modo Ausente
-            await cliente.enviar("GC1");
+            await cliente.enviar("GC1");//Crear juego Tipo 1
+            await cliente.enviar("Ir742;556;0");//envia informaciones pantalla
         });
 
         [PaqueteAtributo("GCK")]

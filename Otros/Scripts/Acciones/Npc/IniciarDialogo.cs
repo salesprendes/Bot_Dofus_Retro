@@ -18,7 +18,7 @@ namespace Bot_Dofus_Retro.Otros.Scripts.Acciones.Npc
 
         internal override Task<ResultadosAcciones> proceso(Cuenta cuenta)
         {
-            if(!cuenta.juego.npcs.utilizar(id))
+            if (!cuenta.juego.npcs.utilizar(id))
             {
                 cuenta.script.detener_Script($"Error al dialogar con el npc id: {id}");
                 return resultado_fallado;

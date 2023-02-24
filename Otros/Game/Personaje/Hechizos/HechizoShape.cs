@@ -21,7 +21,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Hechizos
             Zonas efecto = hechizo_stats.efectos_normales[0].zona_efecto;
             ShaperEntry shaper = Shaper.ShaperMap[efecto.tipo];
 
-            if(shaper == null)
+            if (shaper == null)
             {
                 zona.Add(celda_objetivo);
                 return zona;

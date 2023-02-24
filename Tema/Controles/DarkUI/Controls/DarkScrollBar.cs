@@ -413,7 +413,7 @@ namespace Bot_Dofus_Retro.DarkUI.Controls
         }
 
         private void UpdateThumb(bool forceRefresh = false)
-        { 
+        {
             if (ViewSize >= Maximum)
                 return;
 

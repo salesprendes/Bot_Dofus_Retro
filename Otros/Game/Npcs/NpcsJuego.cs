@@ -3,7 +3,6 @@ using Bot_Dofus_Retro.Otros.Mapas.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Bot_Dofus_Retro.Otros.Game.Npcs
 {

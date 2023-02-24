@@ -3,10 +3,8 @@ using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Net.Sockets;
-using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,16 +25,12 @@ namespace Bot_Dofus_Retro.Comun.Network
         private Socket socket { get; set; }
         private byte[] buffer { get; set; }
         public Ping ping { get; private set; }
-        private string buffer_paquete { get; set; }
+        private StringBuilder buffer_paquete { get; set; }
 
-    /** Otros **/
+        /** Otros **/
         public Cuenta cuenta;
         private SemaphoreSlim semaforo;
         public bool disposed { get; private set; } = false;
-
-        /** Eventos **/
-        public event Action<string> paquete_recibido;
-        public event Action<string> paquete_enviado;
         public event Action<string> socket_informacion;
 
         /** API **/
@@ -50,6 +44,7 @@ namespace Bot_Dofus_Retro.Comun.Network
             semaforo = new SemaphoreSlim(1);
             ping = new Ping();
             cuenta = _cuenta;
+            buffer_paquete = new StringBuilder();
         }
 
         public async Task conectar(string ip, int puerto)
@@ -59,12 +54,12 @@ namespace Bot_Dofus_Retro.Comun.Network
                 //Conectar para obtener api y token
                 api_conectada = await conexion_Zaap();
 
-                if(!api_conectada)
+                if (!api_conectada)
                 {
                     socket_informacion?.Invoke("La api no esta conectada con ankama");
                     return;
                 }
-                
+
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 buffer = new byte[socket.ReceiveBufferSize];
 
@@ -87,10 +82,10 @@ namespace Bot_Dofus_Retro.Comun.Network
         {
             if (!string.IsNullOrEmpty(api_key) && !string.IsNullOrEmpty(auth_getGameToken))
                 return true;
-            
+
             api_key = await ZaapConnect.get_ApiKey(cuenta.configuracion.nombre_cuenta, cuenta.configuracion.password);
-            
-            if(!string.IsNullOrEmpty(api_key))
+
+            if (!string.IsNullOrEmpty(api_key))
                 socket_informacion?.Invoke($"Conectado API Ankama API_KEY: {api_key}");
             else
                 socket_informacion?.Invoke($"Error obteniendo la api");
@@ -119,13 +114,11 @@ namespace Bot_Dofus_Retro.Comun.Network
             }
 
             await semaforo.WaitAsync().ConfigureAwait(false);
-
             byte[] byte_paquete = Encoding.UTF8.GetBytes(string.Format($"{paquete}\n\x00"));
 
             socket.Send(byte_paquete);
             ping.set_ticks();
 
-            paquete_enviado?.Invoke(paquete);
             semaforo.Release();
         }
 
@@ -135,6 +128,7 @@ namespace Bot_Dofus_Retro.Comun.Network
             {
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Disconnect(true);
+                ping.set_Limpiar_latencias();
                 socket_informacion?.Invoke("Socket desconectado del host");
             }
         }
@@ -165,9 +159,8 @@ namespace Bot_Dofus_Retro.Comun.Network
                 cuenta.desconectar();
                 return;
             }
-            
-            int bytes_leidos = socket.EndReceive(ar, out SocketError respuesta);
 
+            int bytes_leidos = socket.EndReceive(ar, out SocketError respuesta);
             if (bytes_leidos < 1 || respuesta != SocketError.Success)
             {
                 cuenta.desconectar();
@@ -179,31 +172,23 @@ namespace Bot_Dofus_Retro.Comun.Network
 
             string datos = Encoding.UTF8.GetString(_buffer, 0, bytes_leidos);
             List<string> paquetes = datos.Replace("\x0a", string.Empty).Split('\0').Where(x => x != string.Empty).ToList();
-            
+
             foreach (string paquete in paquetes)
             {
                 if (paquetes.IndexOf(paquete) != paquetes.Count - 1 || datos.EndsWith("\0"))
                 {
-                    if (!string.IsNullOrEmpty(buffer_paquete))//Unbuffering packet
-                    {
-                        PaqueteRecibido.Recibir(this, buffer_paquete + paquete);
-                        buffer_paquete = null;
-                    }
-                    else
-                    {
-                        paquete_recibido?.Invoke(paquete);
-                        ping.set_Agregar_Latencia();
-                        PaqueteRecibido.Recibir(this, paquete);
-                    }
+                    ping.set_Agregar_Latencia();
+                    PaqueteRecibido.Recibir(this, buffer_paquete.Append(paquete).ToString());
+                    Console.WriteLine(buffer_paquete.ToString());
+                    buffer_paquete.Clear();
                 }
                 else
                 {
-                    buffer_paquete += paquete;
+                    buffer_paquete.Append(paquete);
                 }
             }
 
-            Task.Delay(Hash.get_Nuevo_Random(1000, 3000));
-            socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, recibir_CallBack, socket); 
+            socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, recibir_CallBack, socket);
         }
 
         #region Zona Dispose
@@ -225,9 +210,11 @@ namespace Bot_Dofus_Retro.Comun.Network
                 {
                     socket?.Dispose();
                     semaforo?.Dispose();
+                    buffer_paquete.Clear();
                 }
 
                 semaforo = null;
+                buffer_paquete = null;
                 api_key = null;
                 auth_getGameToken = null;
                 api_conectada = false;
@@ -235,8 +222,6 @@ namespace Bot_Dofus_Retro.Comun.Network
                 socket = null;
                 buffer = null;
                 ping = null;
-                paquete_recibido = null;
-                paquete_enviado = null;
                 ping = null;
                 disposed = true;
             }

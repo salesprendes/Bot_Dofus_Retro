@@ -66,6 +66,10 @@ namespace Bot_Dofus_Retro.Otros.Peleas
         public void actualizar_Hechizo_Exito(short hechizo_id, short celda_id)
         {
             Hechizo hechizo = cuenta.juego.personaje.get_Hechizo(hechizo_id);
+
+            if (hechizo == null)
+                return;
+
             HechizoStats datos_hechizo = hechizo.get_Stats();
 
             if (datos_hechizo.intervalo > 0 && !hechizos_intervalo.ContainsKey(hechizo.id))

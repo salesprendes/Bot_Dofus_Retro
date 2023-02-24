@@ -22,7 +22,7 @@ namespace Bot_Dofus_Retro.Utilidades.Logs
             StringBuilder sb = new StringBuilder();
 
             string _referencia = string.IsNullOrEmpty(referencia) ? "" : $"[{referencia}]";
-            sb.Append($"[{DateTime.Now.ToString("HH:mm:ss")}] {_referencia} {mensaje}");
+            sb.Append($"{_referencia} {mensaje}");
 
             if (es_Exception)
                 sb.Append($"{Environment.NewLine}- Exception ocurrida: {exception}");

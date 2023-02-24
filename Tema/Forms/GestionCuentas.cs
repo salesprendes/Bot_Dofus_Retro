@@ -33,7 +33,7 @@ namespace Bot_Dofus_Retro.Tema.Forms
         private void cargar_Cuentas_Lista()
         {
             listViewCuentas.Items.Clear();
-            
+
             GlobalConf.get_Cuentas().ForEach(x =>
             {
                 if (!Principal.cuentas_cargadas.ContainsKey(x.nombre_cuenta))
@@ -138,19 +138,19 @@ namespace Bot_Dofus_Retro.Tema.Forms
 
                         if (!string.IsNullOrEmpty(nueva_cuenta) || nueva_cuenta.Split(new char[0]).Length == 0)
                             cuenta.nombre_cuenta = nueva_cuenta;
-                    break;
+                        break;
 
                     case "Contraseña":
                         string nueva_password = Interaction.InputBox($"Ingresa la nueva contraseña", "Modificar contraseña", cuenta.password);
 
                         if (!string.IsNullOrEmpty(nueva_password) || nueva_password.Split(new char[0]).Length == 0)
                             cuenta.password = nueva_password;
-                    break;
+                        break;
 
                     default:
                         string nuevo_personaje = Interaction.InputBox($"Ingresa el nombre del nuevo personaje", "Modificar nombre de personaje", cuenta.nombre_personaje);
                         cuenta.nombre_personaje = nuevo_personaje;
-                    break;
+                        break;
                 }
 
                 GlobalConf.guardar();

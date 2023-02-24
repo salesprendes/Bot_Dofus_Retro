@@ -51,6 +51,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
                     _objetos.TryAdd(id_inventario, objeto);
                 }
             }
+
             inventario_actualizado?.Invoke();
         }
 

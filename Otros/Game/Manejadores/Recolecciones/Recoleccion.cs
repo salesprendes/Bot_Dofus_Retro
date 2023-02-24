@@ -80,7 +80,8 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Recolecciones
                 es_herramienta_pescar = herramientas_pescar.Contains(arma.id_modelo);
             }
 
-            foreach (ObjetoInteractivo interactivo in mapa.interactivos.Values)
+
+            foreach (ObjetoInteractivo interactivo in mapa.interactivos.Values.OrderBy(x => x.celda.get_Distancia(personaje.celda)))
             {
                 if (!interactivo.es_utilizable || !interactivo.modelo.recolectable)
                     continue;

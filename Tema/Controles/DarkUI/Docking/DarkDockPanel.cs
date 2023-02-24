@@ -175,7 +175,7 @@ namespace Bot_Dofus_Retro.DarkUI.Docking
 
             ContentAdded?.Invoke(this, new DockContentEventArgs(dockContent));
 
-            if(_contents.Count == 1)
+            if (_contents.Count == 1)
                 dockContent.Select();
         }
 
@@ -330,4 +330,3 @@ namespace Bot_Dofus_Retro.DarkUI.Docking
         public void get_Evento_Contenido_Cambiado(DarkDockContent contenido) => this.ContenidoCambiado?.Invoke(this, new DockContentEventArgs(contenido));
     }
 }
-    

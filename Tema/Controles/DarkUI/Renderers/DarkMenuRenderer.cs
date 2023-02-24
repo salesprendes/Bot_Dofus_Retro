@@ -107,7 +107,7 @@ namespace Bot_Dofus_Retro.DarkUI.Renderers
 
             if (e.Item.Enabled)
             {
-                
+
                 var bgColor = e.Item.Selected ? Colors.GreyHighlight : e.Item.BackColor;
 
                 // Normal item

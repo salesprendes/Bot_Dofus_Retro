@@ -48,15 +48,15 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Interactivos
             switch (cuenta.juego.manejador.movimientos.get_Mover_A_Celda(celda, mapa.celdas_ocupadas(), true, 1))
             {
                 case ResultadoMovimientos.EXITO:
-                return true;
+                    return true;
 
                 case ResultadoMovimientos.MISMA_CELDA:
                     get_Utilizar_Elemento();
-                return true;
+                    return true;
 
                 default:
                     limpiar();
-                return false;
+                    return false;
             }
         }
 

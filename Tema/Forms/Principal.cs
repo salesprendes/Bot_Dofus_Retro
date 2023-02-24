@@ -1,4 +1,7 @@
-﻿using Bot_Dofus_Retro.Otros;
+﻿using Bot_Dofus_Retro.DarkUI.Controls;
+using Bot_Dofus_Retro.DarkUI.Docking;
+using Bot_Dofus_Retro.DarkUI.Forms;
+using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Grupos;
 using Bot_Dofus_Retro.Tema.Interfaces;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
@@ -7,9 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Bot_Dofus_Retro.DarkUI.Forms;
-using Bot_Dofus_Retro.DarkUI.Docking;
-using Bot_Dofus_Retro.DarkUI.Controls;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro

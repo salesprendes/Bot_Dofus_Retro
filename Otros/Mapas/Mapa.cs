@@ -6,8 +6,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using System.Windows.Forms;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
@@ -43,6 +45,7 @@ namespace Bot_Dofus_Retro.Otros.Mapas
             cuenta = _cuenta;
             entidades = new ConcurrentDictionary<int, Entidad>();
             interactivos = new ConcurrentDictionary<int, ObjetoInteractivo>();
+            mapa_cargado = false;
         }
 
         public void get_Actualizar_Mapa(string paquete)
@@ -53,19 +56,24 @@ namespace Bot_Dofus_Retro.Otros.Mapas
             string[] _loc3 = paquete.Split('|');
             id = short.Parse(_loc3[0]);
 
-            FileInfo mapa_archivo = new FileInfo("mapas/" + id + ".xml");
+            FileInfo mapa_archivo = new FileInfo($"mapas/{id}.json");
             if (mapa_archivo.Exists)
             {
-                XElement archivo_mapa = XElement.Load(mapa_archivo.FullName);
-                anchura = byte.Parse(archivo_mapa.Element("ANCHURA").Value);
-                altura = byte.Parse(archivo_mapa.Element("ALTURA").Value);
-                x = sbyte.Parse(archivo_mapa.Element("X").Value);
-                y = sbyte.Parse(archivo_mapa.Element("Y").Value);
+                string texto = File.ReadAllText($"mapas/{id}.json");
+                MapaJson archivo_mapa = JsonSerializer.Deserialize<MapaJson>(texto);
 
-                descomprimir_mapa(archivo_mapa.Element("MAPA_DATA").Value);
+                anchura = archivo_mapa.anchura;
+                altura = archivo_mapa.altura;
+                x = archivo_mapa.x;
+                y = archivo_mapa.y;
+
+                descomprimir_mapa(archivo_mapa.mapa_data);
+                mapa_cargado = true;
             }
-
-            mapa_cargado = true;
+            else
+            {
+                cuenta.logger.log_Error("MAPA", "Error al cargar el mapa");
+            }
         }
 
         public string coordenadas => $"[{x},{y}]";
@@ -187,6 +195,27 @@ namespace Bot_Dofus_Retro.Otros.Mapas
 
             return new Celda(id_celda, activa, tipo, es_linea_vision, nivel, slope, tiene_objeto_interactivo ? layer_objeto_2_num : Convert.ToInt16(-1), layer_objeto_1_num, layer_objeto_2_num, this);
         }
+
+        public class MapaJson
+        {
+            [JsonPropertyName("ID")]
+            public short id { get; set; }
+
+            [JsonPropertyName("ANCHURA")]
+            public byte anchura { get; set; }
+
+            [JsonPropertyName("ALTURA")]
+            public byte altura { get; set; }
+
+            [JsonPropertyName("MAPA_DATA")]
+            public string mapa_data { get; set; } = string.Empty;
+
+            [JsonPropertyName("X")]
+            public sbyte x { get; set; }
+
+            [JsonPropertyName("Y")]
+            public sbyte y { get; set; }
+        }
         #endregion
 
         #region Zona Dispose
@@ -213,6 +242,7 @@ namespace Bot_Dofus_Retro.Otros.Mapas
 
             celdas = null;
             entidades = null;
+            interactivos = null;
             disposed = true;
         }
         #endregion

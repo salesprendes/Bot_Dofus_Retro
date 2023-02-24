@@ -1,4 +1,5 @@
-﻿using Bot_Dofus_Retro.Otros;
+﻿using Bot_Dofus_Retro.DarkUI.Docking;
+using Bot_Dofus_Retro.Otros;
 using Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Movimientos;
 using Bot_Dofus_Retro.Otros.Mapas;
 using Bot_Dofus_Retro.Otros.Mapas.Movimiento;
@@ -10,7 +11,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Bot_Dofus_Retro.DarkUI.Docking;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
