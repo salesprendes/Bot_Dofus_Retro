@@ -5,9 +5,12 @@ using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Personaje;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 /*
     Este archivo es parte del proyecto Bot Dofus Retro
@@ -27,8 +30,8 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             PersonajeJuego personaje = cliente.cuenta.juego.personaje;
 
             await cliente.enviar("BD");
-            personaje.actualizar_Caracteristicas(paquete);
             personaje.gestionar_Bonus_Set_Clase();
+            personaje.actualizar_Caracteristicas(paquete);
         });
 
         [PaqueteAtributo("PIK")]
@@ -229,8 +232,9 @@ namespace Bot_Dofus_Retro.Comun.Frames.Juego
             short hechizo_id = short.Parse(separador[1]);
             byte efecto = byte.Parse(separador[2]);
 
-            //@TODO: No agrega el diccionario a los valores del hechizo falta arreglar
-            personaje.bonus_set_clase.TryAdd(hechizo_id, new ConcurrentDictionary<int, byte>(stat, efecto));
+            Tuple<int, byte> datos = new Tuple<int, byte>(stat, efecto);
+
+            personaje.bonus_set_clase.AddOrUpdate(hechizo_id, datos, (id, _datos) => datos);
         });
 
         /**

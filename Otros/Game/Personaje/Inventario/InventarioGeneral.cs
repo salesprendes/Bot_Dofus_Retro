@@ -1,4 +1,5 @@
 ﻿using Bot_Dofus_Retro.Otros.Game.Personaje.Inventario.Enums;
+using Bot_Dofus_Retro.Otros.Mapas.Entidades;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -109,15 +110,20 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
 
         public bool equipar_Objeto(ObjetosInventario objeto)
         {
-            if (objeto == null || objeto.cantidad == 0 || cuenta.esta_ocupado)
+            if (cuenta == null)
+                return false;
+
+            PersonajeJuego personaje = cuenta.juego.personaje;
+
+            if (objeto == null || objeto.cantidad == 0 || cuenta.esta_ocupado || personaje == null)
             {
                 cuenta.logger.log_Error("INVENTARIO", $"El objeto {objeto.nombre} no se puede equipar");
                 return false;
             }
 
-            if (objeto.nivel > cuenta.juego.personaje.nivel)
+            if (objeto.nivel > personaje.nivel)
             {
-                cuenta.logger.log_Error("INVENTARIO", $"El nivel del objeto {objeto.nombre} es superior al nivel actual.");
+                cuenta.logger.log_Error("INVENTARIO", $"El nivel del objeto {objeto.nombre} es superior al nivel actual");
                 return false;
             }
 
@@ -166,7 +172,12 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
 
         public Task<bool> desequipar_Objeto(ObjetosInventario objeto) => Task.Run(async () =>
         {
-            if (objeto == null)
+            if (cuenta == null)
+                return false;
+
+            PersonajeJuego personaje = cuenta.juego.personaje;
+
+            if (objeto == null || personaje == null)
                 return false;
 
             if (objeto.posicion == InventarioPosiciones.NO_EQUIPADO)
@@ -175,8 +186,8 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje.Inventario
             await cuenta.conexion.enviar("OM" + objeto.id_inventario + "|" + (sbyte)InventarioPosiciones.NO_EQUIPADO);
             objeto.posicion = InventarioPosiciones.NO_EQUIPADO;
             cuenta.logger.log_informacion("INVENTARIO", $"{objeto.nombre} desequipado.");
-            inventario_actualizado?.Invoke();
 
+            inventario_actualizado?.Invoke();
             return true;
         });
 

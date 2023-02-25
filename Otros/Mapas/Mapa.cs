@@ -57,23 +57,24 @@ namespace Bot_Dofus_Retro.Otros.Mapas
             id = short.Parse(_loc3[0]);
 
             FileInfo mapa_archivo = new FileInfo($"mapas/{id}.json");
-            if (mapa_archivo.Exists)
+            if (!mapa_archivo.Exists)
             {
-                string texto = File.ReadAllText($"mapas/{id}.json");
-                MapaJson archivo_mapa = JsonSerializer.Deserialize<MapaJson>(texto);
-
-                anchura = archivo_mapa.anchura;
-                altura = archivo_mapa.altura;
-                x = archivo_mapa.x;
-                y = archivo_mapa.y;
-
-                descomprimir_mapa(archivo_mapa.mapa_data);
-                mapa_cargado = true;
+                cuenta.logger.log_Error("MAPA", "Error al cargar el mapa no existe");
+                return;
             }
-            else
-            {
-                cuenta.logger.log_Error("MAPA", "Error al cargar el mapa");
-            }
+
+            string texto = File.ReadAllText($"mapas/{id}.json");
+            MapaJson archivo_mapa = JsonSerializer.Deserialize<MapaJson>(texto);
+
+            anchura = archivo_mapa.anchura;
+            altura = archivo_mapa.altura;
+            x = archivo_mapa.x;
+            y = archivo_mapa.y;
+
+            descomprimir_mapa(archivo_mapa.mapa_data);
+
+            archivo_mapa = null;
+            mapa_cargado = true;
         }
 
         public string coordenadas => $"[{x},{y}]";
@@ -229,7 +230,6 @@ namespace Bot_Dofus_Retro.Otros.Mapas
             y = 0;
             entidades.Clear();
             interactivos.Clear();
-            celdas = null;
         }
 
         protected virtual void Dispose(bool disposing)

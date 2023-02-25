@@ -5,6 +5,7 @@ using Bot_Dofus_Retro.Otros.Enums;
 using Bot_Dofus_Retro.Otros.Game.Servidor;
 using Bot_Dofus_Retro.Utilidades.Configuracion;
 using Bot_Dofus_Retro.Utilidades.Criptografia;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -71,7 +72,7 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
         public Task get_Pregunta_Secreta(ClienteTcp cliente, string paquete) => Task.Run(async () =>
         {
             while (cliente.cuenta.juego.servidor.estado != EstadosServidor.CONECTADO)
-                await Task.Delay(500);
+                await Task.Delay(1500);
 
             await cliente.enviar($"Ap{GlobalConf.puerto_conexion}");
             await cliente.enviar($"Ai{StringHelpercs.GetRandomNetworkKey()}");
@@ -94,19 +95,29 @@ namespace Bot_Dofus_Retro.Comun.Frames.LoginCuenta
 
                 if (id == servidor.id)
                 {
-                    if (servidor.estado == EstadosServidor.CONECTADO)
+                    switch (servidor.estado)
                     {
-                        seleccionado = true;
-                        cuenta.juego.personaje.evento_Servidor_Seleccionado();
+                        case EstadosServidor.CONECTADO:
+                            seleccionado = true;
+                            cuenta.juego.personaje.evento_Servidor_Seleccionado();
+                        break;
+
+                        default:
+                            cuenta.logger.log_Error("LOGIN", "Servidor no accesible cuando este accesible se re-conectara");
+                        break;
                     }
-                    else
-                        cuenta.logger.log_Error("LOGIN", "Servidor no accesible cuando este accesible se re-conectara");
                 }
                 contador++;
             }
 
-            if (seleccionado)
-                await cliente.enviar($"AX{servidor.id}");
+            if (!seleccionado)
+            {
+                cuenta.logger.log_Error("LOGIN", $"No tienes ningun personaje en el servidor {servidor.nombre}");
+                cliente.get_Desconectar_Socket();
+                return;
+            }
+
+            await cliente.enviar($"AX{servidor.id}");
         });
 
         [PaqueteAtributo("AXK")]//metodo antiguo??

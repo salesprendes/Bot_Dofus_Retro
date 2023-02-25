@@ -56,7 +56,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Entidades.Manejadores.Interactivos
 
                 default:
                     limpiar();
-                    return false;
+                return false;
             }
         }
 

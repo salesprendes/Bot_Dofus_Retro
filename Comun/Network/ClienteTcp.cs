@@ -51,7 +51,6 @@ namespace Bot_Dofus_Retro.Comun.Network
         {
             try
             {
-                //Conectar para obtener api y token
                 api_conectada = await conexion_Zaap();
 
                 if (!api_conectada)
@@ -118,7 +117,6 @@ namespace Bot_Dofus_Retro.Comun.Network
 
             socket.Send(byte_paquete);
             ping.set_ticks();
-
             semaforo.Release();
         }
 
@@ -130,6 +128,13 @@ namespace Bot_Dofus_Retro.Comun.Network
                 socket.Disconnect(true);
                 ping.set_Limpiar_latencias();
                 socket_informacion?.Invoke("Socket desconectado del host");
+            }
+
+            if(!cuenta.esta_Cambiando_A_Juego())
+            {
+                api_conectada = false;
+                api_key = string.Empty;
+                auth_getGameToken = string.Empty;
             }
         }
 
@@ -210,7 +215,6 @@ namespace Bot_Dofus_Retro.Comun.Network
                 {
                     socket?.Dispose();
                     semaforo?.Dispose();
-                    buffer_paquete.Clear();
                 }
 
                 semaforo = null;
@@ -221,7 +225,6 @@ namespace Bot_Dofus_Retro.Comun.Network
                 cuenta = null;
                 socket = null;
                 buffer = null;
-                ping = null;
                 ping = null;
                 disposed = true;
             }

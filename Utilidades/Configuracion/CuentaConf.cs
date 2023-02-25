@@ -46,9 +46,9 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
             }
         }
 
-        public string get_Servidor_Nombre(int _servidor_id)
+        public string get_Servidor_Nombre(int servidor_id)
         {
-            switch (_servidor_id)
+            switch (servidor_id)
             {
                 case 601:
                     return "Eratz";
@@ -56,32 +56,14 @@ namespace Bot_Dofus_Retro.Utilidades.Configuracion
                 case 602:
                     return "Henual";
 
-                case 603:
-                    return "Nabur";
+                case 612:
+                    return "Bun";
 
-                case 604:
-                    return "Arty";
+                case 613:
+                    return "Crail";
 
-                case 605:
-                    return "Algata";
-
-                case 606:
-                    return "Hogmeiser";
-
-                case 607:
-                    return "Droopica";
-
-                case 608:
-                    return "Ayuto";
-
-                case 609:
-                    return "Bilby";
-
-                case 610:
-                    return "Clustus";
-
-                case 611:
-                    return "Sinserrin";
+                case 614:
+                    return "Gálgarion";
             }
 
             return string.Empty;

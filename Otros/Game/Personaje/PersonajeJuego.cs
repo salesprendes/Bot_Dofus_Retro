@@ -35,7 +35,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
         public int kamas { get; private set; }
         public Caracteristicas caracteristicas { get; set; }
         public Dictionary<short, Hechizo> hechizos { get; set; }//id_hechizo, hechizo
-        public ConcurrentDictionary<short, ConcurrentDictionary<int, byte>> bonus_set_clase { get; private set; }
+        public ConcurrentDictionary<short, Tuple<int, byte>> bonus_set_clase { get; private set; }
         public OficiosJuego oficios { get; private set; }
         public Timer timer_regeneracion { get; private set; }
         public Timer timer_afk { get; private set; }
@@ -67,7 +67,7 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             inventario = new InventarioGeneral(cuenta);
             caracteristicas = new Caracteristicas();
             hechizos = new Dictionary<short, Hechizo>();
-            bonus_set_clase = new ConcurrentDictionary<short, ConcurrentDictionary<int, byte>>();
+            bonus_set_clase = new ConcurrentDictionary<short, Tuple<int, byte>>();
             oficios = new OficiosJuego();
             derechos = new Derechos(0);
             restricciones = new Restricciones(0);
@@ -198,45 +198,53 @@ namespace Bot_Dofus_Retro.Otros.Game.Personaje
             hechizos_actualizados?.Invoke();
         }
 
+        /** static var ACTION_BOOST_SPELL_RANGE = 281;
+         * static var ACTION_BOOST_SPELL_RANGEABLE = 282;
+         * static var ACTION_BOOST_SPELL_DMG = 283;
+         * static var ACTION_BOOST_SPELL_HEAL = 284;
+         * static var ACTION_BOOST_SPELL_AP_COST = 285;
+         * static var ACTION_BOOST_SPELL_CAST_INTVL = 286;
+         * static var ACTION_BOOST_SPELL_CC = 287;
+         * static var ACTION_BOOST_SPELL_CASTOUTLINE = 288;
+         * static var ACTION_BOOST_SPELL_NOLINEOFSIGHT = 289;
+         * static var ACTION_BOOST_SPELL_MAXPERTURN = 290;
+         * static var ACTION_BOOST_SPELL_MAXPERTARGET = 291;
+         * static var ACTION_BOOST_SPELL_SET_INTVL = 292; **/
         public void gestionar_Bonus_Set_Clase()
         {
-            foreach (short hechizo_id in bonus_set_clase.Keys)
+            foreach (KeyValuePair<short, Tuple<int, byte>> bonus in bonus_set_clase)
             {
-                Hechizo hechizo = get_Hechizo(hechizo_id);
+                Hechizo hechizo = get_Hechizo(bonus.Key);
 
                 //Si no tiene el hechizo dentro del diccionario o el hechizo es nulo
                 if (hechizo == null || !bonus_set_clase.ContainsKey(hechizo.id))
                     continue;
 
-                foreach (KeyValuePair<int, byte> bonus in bonus_set_clase[hechizo.id])
+                int stat = bonus.Value.Item1;
+                byte efecto = bonus.Value.Item2;
+
+                switch (stat)
                 {
-                    int stat = bonus.Key;
-                    byte efecto = bonus.Value;
+                    case 285://REDUCE_COSTE_PA
+                        byte pa_total = efecto > 0 ? (byte)(hechizo.get_Stats().coste_pa - efecto) : (byte)(hechizo.get_Stats().coste_pa + efecto);
+                        hechizo.get_Stats().coste_pa = pa_total;
+                        cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} fue modificado a un total de {hechizo.get_Stats().coste_pa} PA");
+                    break;
 
-                    switch (stat)
-                    {
-                        case 285://REDUCE_COSTE_PA
-                            byte pa_total = efecto > 0 ? (byte)(hechizo.get_Stats().coste_pa - efecto) : (byte)(hechizo.get_Stats().coste_pa + efecto);
-                            hechizo.get_Stats().coste_pa = pa_total;
-                            cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} {(efecto > 0 ? "reduce" : "aumenta")} {efecto} PA");
-                            break;
+                    case 286://TURNOS_VOLVER_LANZAR
+                        byte intervalo_total = efecto > 0 ? (byte)(hechizo.get_Stats().intervalo - efecto) : (byte)(hechizo.get_Stats().intervalo + efecto);
+                        hechizo.get_Stats().intervalo = intervalo_total;
+                        cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} fue modificado a un total de {hechizo.get_Stats().intervalo} cooldown");
+                    break;
 
-                        case 286://TURNOS_VOLVER_LANZAR
-                            byte intervalo_total = efecto > 0 ? (byte)(hechizo.get_Stats().intervalo - efecto) : (byte)(hechizo.get_Stats().intervalo + efecto);
-                            hechizo.get_Stats().intervalo = intervalo_total;
-                            cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} {(efecto > 0 ? "reduce" : "aumenta")} {efecto} turno(s)");
-                            break;
-
-                        case 288://DESACTIVA_LINEA_RECTA
-                            hechizo.get_Stats().es_lanzado_linea = false;
-                            cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} desactiva la linea recta");
-                            break;
-                    }
-
+                    case 288://DESACTIVA_LINEA_RECTA
+                        hechizo.get_Stats().es_lanzado_linea = efecto > 0 ? false : true;
+                        cuenta.logger.log_informacion("PERSONAJE", $"{hechizo.nombre} fue modificado y su lanzamiento en linea es: {hechizo.get_Stats().es_lanzado_linea}");
+                    break;
                 }
+
+                bonus_set_clase.TryRemove(hechizo.id, out _);
             }
-
-
         }
 
         private void regeneracion_TimerCallback(object state)
